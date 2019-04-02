@@ -1,0 +1,526 @@
+{
+    "name": "Standard Tarot Deck",
+    "types":[
+        "Major Arcana", "Minor Arcana"
+    ],
+    "suits":[
+        {
+            "rank": 1,
+            "name": "Pentacles",
+            "sprite": "P",
+            "keywords": ["Earth", "Physical", "Value", "Money"]
+        },
+        {
+            "rank": 2,
+            "name": "Wands",
+            "sprite": "W",
+            "keywords": ["Fire", "Spirit", "Will", "Action"]
+        },
+        {
+            "rank": 3,
+            "name": "Cups",
+            "sprite": "C",
+            "keywords": ["Water", "Heart", "Emotions", "Intuition"]
+        },
+        {
+            "rank": 4,
+            "name": "Swords",
+            "sprite": "S",
+            "keywords": ["Air", "Mind", "Thought", "Logic"]
+        }
+    ],
+    "cards": [
+        {
+            "order": 0,
+            "rank": 0,
+            "name": "The Fool",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 1,
+            "rank": 1,
+            "name": "The Magician",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 2,
+            "rank": 2,
+            "name": "The High Priestess",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 3,
+            "rank": 3,
+            "name": "The Empress",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 4,
+            "rank": 4,
+            "name": "The Emperor",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 5,
+            "rank": 5,
+            "name": "The Hierophant",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 6,
+            "rank": 6,
+            "name": "The Lovers",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 7,
+            "rank": 7,
+            "name": "The Chariot",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 8,
+            "rank": 8,
+            "name": "Strength",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 9,
+            "rank": 9,
+            "name": "The Hermit",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 10,
+            "rank": 10,
+            "name": "The Wheel",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 11,
+            "rank": 11,
+            "name": "Justice",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 12,
+            "rank": 12,
+            "name": "The Hanged Man",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 13,
+            "rank": 13,
+            "name": "Death",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 14,
+            "rank": 14,
+            "name": "Temperance",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 15,
+            "rank": 15,
+            "name": "The Devil",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 16,
+            "rank": 16,
+            "name": "The Tower",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 17,
+            "rank": 17,
+            "name": "The Star",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 18,
+            "rank": 18,
+            "name": "The Moon",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 19,
+            "rank": 19,
+            "name": "The Sun",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 20,
+            "rank": 20,
+            "name": "Judgment",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+        {
+            "order": 21,
+            "rank": 21,
+            "name": "The World",
+            "type": "Major Arcana",
+            "keywords": []
+        },
+
+        {
+            "order": 22,
+            "rank": 1,
+            "suit": "Pentacles",
+            "keywords": ["Ace"]
+        },
+        {
+            "order": 23,
+            "rank": 2,
+            "suit": "Pentacles",
+            "keywords": []
+        },
+        {
+            "order": 24,
+            "rank": 3,
+            "suit": "Pentacles",
+            "keywords": []
+        },
+        {
+            "order": 25,
+            "rank": 4,
+            "suit": "Pentacles",
+            "keywords": []
+        },
+        {
+            "order": 26,
+            "rank": 5,
+            "suit": "Pentacles",
+            "keywords": []
+        },
+        {
+            "order": 27,
+            "rank": 6,
+            "suit": "Pentacles",
+            "keywords": []
+        },
+        {
+            "order": 28,
+            "rank": 7,
+            "suit": "Pentacles",
+            "keywords": []
+        },
+        {
+            "order": 29,
+            "rank": 8,
+            "suit": "Pentacles",
+            "keywords": []
+        },
+        {
+            "order": 30,
+            "rank": 9,
+            "suit": "Pentacles",
+            "keywords": []
+        },
+        {
+            "order": 31,
+            "rank": 10,
+            "suit": "Pentacles",
+            "keywords": []
+        },
+        {
+            "order": 32,
+            "rank": 11,
+            "suit": "Pentacles",
+            "keywords": ["Page"]
+        },
+        {
+            "order": 33,
+            "rank": 12,
+            "suit": "Pentacles",
+            "keywords": ["Knight"]
+        },
+        {
+            "order": 34,
+            "rank": 13,
+            "suit": "Pentacles",
+            "keywords": ["Queen"]
+        },
+        {
+            "order": 35,
+            "rank": 14,
+            "suit": "Pentacles",
+            "keywords": ["King"]
+        },
+
+        {
+            "order": 36,
+            "rank": 1,
+            "suit": "Wands",
+            "keywords": ["Ace"]
+        },
+        {
+            "order": 37,
+            "rank": 2,
+            "suit": "Wands",
+            "keywords": []
+        },
+        {
+            "order": 38,
+            "rank": 3,
+            "suit": "Wands",
+            "keywords": []
+        },
+        {
+            "order": 39,
+            "rank": 4,
+            "suit": "Wands",
+            "keywords": []
+        },
+        {
+            "order": 40,
+            "rank": 5,
+            "suit": "Wands",
+            "keywords": []
+        },
+        {
+            "order": 41,
+            "rank": 6,
+            "suit": "Wands",
+            "keywords": []
+        },
+        {
+            "order": 42,
+            "rank": 7,
+            "suit": "Wands",
+            "keywords": []
+        },
+        {
+            "order": 43,
+            "rank": 8,
+            "suit": "Wands",
+            "keywords": []
+        },
+        {
+            "order": 44,
+            "rank": 9,
+            "suit": "Wands",
+            "keywords": []
+        },
+        {
+            "order": 45,
+            "rank": 10,
+            "suit": "Wands",
+            "keywords": []
+        },
+        {
+            "order": 46,
+            "rank": 11,
+            "suit": "Wands",
+            "keywords": ["Page"]
+        },
+        {
+            "order": 47,
+            "rank": 12,
+            "suit": "Wands",
+            "keywords": ["Knight"]
+        },
+        {
+            "order": 48,
+            "rank": 13,
+            "suit": "Wands",
+            "keywords": ["Queen"]
+        },
+        {
+            "order": 49,
+            "rank": 14,
+            "suit": "Wands",
+            "keywords": ["King"]
+        },
+        {
+            "order": 50,
+            "rank": 1,
+            "suit": "Cups",
+            "keywords": ["Ace"]
+        },
+        {
+            "order": 51,
+            "rank": 2,
+            "suit": "Cups",
+            "keywords": []
+        },
+        {
+            "order": 52,
+            "rank": 3,
+            "suit": "Cups",
+            "keywords": []
+        },
+        {
+            "order": 53,
+            "rank": 4,
+            "suit": "Cups",
+            "keywords": []
+        },
+        {
+            "order": 54,
+            "rank": 5,
+            "suit": "Cups",
+            "keywords": []
+        },
+        {
+            "order": 55,
+            "rank": 6,
+            "suit": "Cups",
+            "keywords": []
+        },
+        {
+            "order": 56,
+            "rank": 7,
+            "suit": "Cups",
+            "keywords": []
+        },
+        {
+            "order": 57,
+            "rank": 8,
+            "suit": "Cups",
+            "keywords": []
+        },
+        {
+            "order": 58,
+            "rank": 9,
+            "suit": "Cups",
+            "keywords": []
+        },
+        {
+            "order": 59,
+            "rank": 10,
+            "suit": "Cups",
+            "keywords": []
+        },
+        {
+            "order": 60,
+            "rank": 11,
+            "suit": "Cups",
+            "keywords": ["Page"]
+        },
+        {
+            "order": 61,
+            "rank": 12,
+            "suit": "Cups",
+            "keywords": ["Knight"]
+        },
+        {
+            "order": 62,
+            "rank": 13,
+            "suit": "Cups",
+            "keywords": ["Queen"]
+        },
+        {
+            "order": 63,
+            "rank": 14,
+            "suit": "Cups",
+            "keywords": ["King"]
+        },
+        {
+            "order": 64,
+            "rank": 1,
+            "suit": "Swords",
+            "keywords": ["Ace"]
+        },
+        {
+            "order": 65,
+            "rank": 2,
+            "suit": "Swords",
+            "keywords": []
+        },
+        {
+            "order": 66,
+            "rank": 3,
+            "suit": "Swords",
+            "keywords": []
+        },
+        {
+            "order": 67,
+            "rank": 4,
+            "suit": "Swords",
+            "keywords": []
+        },
+        {
+            "order": 68,
+            "rank": 5,
+            "suit": "Swords",
+            "keywords": []
+        },
+        {
+            "order": 69,
+            "rank": 6,
+            "suit": "Swords",
+            "keywords": []
+        },
+        {
+            "order": 70,
+            "rank": 7,
+            "suit": "Swords",
+            "keywords": []
+        },
+        {
+            "order": 71,
+            "rank": 8,
+            "suit": "Swords",
+            "keywords": []
+        },
+        {
+            "order": 72,
+            "rank": 9,
+            "suit": "Swords",
+            "keywords": []
+        },
+        {
+            "order": 73,
+            "rank": 10,
+            "suit": "Swords",
+            "keywords": []
+        },
+        {
+            "order": 74,
+            "rank": 11,
+            "suit": "Swords",
+            "keywords": ["Page"]
+        },
+        {
+            "order": 75,
+            "rank": 12,
+            "suit": "Swords",
+            "keywords": ["Knight"]
+        },
+        {
+            "order": 76,
+            "rank": 13,
+            "suit": "Swords",
+            "keywords": ["Queen"]
+        },
+        {
+            "order": 77,
+            "rank": 14,
+            "suit": "Swords",
+            "keywords": ["King"]
+        }
+    ]
+}
