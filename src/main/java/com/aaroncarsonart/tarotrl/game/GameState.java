@@ -2,6 +2,7 @@ package com.aaroncarsonart.tarotrl.game;
 
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.GameSprite;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class GameState implements Serializable {
     private int playerPosY;
     private int playerPosX;
 
+    @JsonIgnore
     private GameMap activeMap;
 
     /**

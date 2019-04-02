@@ -20,7 +20,7 @@ public class ZirconGameMapColorProfile {
 
     public static final ZirconGameMapColorProfile FOREST_GREEN = new ZirconGameMapColorProfile() {{
         wallBG = TileColors.create(0, 0, 0);
-        wallFG = TileColors.create(0, 50, 0);
+        wallFG = TileColors.create(0, 25, 0);
 
         pathBG = TileColors.create(0, 50, 0);
         pathFG = TileColors.create(0, 200, 0);

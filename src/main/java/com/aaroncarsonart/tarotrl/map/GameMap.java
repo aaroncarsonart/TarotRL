@@ -5,13 +5,14 @@ import java.io.Serializable;
 /**
  * Encapsulates essential 2d tileGrid information in one class.
  *
- * This coordinate plane always starts with (0,0) as the top-left corder,
+ * This coordinate plane always starts with (0,0) as the top-left corner,
  * with (mapHeight, mapWidth) as the bottom right corner of the tileGrid.
  */
 public class GameMap implements Serializable {
 
     private String name;
     private char[][] tileGrid;
+    private char[][] spriteLayer;
 
     private int height;  // NOTE: height/rows are equivalent terminology
     private int width;   // NOTE: width/columns are equivalent terminology

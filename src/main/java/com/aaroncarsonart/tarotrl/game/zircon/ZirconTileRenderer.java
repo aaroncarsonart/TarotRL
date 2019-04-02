@@ -44,6 +44,7 @@ public class ZirconTileRenderer {
             }
         }
 
+
         // draw sprites
         int px = gameState.getPlayerPosX();
         int py = gameState.getPlayerPosY();

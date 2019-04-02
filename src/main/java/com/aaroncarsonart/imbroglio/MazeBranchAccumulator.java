@@ -327,21 +327,20 @@ public class MazeBranchAccumulator {
      *        cells to be picked first as candidates for having walls removed.
      */
     public Set<Cell> countBranchDistances(int x, int y, int terminalOffset) {
-
+        Graph<Cell> graph = getCellGraph();
         Set<Cell> visited = new HashSet<Cell>();
         Queue<Cell> queue = new LinkedList<Cell>();
 
         Cell initial = cells[x][y];
         initial.distance = 0;
-        //System.out.println("initial type: " + initial.type);
+        System.out.println("initial type: " + initial.type);
 
         queue.add(initial);
         visited.add(initial);
 
         while (!queue.isEmpty()) {
             Cell current = queue.poll();
-            //Set<Cell> neighbors = graph.getEdges(current);
-            LinkedList<Cell> neighbors = current.getNeighbors();
+            Set<Cell> neighbors = graph.getEdges(current);
 
             // reset count if branch occurs (branch has more than 2 neighbors)
             if (accumulatorType == Maze.PATH && neighbors.size() > 2){
@@ -615,7 +614,9 @@ public class MazeBranchAccumulator {
      * @param args does nothing.
      */
     public static void main(String[] args) {
+        // TODO: implement a method for removing walls, one at a time
+        // TODO: algorithm should fix the wall
+
         testAccumulator(20,20);
     }
 }
-
