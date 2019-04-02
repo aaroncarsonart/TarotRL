@@ -10,7 +10,7 @@ import java.util.Map;
  * Handle user input from Zircon API.  Convert into PlayerActions
  * or other commands that update specifically the GameState.
  */
-public class ZirconInputHandler {
+public class InputHandler {
 
     private static final Map<String, PlayerAction> inputActionsMap = initInputActionsMap();
 

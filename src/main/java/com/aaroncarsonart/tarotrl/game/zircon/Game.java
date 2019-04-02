@@ -17,7 +17,7 @@ import org.hexworks.zircon.api.resource.TilesetResource;
 /**
  * The main class for encapsulating all game logic when using the Zircon UI.
  */
-public class ZirconGame {
+public class Game {
 
 //    public static final TilesetResource REX_PAINT_8x8 = CP437TilesetResources.rexPaint8x8();
 //    public static final TilesetResource MD_CURSES_16x16 = CP437TilesetResources.mdCurses16x16();
@@ -76,10 +76,10 @@ public class ZirconGame {
                         .build());
 
         GameActionHandler actionHandler = new GameActionHandler();
-        ZirconInputHandler inputHandler = new ZirconInputHandler();
+        InputHandler inputHandler = new InputHandler();
         tileGrid.onKeyStroke(inputHandler::handleKeyStroke);
 
-        ZirconTileRenderer tileRenderer = new ZirconTileRenderer();
+        TileRenderer tileRenderer = new TileRenderer();
         tileRenderer.renderGameState(tileGrid, gameState);
 
         while (true) {

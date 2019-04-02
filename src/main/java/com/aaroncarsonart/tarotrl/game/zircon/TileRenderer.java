@@ -9,14 +9,14 @@ import org.hexworks.zircon.api.color.TileColor;
 import org.hexworks.zircon.api.data.Tile;
 import org.hexworks.zircon.api.grid.TileGrid;
 
-public class ZirconTileRenderer {
+public class TileRenderer {
 
-    private ZirconGameMapColorProfile colors;
+    private GameMapColorProfile colors;
     private GameMap renderedGameMap;
     private Tile[][] mapTiles;
 
-    public ZirconTileRenderer() {
-        colors = ZirconGameMapColorProfile.FOREST_GREEN;
+    public TileRenderer() {
+        colors = GameMapColorProfile.FOREST_GREEN;
     }
 
     /**

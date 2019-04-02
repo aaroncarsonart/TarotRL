@@ -6,7 +6,7 @@ import org.hexworks.zircon.api.color.TileColor;
 /**
  * Encapsulate the specific colors used to render GameMaps.
  */
-public class ZirconGameMapColorProfile {
+public class GameMapColorProfile {
 
     TileColor wallBG;
     TileColor wallFG;
@@ -18,7 +18,7 @@ public class ZirconGameMapColorProfile {
     TileColor defaultBG;
     TileColor defaultFG;
 
-    public static final ZirconGameMapColorProfile FOREST_GREEN = new ZirconGameMapColorProfile() {{
+    public static final GameMapColorProfile FOREST_GREEN = new GameMapColorProfile() {{
         wallBG = TileColors.create(0, 0, 0);
         wallFG = TileColors.create(0, 25, 0);
 
