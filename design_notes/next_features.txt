@@ -1,0 +1,3 @@
+- Make multi-window game display
+- Load maps from JSON
+- Link map navigation via stairs/doors/portals to new maps
