@@ -2,6 +2,7 @@ package com.aaroncarsonart.tarotrl.deck;
 
 
 import com.aaroncarsonart.tarotrl.Globals;
+import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,7 +31,7 @@ public class TarotRL {
             TarotDeck tarotDeck = Globals.OBJECT_MAPPER.readValue(url, TarotDeck.class);
             return tarotDeck;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new TarotRLException(e);
         }
     }
 }

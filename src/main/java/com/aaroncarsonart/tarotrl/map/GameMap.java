@@ -1,5 +1,7 @@
 package com.aaroncarsonart.tarotrl.map;
 
+import com.aaroncarsonart.imbroglio.Position;
+
 import java.io.Serializable;
 
 /**
@@ -59,6 +61,10 @@ public class GameMap implements Serializable {
                 (0 <= px && px < width);
     }
 
+    public boolean withinBounds(Position pos) {
+        return withinBounds(pos.y(), pos.x());
+    }
+
     /**
      * Is the given position within the bounds of the tileGrid?
      * @param py The y coordinate to check
@@ -69,6 +75,11 @@ public class GameMap implements Serializable {
         char tile = tileGrid[py][px];
         return GameSprite.PASSABLE_TILES.contains(tile);
     }
+
+    public boolean isPassable(Position pos) {
+        return isPassable(pos.y(), pos.x());
+    }
+
 
     public int getHeight() {
         return height;

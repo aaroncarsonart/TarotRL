@@ -1,6 +1,7 @@
 package com.aaroncarsonart.tarotrl.deck;
 
 import com.aaroncarsonart.tarotrl.Globals;
+import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 
 import java.io.IOException;
 
@@ -38,7 +39,7 @@ public class Suit extends Keywordable {
         try {
             return Globals.OBJECT_MAPPER.writeValueAsString(this);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new TarotRLException(e);
         }
     }
 }

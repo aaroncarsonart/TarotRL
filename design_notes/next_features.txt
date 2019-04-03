@@ -1,3 +1,16 @@
 - Make multi-window game display
 - Load maps from JSON
 - Link map navigation via stairs/doors/portals to new maps
+
+Exploring maps with different features
+- lighting in darkness important
+- torches, lamps, spells
+- hmm, explored/visible areas?
+
+Make a series of maps that can be explored in a fun way.
+Add stuff to collect.  Resources you can do stuff with.
+What is the purpose of the game?
+- Collect all 78 Tarot Cards.
+- Complete the Fool's Journey ... what would that mean?
+
+Do Tarot cards represent maps? Monsters? Ways of traversing?

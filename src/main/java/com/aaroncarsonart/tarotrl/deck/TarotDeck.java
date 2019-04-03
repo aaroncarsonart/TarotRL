@@ -1,6 +1,7 @@
 package com.aaroncarsonart.tarotrl.deck;
 
 import com.aaroncarsonart.tarotrl.Globals;
+import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -131,7 +132,7 @@ public class TarotDeck {
         try {
             return Globals.OBJECT_MAPPER.writeValueAsString(this);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new TarotRLException(e);
         }
     }
 }

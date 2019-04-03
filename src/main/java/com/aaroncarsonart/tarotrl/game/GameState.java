@@ -1,5 +1,6 @@
 package com.aaroncarsonart.tarotrl.game;
 
+import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.GameSprite;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -86,7 +87,7 @@ public class GameState implements Serializable {
 
     public void addGameMap(GameMap gameMap) {
         if (gameMaps.containsKey(gameMap.getKey())) {
-            throw new RuntimeException("Map '" + gameMap.getKey() + "' has non-unique key.");
+            throw new TarotRLException("Map '" + gameMap.getKey() + "' has non-unique key.");
         }
         gameMaps.put(gameMap.getKey(), gameMap);
     }

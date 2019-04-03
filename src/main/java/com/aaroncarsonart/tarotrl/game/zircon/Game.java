@@ -45,7 +45,7 @@ public class Game {
 //        Maze maze = Maze.generateRandomWalledMaze(21, 21);
 //        GameMap gameMap = GameMapUtils.createGameMapFromMaze("Maze Map", maze);
 
-        Maze maze = generateCavernMap(50, 50, 2);
+        Maze maze = generateCavernMap(500, 500, 2);
         GameMap gameMap = GameMapUtils.createGameMapFromMaze("Cave map", maze);
 
 //        GameMap gameMap = GameMapUtils.readFileAsGameMap("/maps/test_game_map.txt");
@@ -65,9 +65,8 @@ public class Game {
         //LinkedList<GameState> gameStates = new LinkedList<>();
         GameState gameState = initGameState();
 
-        GameMap activeGameMap = gameState.getActiveMap();
-        int width = activeGameMap.getWidth();
-        int height = activeGameMap.getHeight();
+        int width = 100;
+        int height = 50;
 
         TileGrid tileGrid = SwingApplications.startTileGrid(
                 AppConfigs.newConfig()
@@ -75,18 +74,19 @@ public class Game {
                         .withDefaultTileset(TILESET)
                         .build());
 
+        ViewPort viewPort = new ViewPort(20, 2, width - 40, height - 12);
+
         GameActionHandler actionHandler = new GameActionHandler();
         InputHandler inputHandler = new InputHandler();
         tileGrid.onKeyStroke(inputHandler::handleKeyStroke);
 
         TileRenderer tileRenderer = new TileRenderer();
-        tileRenderer.renderGameState(tileGrid, gameState);
-
+        tileRenderer.renderGameMapThroughViewPort(tileGrid, gameState, viewPort);
         while (true) {
             PlayerAction nextAction = inputHandler.consumeNextAction();
             if (nextAction != PlayerAction.UNKNOWN) {
                 actionHandler.processPlayerAction(nextAction, gameState);
-                tileRenderer.renderGameState(tileGrid, gameState);
+                tileRenderer.renderGameMapThroughViewPort(tileGrid, gameState, viewPort);
             }
         }
     }
