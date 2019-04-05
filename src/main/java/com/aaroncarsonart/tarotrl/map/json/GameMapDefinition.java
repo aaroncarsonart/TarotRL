@@ -1,5 +1,6 @@
 package com.aaroncarsonart.tarotrl.map.json;
 
+import com.aaroncarsonart.imbroglio.Difficulty;
 import com.aaroncarsonart.tarotrl.map.MapType;
 import com.aaroncarsonart.tarotrl.validation.ValidatedDefinition;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -29,9 +30,29 @@ public class GameMapDefinition extends ValidatedDefinition {
 
     private String[] mapTerrainData = null;
 
-    private Integer iterations = null;
     private Integer width = null;
     private Integer height = null;
+
+    /**
+     * Easier mazes have more disconnected components, and thus have
+     * multiple paths to reach most destinations within the maze.
+     */
+    private Difficulty mazeDifficulty = Difficulty.HARD;
+
+    /**
+     * The number of additional iterations applied to CELLULAR_AUTOMATA maps.
+     */
+    private Integer iterations = null;
+
+    /**
+     * What digPercentage to dig RANDOM maps before stopping.
+     */
+    private Double digPercentage = null;
+
+    /**
+     * What digPercentage to dig RANDOM maps before stopping.
+     */
+    private Boolean useTunnels = null;
 
     public String getMapName() {
         return mapName;
@@ -79,6 +100,30 @@ public class GameMapDefinition extends ValidatedDefinition {
 
     public void setIterations(Integer iterations) {
         this.iterations = iterations;
+    }
+
+    public Double getDigPercentage() {
+        return digPercentage;
+    }
+
+    public void setDigPercentage(Double digPercentage) {
+        this.digPercentage = digPercentage;
+    }
+
+    public Boolean getUseTunnels() {
+        return useTunnels;
+    }
+
+    public void setUseTunnels(Boolean useTunnels) {
+        this.useTunnels = useTunnels;
+    }
+
+    public Difficulty getMazeDifficulty() {
+        return mazeDifficulty;
+    }
+
+    public void setMazeDifficulty(Difficulty mazeDifficulty) {
+        this.mazeDifficulty = mazeDifficulty;
     }
 
     /**
@@ -142,6 +187,25 @@ public class GameMapDefinition extends ValidatedDefinition {
                     validationErrors.add("CELLULAR_AUTOMATA mapTypes must define a height.");
                 }
                 break;
+
+            case RANDOM:
+                if (mapTerrainData != null && mapTerrainData.length > 0) {
+                    validationErrors.add("RANDOM mapTypes must not define the mapTerrainData, " +
+                            "as the map contents are generated later by the GameMapGenerator.");
+                }
+                if (width == null) {
+                    validationErrors.add("RANDOM mapTypes must define a width.");
+                }
+                if (height == null) {
+                    validationErrors.add("RANDOM mapTypes must define a height.");
+                }
+                if (digPercentage == null) {
+                    validationErrors.add("RANDOM mapTypes must define the digPercentage field.");
+                }
+                if (useTunnels == null) {
+                    validationErrors.add("RANDOM mapTypes must define the useTunnels field.");
+                }
+                break;
         }
 
         return validationErrors;
@@ -163,13 +227,26 @@ public class GameMapDefinition extends ValidatedDefinition {
                 this.width = charactersPerRow;
                 this.height = rowCount;
                 this.iterations = null;
+                this.digPercentage = null;
+                this.useTunnels = null;
                 break;
 
             case MAZE:
+                if (this.mazeDifficulty == null) {
+                    this.mazeDifficulty = Difficulty.HARD;
+                }
+                this.iterations = null;
+                this.digPercentage = null;
+                this.useTunnels = null;
+                break;
+
+            case RANDOM:
                 this.iterations = null;
                 break;
 
             case CELLULAR_AUTOMATA:
+                this.digPercentage = null;
+                this.useTunnels = null;
                 break;
         }
     }

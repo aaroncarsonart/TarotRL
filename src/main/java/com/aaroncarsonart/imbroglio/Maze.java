@@ -931,7 +931,7 @@ public class Maze
             boolean validPanel = false;
             while (!validPanel && checkList.size() != 0) {
 
-                // generate random number within the outer border
+                // generateMapFrom random number within the outer border
                 Position2D temp = checkList.get(random.nextInt(checkList.size()));
                 x = temp.x();
                 y = temp.y();
@@ -1001,7 +1001,7 @@ public class Maze
      *
      * @param width The width in tiles.
      * @param height The height in tiles.
-     * @param rooms The number of rectangular rooms to randomly generate in the
+     * @param rooms The number of rectangular rooms to randomly generateMapFrom in the
      *        space.
      * @return a new dungeon of given size with the given number of
      *         interconnected rooms.
@@ -1175,7 +1175,8 @@ public class Maze
      *
      * @param width The width of the cells to save.
      * @param height The height of the cells to save.
-     * @param percent
+     * @param percent The percentage to dig out before stopping.
+     * @param tunnels Apply a variation to the algorithm to dig more tunnel-like.
      * @return
      */
     public static Maze generateRandomShapedRoom(int width, int height,

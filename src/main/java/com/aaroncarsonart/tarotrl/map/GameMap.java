@@ -112,6 +112,23 @@ public class GameMap implements Serializable {
         return tileGrid[y][x];
     }
 
+    /**
+     * Get the top-left most position of this map that matches the given character.
+     *
+     * @param character The type of cell to find.
+     * @return The top, left-most unvisited position, or null if not found.
+     */
+    public Position2D findFirstOccurrence(char character) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (tileGrid[y][x] == character) {
+                    return new Position2D(x, y);
+                }
+            }
+        }
+        return null;
+    }
+
     public String createTileDataString() {
         // go ahead and make room for spaces and newlines
         int len = (width * 2 + 1) * height;

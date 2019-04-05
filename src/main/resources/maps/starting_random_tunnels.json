@@ -1,0 +1,8 @@
+{
+    "mapName": "Initial Random Tunnels Map",
+    "mapType": "RANDOM",
+    "width": 100,
+    "height": 100,
+    "digPercentage": 30,
+    "useTunnels": true
+}

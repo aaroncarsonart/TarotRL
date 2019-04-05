@@ -1,0 +1,8 @@
+{
+    "mapName": "Initial Random Map",
+    "mapType": "RANDOM",
+    "width": 150,
+    "height": 150,
+    "digPercentage": 30,
+    "useTunnels": false
+}

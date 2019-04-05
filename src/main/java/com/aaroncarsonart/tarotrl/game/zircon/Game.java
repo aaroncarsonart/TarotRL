@@ -1,12 +1,13 @@
 package com.aaroncarsonart.tarotrl.game.zircon;
 
-import com.aaroncarsonart.imbroglio.Maze;
 import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.game.GameActionHandler;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.map.GameMap;
-import com.aaroncarsonart.tarotrl.map.GameMapUtils;
+import com.aaroncarsonart.tarotrl.map.generator.GameMapGenerator;
+import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
+import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
 import org.hexworks.zircon.api.AppConfigs;
 import org.hexworks.zircon.api.CP437TilesetResources;
 import org.hexworks.zircon.api.Positions;
@@ -19,46 +20,32 @@ import org.hexworks.zircon.api.graphics.Layer;
 import org.hexworks.zircon.api.grid.TileGrid;
 import org.hexworks.zircon.api.resource.TilesetResource;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 /**
  * The main class for encapsulating all game logic when using the Zircon UI.
  */
 public class Game {
 
-//    public static final TilesetResource REX_PAINT_8x8 = CP437TilesetResources.rexPaint8x8();
-//    public static final TilesetResource MD_CURSES_16x16 = CP437TilesetResources.mdCurses16x16();
-//    public static final TilesetResource TILESET = CP437TilesetResources.rexPaint8x8();
-    public static final TilesetResource TILESET = CP437TilesetResources.rexPaint12x12();
-
-    /**
-     * Helper method to generate a byte[][] of paths and walls.
-     *
-     * @return a 2d byte array.
-     */
-    private static Maze generateCavernMap(int width, int height, int iterations) {
-        Maze maze = Maze.generateCellularAutomataRoom(width, height);
-        maze.connectDisconnectedComponents();
-        for (int i = 0; i < iterations; i++) {
-            maze.cellularAutomataIteration();
-            maze.connectDisconnectedComponents();
-        }
-        return maze;
-    }
-
     public static GameState initGameState() {
         GameState gameState = new GameState();
 
-//        Maze maze = Maze.generateRandomWalledMaze(21, 21);
-//        GameMap gameMap = GameMapUtils.createGameMapFromMaze("Maze Map", maze);
+        JsonDefinitionLoader loader = new JsonDefinitionLoader();
+        GameMapGenerator generator = new GameMapGenerator();
 
-        Maze maze = generateCavernMap(500, 500, 2);
-        GameMap gameMap = GameMapUtils.createGameMapFromMaze("Cave map", maze);
+//        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_vault.json");
+//        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_maze.json");
+        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_random.json");
+//        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_random_tunnels.json");
+//        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_cellular_automata.json");
 
-//        GameMap gameMap = GameMapUtils.readFileAsGameMap("/maps/test_game_map.txt");
+        GameMap gameMap = generator.generateMapFrom(definition);
 
         gameState.addGameMap(gameMap);
         gameState.setActiveMap(gameMap);
 
-        Position2D start = maze.findFirstOccurrence(Maze.PATH);
+        Position2D start = gameMap.findFirstOccurrence(GameTile.PATH.getCharacter());
 
         gameState.setPlayerPosY(start.y());
         gameState.setPlayerPosX(start.x());
@@ -67,16 +54,22 @@ public class Game {
     }
 
     public static void runZirconGame() {
-        //LinkedList<GameState> gameStates = new LinkedList<>();
         GameState gameState = initGameState();
 
-        int windowWidth = 100;
-        int windowHeight = 50;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double screenWidth = screenSize.getWidth();
+        double screenHeight = screenSize.getHeight() - 50;
+
+       TilesetResource tileSet = CP437TilesetResources.rexPaint10x10();
+
+        int windowWidth = (int) screenWidth / tileSet.getWidth();
+        int windowHeight = (int) screenHeight / tileSet.getHeight();
+
 
         TileGrid tileGrid = SwingApplications.startTileGrid(
                 AppConfigs.newConfig()
                         .withSize(Sizes.create(windowWidth, windowHeight))
-                        .withDefaultTileset(TILESET)
+                        .withDefaultTileset(tileSet)
                         .build());
 
         Position mapOffset = Positions.create(20, 2);
@@ -131,6 +124,5 @@ public class Game {
 
     public static void main(String[] args) throws Exception {
         runZirconGame();
-        // testScanner();
     }
 }

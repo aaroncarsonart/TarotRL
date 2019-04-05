@@ -43,12 +43,15 @@ public class JsonDefinitionLoader {
      * @param path The resource file path to load the GameMapDefinition from.
      * @return The validated, normalized GameMapDefinition described by
      *         the JSON definition file located at the given path.
-     * @throws ValidatedDefinitionException
      */
-    public GameMapDefinition loadGameMapDefinition(String path) throws ValidatedDefinitionException {
-        GameMapDefinition definition = loadDefinition(path, GameMapDefinition.class);
-        definition.normalize();
-        return definition;
+    public GameMapDefinition loadGameMapDefinition(String path) {
+        try {
+            GameMapDefinition definition = loadDefinition(path, GameMapDefinition.class);
+            definition.normalize();
+            return definition;
+        } catch (ValidatedDefinitionException e) {
+            throw new TarotRLException(e);
+        }
     }
 
     public void enableValidation() {

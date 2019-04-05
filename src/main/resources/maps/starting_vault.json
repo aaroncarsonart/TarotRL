@@ -1,5 +1,6 @@
 {
-    "name": "TestVaultMap",
+    "mapName": "Initial Vault Map",
+    "mapType": "VAULT",
     "mapTerrainData": [
         "########################################",
         "#................###...########...######",

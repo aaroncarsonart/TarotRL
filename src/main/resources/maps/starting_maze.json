@@ -1,0 +1,7 @@
+{
+    "mapName": "Initial Maze Map",
+    "mapType": "MAZE",
+    "width": 75,
+    "height": 50,
+    "mazeDifficulty": "EASY"
+}

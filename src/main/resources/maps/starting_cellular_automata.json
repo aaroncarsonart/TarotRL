@@ -1,0 +1,11 @@
+{
+    "mapName": "Initial Cellular Automata Map",
+    "mapType": "CELLULAR_AUTOMATA",
+    "mapTerrainData": null,
+    "width": 200,
+    "height": 200,
+    "mazeDifficulty": null,
+    "iterations": 3,
+    "digPercentage": null,
+    "useTunnels": null
+}
