@@ -1,0 +1,6 @@
+{
+    "mapName": "An invalid vault map definition, missing the mapTerrainData field",
+    "mapType": "VAULT",
+    "width": 79,
+    "height": 22
+}

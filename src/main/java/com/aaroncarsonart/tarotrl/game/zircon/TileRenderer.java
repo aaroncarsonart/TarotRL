@@ -1,6 +1,6 @@
 package com.aaroncarsonart.tarotrl.game.zircon;
 
-import com.aaroncarsonart.imbroglio.Position;
+import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.map.GameMap;
@@ -45,7 +45,6 @@ public class TileRenderer {
                         mapTiles[y][x].createCopy());
             }
         }
-
 
         // draw sprites
         int px = gameState.getPlayerPosX();
@@ -105,41 +104,76 @@ public class TileRenderer {
         // on the TileGrid, applying the appropriate offset.
         // Offset is based on the camera heuristic.
 
+        // camera coordinates
+        int cx = gameState.getPlayerPosX();
+        int cy = gameState.getPlayerPosY();
+        Position2D camera = new Position2D(cx, cy);
 
-        int px = gameState.getPlayerPosX();
-        int py = gameState.getPlayerPosY();
-        Position camera = new Position(px, py);
-        int padX = viewPort.width / 2;
-        int padY = viewPort.height / 2;
+        int offsetX = viewPort.width / 2;
+        int offsetY = viewPort.height / 2;
 
-        for (int x = 0; x < viewPort.width; x++) {
-            for (int y = 0; y < viewPort.height; y++) {
+        for (int vx = 0; vx < viewPort.width; vx++) {
+            for (int vy = 0; vy < viewPort.height; vy++) {
                 // map coordinates
-                int cx = camera.x() - padX + x;
-                int cy = camera.y() - padY + y;
-                Position current = new Position(cx, cy);
+                int mx = cx - offsetX + vx;
+                int my = cy - offsetY + vy;
+                Position2D mapPos = new Position2D(mx, my);
 
                 // screen coordinates
-                int dx = viewPort.x + x;
-                int dy = viewPort.y + y;
+                int sx = viewPort.x + vx;
+                int sy = viewPort.y + vy;
 
                 Tile tile;
-                if (activeGameMap.withinBounds(current)) {
-                    tile = mapTiles[cy][cx].createCopy();
+                if (activeGameMap.withinBounds(mapPos)) {
+                    tile = mapTiles[my][mx].createCopy();
                 } else {
                     tile = GameTile.WALL.getTile();
                 }
-                tileGrid.setTileAt(Positions.create(dx, dy), tile);
+                tileGrid.setTileAt(Positions.create(sx, sy), tile);
             }
         }
 
-        // draw sprites
-        int pdx = viewPort.x + px - camera.x() + padX;
-        int pdy = viewPort.y + py - camera.y() + padY;
+        // draw entities
+
+        // tile grid entity offsets
+        int entityOffsetX = viewPort.x - cx + offsetX;
+        int entityOffsetY = viewPort.y - cy + offsetY;
+
+        // screen player position
+        int spx = gameState.getPlayerPosX() + entityOffsetX;
+        int spy = gameState.getPlayerPosY() + entityOffsetY;
 
         tileGrid.setTileAt(
-                Positions.create(pdx, pdy),
+                Positions.create(spx, spy),
                 GameTile.PLAYER.getTile());
+    }
+
+    public void drawGuiTextInfo(TileGrid tileGrid,
+                                GameState gameState,
+                                ViewPort viewPort){
+
+        int px = gameState.getPlayerPosX();
+        int py = gameState.getPlayerPosY();
+        String playerCoordinates = "Position: " + px + ", "+  py + "    ";
+        writeText(tileGrid, playerCoordinates, 1, 1);
+        //tileGrid.write(playerCoordinates, Positions.create(2, 2));
+
+        String gameTurns = "turns: " +  gameState.getTurnCounter();;
+        writeText(tileGrid, gameTurns, 1, 3);
+        System.out.println("BG: " + tileGrid.getBackgroundColor());
+        System.out.println("FG: " + tileGrid.getForegroundColor());
+    }
+
+    public void writeText(TileGrid tileGrid, String text, int x, int y) {
+        for (int cursor = 0; cursor < text.length(); cursor ++) {
+            tileGrid.setTileAt(Positions.create(x + cursor, y),
+                    Tiles.newBuilder()
+                            .withCharacter(text.charAt(cursor))
+                            .withBackgroundColor(tileGrid.getBackgroundColor())
+                            .withForegroundColor(tileGrid.getForegroundColor())
+                            .build());
+
+        }
     }
 
 

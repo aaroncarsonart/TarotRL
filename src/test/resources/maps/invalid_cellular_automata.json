@@ -1,0 +1,8 @@
+{
+    "mapName": "An invalid cellular automata map definition, missing the iterations field",
+    "mapType": "CELLULAR_AUTOMATA",
+    "mapTerrainData": null,
+    "iterations": null,
+    "width": 19,
+    "height": 13
+}

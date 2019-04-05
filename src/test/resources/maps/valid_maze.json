@@ -1,0 +1,6 @@
+{
+    "mapName": "A valid maze map definition file",
+    "mapType": "MAZE",
+    "width": 27,
+    "height": 9
+}

@@ -44,7 +44,7 @@ Hmm, general question:
 - where should such terrain attributes be stored?
 
 Making everything an event would be interesting.
-- Have a generic MapEvent, which is basically a position, a sprite, a name, and a description message if inspected.
+- Have a generic MapEvent, which is basically a position, a sprite, a mapName, and a description message if inspected.
 - Then have TerrainEvent, which is always the lowest event.  These could also be/replace Tiles.
 - TerrainEvents will contain a pointer an ActiveEvent or a PassiveEvent.
 - ActiveEvents are entities that can move or change the state of the map.  Examples:

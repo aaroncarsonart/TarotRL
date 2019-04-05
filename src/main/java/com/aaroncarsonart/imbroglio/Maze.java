@@ -79,7 +79,7 @@ public class Maze
      * @param width The total width of the maze to create.
      * @param height The total height of the maze to create.
      */
-    public Maze(byte[][] cells, Position offsets, int width, int height) {
+    public Maze(byte[][] cells, Position2D offsets, int width, int height) {
         if (cells.length < 3)
             throw new IllegalArgumentException(
                     "Maze must be at least 3 cells wide.");
@@ -184,10 +184,10 @@ public class Maze
      * Check if the given coordinates are contained within this maze (counting
      * by cell)
      *
-     * @param pos The Position containing the coordinates to check.
+     * @param pos The Position2D containing the coordinates to check.
      * @return True, if the coordinates are within the maze.
      */
-    public boolean withinBounds(Position pos) {
+    public boolean withinBounds(Position2D pos) {
         return withinBounds(pos.x(), pos.y());
     }
 
@@ -205,13 +205,13 @@ public class Maze
     }
 
     /**
-     * Get the cell at the given Position, represented by a byte.
+     * Get the cell at the given Position2D, represented by a byte.
      *
-     * @param pos the Position to check against.
+     * @param pos the Position2D to check against.
      * @return A single cell of the maze with a value of either Maze.PATH or
      *         Maze.WALL, or Maze.OUT_OF_BOUNDS if the point is out of bounds.
      */
-    public byte getCell(Position pos) {
+    public byte getCell(Position2D pos) {
         return getCell(pos.x(), pos.y());
     }
 
@@ -320,27 +320,27 @@ public class Maze
         Maze m = new Maze(width, height);
         m.fillWithWalls();
 
-        ArrayList<Position> checklist = new ArrayList<Position>();
+        ArrayList<Position2D> checklist = new ArrayList<Position2D>();
         int halfWidth = width / 2 + 1;
         int halfHeight = height / 2 + 1;
         boolean visited[][] = new boolean[halfWidth][halfHeight];
 
         boolean digging = true;
         Random rand = RANDOM;
-        Position digger = new Position(0, 0);
+        Position2D digger = new Position2D(0, 0);
         visited[digger.x()][digger.y()] = true;
 
         while (digging) {
-            ArrayList<Position> neighbors = new ArrayList<Position>();
+            ArrayList<Position2D> neighbors = new ArrayList<Position2D>();
             neighbors.add(digger.above());
             neighbors.add(digger.below());
             neighbors.add(digger.left());
             neighbors.add(digger.right());
 
-            Iterator<Position> it = neighbors.iterator();
+            Iterator<Position2D> it = neighbors.iterator();
 
             while (it.hasNext()) {
-                Position pos = it.next();
+                Position2D pos = it.next();
                 int x = pos.x();
                 int y = pos.y();
                 if (!(0 <= x && x < halfWidth && 0 <= y && y < halfHeight)
@@ -349,8 +349,8 @@ public class Maze
             }
 
             if (neighbors.size() > 0) {
-                checklist.add(new Position(digger));
-                Position target = neighbors.get(rand.nextInt(neighbors.size()));
+                checklist.add(new Position2D(digger));
+                Position2D target = neighbors.get(rand.nextInt(neighbors.size()));
 
                 int digX;
                 if (digger.x() == target.x()) digX = digger.x() * 2;
@@ -364,7 +364,7 @@ public class Maze
                 m.cells[target.x() * 2][target.y() * 2] = PATH;
 
                 visited[target.x()][target.y()] = true;
-                digger = new Position(target);
+                digger = new Position2D(target);
 
             }
             else {
@@ -401,31 +401,31 @@ public class Maze
         }
 
         // local values needed for digging out the maze
-        ArrayList<Position> checklist = new ArrayList<Position>();
+        ArrayList<Position2D> checklist = new ArrayList<Position2D>();
         int halfWidth = width / 2;
         int halfHeight = height / 2;
         boolean visited[][] = new boolean[halfWidth][halfHeight];
 
         boolean digging = true;
         Random rand = RANDOM;
-        Position digger = new Position(0, 0);
+        Position2D digger = new Position2D(0, 0);
         visited[digger.x()][digger.y()] = true;
 
         // dig out the maze
         while (digging) {
 
             // get neighboring positions
-            ArrayList<Position> neighbors = new ArrayList<Position>();
+            ArrayList<Position2D> neighbors = new ArrayList<Position2D>();
             neighbors.add(digger.above());
             neighbors.add(digger.below());
             neighbors.add(digger.left());
             neighbors.add(digger.right());
 
-            Iterator<Position> it = neighbors.iterator();
+            Iterator<Position2D> it = neighbors.iterator();
 
             // remove neighbors outside of maze
             while (it.hasNext()) {
-                Position pos = it.next();
+                Position2D pos = it.next();
                 int x = pos.x();
                 int y = pos.y();
 
@@ -438,10 +438,10 @@ public class Maze
 
             // if there exist at least one valid neighbor to dig to
             if (neighbors.size() > 0) {
-                checklist.add(new Position(digger));
+                checklist.add(new Position2D(digger));
 
                 // randomly select a new digging target
-                Position target = neighbors.get(rand.nextInt(neighbors.size()));
+                Position2D target = neighbors.get(rand.nextInt(neighbors.size()));
 
                 // calculate the coordinates to dig out of the maze array
                 int x1 = digger.x() * 2 + 1;
@@ -465,7 +465,7 @@ public class Maze
                 visited[target.x()][target.y()] = true;
 
                 // set target position as new digger
-                digger = new Position(target);
+                digger = new Position2D(target);
 
             }
 
@@ -489,12 +489,12 @@ public class Maze
      *
      * @return A graph of positional data.
      */
-    public Graph<Position> getPositionGraph() {
-        HashSet<Position> visited = new HashSet<Position>();
-        Queue<Position> queue = new LinkedList<Position>();
-        Graph<Position> graph = new Graph<Position>();
+    public Graph<Position2D> getPositionGraph() {
+        HashSet<Position2D> visited = new HashSet<Position2D>();
+        Queue<Position2D> queue = new LinkedList<Position2D>();
+        Graph<Position2D> graph = new Graph<Position2D>();
 
-        Position start = findFirstUnvisitedCell(PATH, visited);
+        Position2D start = findFirstUnvisitedCell(PATH, visited);
 
         while (start != null) {
             // add them to the queue, and begin searching.
@@ -504,8 +504,8 @@ public class Maze
 
             // find all connected components to this element.
             while (!queue.isEmpty()) {
-                Position current = queue.remove();
-                for (Position neighbor : current.getNeighbors()) {
+                Position2D current = queue.remove();
+                for (Position2D neighbor : current.getNeighbors()) {
 
                     // case 1: been here already.
                     if (visited.contains(neighbor)) {
@@ -546,17 +546,17 @@ public class Maze
      *
      * @return A graph of positional data.
      */
-    public List<Set<Position>> getConnectedComponents() {
+    public List<Set<Position2D>> getConnectedComponents() {
 
-        List<Set<Position>> components = new ArrayList<Set<Position>>();
-        HashSet<Position> visited = new HashSet<Position>();
-        Queue<Position> queue = new LinkedList<Position>();
-        //Graph<Position> graph = new Graph<Position>();
+        List<Set<Position2D>> components = new ArrayList<Set<Position2D>>();
+        HashSet<Position2D> visited = new HashSet<Position2D>();
+        Queue<Position2D> queue = new LinkedList<Position2D>();
+        //Graph<Position2D> graph = new Graph<Position2D>();
 
-        Position start = findFirstUnvisitedCell(PATH, visited);
+        Position2D start = findFirstUnvisitedCell(PATH, visited);
 
         while (start != null) {
-            Set<Position> component = new HashSet<Position>();
+            Set<Position2D> component = new HashSet<Position2D>();
             components.add(component);
             // add them to the queue, and begin searching.
             visited.add(start);
@@ -566,8 +566,8 @@ public class Maze
 
             // find all connected components to this element.
             while (!queue.isEmpty()) {
-                Position current = queue.remove();
-                for (Position neighbor : current.getNeighbors()) {
+                Position2D current = queue.remove();
+                for (Position2D neighbor : current.getNeighbors()) {
 
                     // case 1: been here already.
                     if (visited.contains(neighbor)) {
@@ -613,17 +613,17 @@ public class Maze
         // ***************************************
         // 1. get disconnected components.
         // ***************************************
-        //Graph<Position> graph = getPositionGraph();
-        //List<Set<Position>> components = graph.getDisconnectedComponents();
-        List<Set<Position>> components = this.getConnectedComponents();
+        //Graph<Position2D> graph = getPositionGraph();
+        //List<Set<Position2D>> components = graph.getDisconnectedComponents();
+        List<Set<Position2D>> components = this.getConnectedComponents();
         System.out.printf("Disconnected Components: %d\n", components.size());
         System.out.printf("Paths: %d\n", countPaths());
 
         // *******************************************************
         // 2. remove the front set, as a starting point.
         // ********************************************************
-        Iterator<Set<Position>> setIterator = components.iterator();
-        Set<Position> result = null;
+        Iterator<Set<Position2D>> setIterator = components.iterator();
+        Set<Position2D> result = null;
         if(setIterator.hasNext()){
             result = setIterator.next();
             setIterator.remove();
@@ -632,14 +632,14 @@ public class Maze
         // connect each other component to this one.
         while(setIterator.hasNext()){
             // get and remove the next element.
-            Set<Position> nextComponent = setIterator.next();
+            Set<Position2D> nextComponent = setIterator.next();
             setIterator.remove();
 
             // dig a path from this set to the result.
             //TODO: dig to the next thing.
             boolean connected = false;
-            Iterator<Position> it = nextComponent.iterator();
-            Position digger = null;
+            Iterator<Position2D> it = nextComponent.iterator();
+            Position2D digger = null;
             if (it.hasNext()){
                 digger = it.next();
                 it.remove();
@@ -651,16 +651,16 @@ public class Maze
 			*/
 
             // find a path to the result.
-            List<Position> path = findPathToComponent(result, digger);
+            List<Position2D> path = findPathToComponent(result, digger);
 
             // make the path positions, and add them to the result.
-            for(Position p : path){
+            for(Position2D p : path){
                 cells[p.x()][p.y()] = PATH;
                 result.add(p);
             }
 
             // add all the positions in this set to the result set.
-            for(Position p : nextComponent){
+            for(Position2D p : nextComponent){
                 result.add(p);
             }
         }
@@ -672,10 +672,10 @@ public class Maze
      * @param position
      * @return
      */
-    public List<Position> getNeighbors(Position position){
+    public List<Position2D> getNeighbors(Position2D position){
         // get all neighbors.
-        List<Position> neighbors = position.getNeighbors();
-        Iterator<Position> it = neighbors.iterator();
+        List<Position2D> neighbors = position.getNeighbors();
+        Iterator<Position2D> it = neighbors.iterator();
         while(it.hasNext()){
             // if the next element is not within bounds, remove it.
             if(!withinBounds(it.next())) it.remove();
@@ -692,22 +692,22 @@ public class Maze
      * @param start The starting position.
      * @return
      */
-    public List<Position> findPathToComponent(Set<Position> component, Position start){
+    public List<Position2D> findPathToComponent(Set<Position2D> component, Position2D start){
         Random r = RANDOM;
-        HashSet<Position> visited = new HashSet<Position>();
-        LinkedList<Position> path = new LinkedList<Position>();
+        HashSet<Position2D> visited = new HashSet<Position2D>();
+        LinkedList<Position2D> path = new LinkedList<Position2D>();
         path.add(start);
         visited.add(start);
 
         // run search
         while(!path.isEmpty()){
-            Position current = path.peek();
+            Position2D current = path.peek();
 
             //check neighboring positions.
-            List<Position> neighbors = current.getNeighbors();
-            Iterator<Position> it = neighbors.iterator();
+            List<Position2D> neighbors = current.getNeighbors();
+            Iterator<Position2D> it = neighbors.iterator();
             while(it.hasNext()){
-                Position neighbor = it.next();
+                Position2D neighbor = it.next();
 
                 // found a collect_treasure (finished)
                 if(component.contains(neighbor)) {
@@ -727,8 +727,8 @@ public class Maze
                     break;
 
                 default:
-                    // push a random neighboring Position onto the stack.
-                    Position next = neighbors.get(r.nextInt(neighbors.size()));
+                    // push a random neighboring Position2D onto the stack.
+                    Position2D next = neighbors.get(r.nextInt(neighbors.size()));
                     path.push(next);
                     visited.add(next);
                     break;
@@ -736,38 +736,38 @@ public class Maze
         }
 
         // if reached, no treasures were found.
-        return new LinkedList<Position>();
+        return new LinkedList<Position2D>();
 
 
 		/*
 		Random r = new Random();
-		HashSet<Position> visited = new HashSet<Position>();
-		Stack<Position> stack = new Stack<Position>();
+		HashSet<Position2D> visited = new HashSet<Position2D>();
+		Stack<Position2D> stack = new Stack<Position2D>();
 		stack.push(start);
 
-		List<Position> path = new LinkedList<Position>();
+		List<Position2D> path = new LinkedList<Position2D>();
 
 		while(!stack.isEmpty()){
-			Position next = stack.pop();
+			Position2D next = stack.pop();
 			if(!visited.contains(next)){
 				visited.add(next);
-				List<Position> neighbors = getNeighbors(next);
+				List<Position2D> neighbors = getNeighbors(next);
 				for(int i = 0; i < neighbors.size(); i++){
-					Position neighbor = neighbors.remove(r.nextInt(neighbors.size()));
+					Position2D neighbor = neighbors.remove(r.nextInt(neighbors.size()));
 					stack.push(neighbor);
 				}
 			}
 		}
 
 		/*
-		List<Position> path = new LinkedList<Position>();
-		Set<Position> visited = new HashSet<Position>();
-		Position digger = new Position(start);
+		List<Position2D> path = new LinkedList<Position2D>();
+		Set<Position2D> visited = new HashSet<Position2D>();
+		Position2D digger = new Position2D(start);
 		visited.add(digger);
 		boolean complete = false;
 		while(!complete){
-			List<Position> neighbors = getNeighbors(digger);
-			Position neighbor = neighbors.get(r.nextInt(neighbors.size()));
+			List<Position2D> neighbors = getNeighbors(digger);
+			Position2D neighbor = neighbors.get(r.nextInt(neighbors.size()));
 
 		}
 		*/
@@ -783,11 +783,11 @@ public class Maze
      * @return The top, left-most unvisited position, or null if every position
      *         has been visited.
      */
-    public Position findFirstUnvisitedCell(byte cellType, boolean[][] visited) {
+    public Position2D findFirstUnvisitedCell(byte cellType, boolean[][] visited) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (!visited[x][y] && cells[x][y] == cellType) {
-                    return new Position(x, y);
+                    return new Position2D(x, y);
                 }
             }
         }
@@ -803,13 +803,13 @@ public class Maze
      * @return The top, left-most unvisited position, or null if every position
      *         has been visited.
      */
-    public Position findFirstUnvisitedCell(byte cellType,
-                                           HashSet<Position> visited) {
+    public Position2D findFirstUnvisitedCell(byte cellType,
+                                             HashSet<Position2D> visited) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (!visited.contains(new Position(x, y))
+                if (!visited.contains(new Position2D(x, y))
                         && cells[x][y] == cellType) {
-                    return new Position(x, y);
+                    return new Position2D(x, y);
                 }
             }
         }
@@ -822,11 +822,11 @@ public class Maze
      * @param cellType The type of cell to find.
      * @return The top, left-most unvisited position, or null if not found.
      */
-    public Position findFirstOccurrence(byte cellType) {
+    public Position2D findFirstOccurrence(byte cellType) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (cells[x][y] == cellType) {
-                    return new Position(x, y);
+                    return new Position2D(x, y);
                 }
             }
         }
@@ -912,13 +912,13 @@ public class Maze
         }
 
         // create a list of valid cells to iterate over
-        ArrayList<Position> checkList = new ArrayList<Position>();
+        ArrayList<Position2D> checkList = new ArrayList<Position2D>();
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
                 // if the coordinate is a wall
                 if (cells[x][y] == 1) {
                     // add it to the list to iterate over
-                    checkList.add(new Position(x, y));
+                    checkList.add(new Position2D(x, y));
                 }
             }
         }
@@ -932,7 +932,7 @@ public class Maze
             while (!validPanel && checkList.size() != 0) {
 
                 // generate random number within the outer border
-                Position temp = checkList.get(random.nextInt(checkList.size()));
+                Position2D temp = checkList.get(random.nextInt(checkList.size()));
                 x = temp.x();
                 y = temp.y();
 
@@ -1014,24 +1014,24 @@ public class Maze
 
         // 4. Depth first search through the dungeon like the maze.
 		/*
-		 * //local values needed for digging out the maze ArrayList<Position>
-		 * checklist = new ArrayList<Position>(); int halfWidth = width / 2; int
+		 * //local values needed for digging out the maze ArrayList<Position2D>
+		 * checklist = new ArrayList<Position2D>(); int halfWidth = width / 2; int
 		 * halfHeight = height / 2; boolean visited[][] = new
 		 * boolean[halfWidth][halfHeight];
 		 *
-		 * boolean digging = true; Random rand = new Random(); Position digger =
-		 * new Position(0, 0); visited[digger.x()][digger.y()] = true;
+		 * boolean digging = true; Random rand = new Random(); Position2D digger =
+		 * new Position2D(0, 0); visited[digger.x()][digger.y()] = true;
 		 *
 		 * //dig out the maze while (digging) {
 		 *
-		 * //get neighboring positions ArrayList<Position> neighbors = new
-		 * ArrayList<Position>(); neighbors.add(digger.above());
+		 * //get neighboring positions ArrayList<Position2D> neighbors = new
+		 * ArrayList<Position2D>(); neighbors.add(digger.above());
 		 * neighbors.add(digger.below()); neighbors.add(digger.left());
 		 * neighbors.add(digger.right());
 		 *
-		 * Iterator<Position> it = neighbors.iterator();
+		 * Iterator<Position2D> it = neighbors.iterator();
 		 *
-		 * //remove neighbors outside of maze while (it.hasNext()) { Position
+		 * //remove neighbors outside of maze while (it.hasNext()) { Position2D
 		 * pos = it.next(); int x = pos.x(); int y = pos.y();
 		 *
 		 * // remove if position has already been visited, or is out of bounds
@@ -1041,9 +1041,9 @@ public class Maze
 		 * }
 		 *
 		 * //if there exist at least one valid neighbor to dig to if
-		 * (neighbors.size() > 0) { checklist.add(new Position(digger));
+		 * (neighbors.size() > 0) { checklist.add(new Position2D(digger));
 		 *
-		 * //randomly select a new digging target Position target =
+		 * //randomly select a new digging target Position2D target =
 		 * neighbors.get(rand.nextInt(neighbors.size()));
 		 *
 		 * //calculate the coordinates to dig out of the maze array int x1 =
@@ -1060,7 +1060,7 @@ public class Maze
 		 *
 		 * // mark as visited visited[target.x()][target.y()] = true;
 		 *
-		 * // set target position as new digger digger = new Position(target);
+		 * // set target position as new digger digger = new Position2D(target);
 		 *
 		 * }
 		 *
@@ -1186,7 +1186,7 @@ public class Maze
         boolean[][] visited = new boolean[width][height];
 
         // dig out the center square.
-        Position digger = new Position(width / 2, height / 2);
+        Position2D digger = new Position2D(width / 2, height / 2);
         m.cells[digger.x()][digger.y()] = PATH;
         visited[digger.x()][digger.y()] = true;
         int count = 1;
@@ -1198,18 +1198,18 @@ public class Maze
             count++;
             // 1. find a bordering neighbor.
             // dig out any unoccupied neighbors.
-            List<Position> neighbors = new ArrayList<Position>();
+            List<Position2D> neighbors = new ArrayList<Position2D>();
             neighbors.add(digger.above());
             neighbors.add(digger.below());
             neighbors.add(digger.left());
             neighbors.add(digger.right());
-            neighbors.add(new Position(digger.x() - 1, digger.y() - 1));
-            neighbors.add(new Position(digger.x() - 1, digger.y() + 1));
-            neighbors.add(new Position(digger.x() + 1, digger.y() - 1));
-            neighbors.add(new Position(digger.x() + 1, digger.y() + 1));
+            neighbors.add(new Position2D(digger.x() - 1, digger.y() - 1));
+            neighbors.add(new Position2D(digger.x() - 1, digger.y() + 1));
+            neighbors.add(new Position2D(digger.x() + 1, digger.y() - 1));
+            neighbors.add(new Position2D(digger.x() + 1, digger.y() + 1));
 
             for (int i = neighbors.size() - 1; i >= 0; i--) {
-                Position next = neighbors.get(i);
+                Position2D next = neighbors.get(i);
                 if (m.withinBounds(next)) {
                     if (visited[next.x()][next.y()]) {
                         if (tunnels) neighbors.remove(i);
@@ -1383,7 +1383,7 @@ public class Maze
      * @param rule The rule to use.
      * @return
      */
-    public static Maze combineMazes(Maze[] mazes, Position[] offsets, int rule) {
+    public static Maze combineMazes(Maze[] mazes, Position2D[] offsets, int rule) {
         int width = 0, height = 0;
 
         // calculate final maze dimensions.
@@ -1500,8 +1500,8 @@ public class Maze
 			 * Maze[] mazes = { Maze.generateRandomWalledMaze(60,60),
 			 * Maze.generateCellularAutomataRoom(40,40), };
 			 *
-			 * Position[] offsets = { new Position(0,0), //new Position(0,0),
-			 * new Position(10,10), };
+			 * Position2D[] offsets = { new Position2D(0,0), //new Position2D(0,0),
+			 * new Position2D(10,10), };
 			 *
 			 * Maze composite = Maze.combineMazes(mazes, offsets, AND);
 			 * System.out.printf("Final:\n%s\n",composite.toString());

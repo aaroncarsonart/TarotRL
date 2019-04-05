@@ -1,5 +1,8 @@
 package com.aaroncarsonart.tarotrl.game.zircon;
 
+import org.hexworks.zircon.api.data.Position;
+import org.hexworks.zircon.api.data.Size;
+
 public class ViewPort {
 
     public final int x;
@@ -12,5 +15,12 @@ public class ViewPort {
         this.y = y;
         this.width = width;
         this.height = height;
+    }
+
+    public ViewPort(Position offset, Size size) {
+        this.x = offset.getX();
+        this.y = offset.getY();
+        this.width = size.getWidth();
+        this.height = size.getHeight();
     }
 }

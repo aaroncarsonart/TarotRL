@@ -1,0 +1,19 @@
+{
+    "mapName": "Non-rectangular mapTerrainData values aren't allowed for VAULTS!",
+    "mapType": "VAULT",
+    "mapTerrainData": [
+        "#",
+        "##",
+        "###",
+        "#####",
+        "######",
+        "#######",
+        "########"
+    ],
+    "mapFeatures": [
+        {
+            "featureType": "PORTAL",
+            "tileType": "UPSTAIRS"
+        }
+    ]
+}

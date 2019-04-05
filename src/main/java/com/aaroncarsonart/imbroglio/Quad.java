@@ -26,7 +26,7 @@ public final class Quad
      * Make a Quad.
      *
      * @param x The center x position.
-     * @param y The center y Position.
+     * @param y The center y Position2D.
      * @param halfWidth The distance to the left and right edges.
      * @param halfHeight The distance to the top and bottom edges.
      */

@@ -43,6 +43,7 @@ public class GameActionHandler {
             default:
                 System.out.println("Handle PlayerAction." + nextAction.name());
         }
+        gameState.incrementTurnCounter();
     }
 
     /**

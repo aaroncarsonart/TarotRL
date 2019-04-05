@@ -1,0 +1,8 @@
+{
+    "mapName": "A valid cellular automata map definition file",
+    "mapType": "CELLULAR_AUTOMATA",
+    "mapTerrainData": null,
+    "iterations": 3,
+    "width": 19,
+    "height": 13
+}

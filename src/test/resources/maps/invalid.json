@@ -1,0 +1,4 @@
+{
+    "unusedField": "This map definition is completely incorrect!",
+    "whatThisTests": "This tests only the ConstraintViolation validation for GameMapDefinitions."
+}

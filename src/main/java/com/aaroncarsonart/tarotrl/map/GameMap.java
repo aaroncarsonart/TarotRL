@@ -1,6 +1,6 @@
 package com.aaroncarsonart.tarotrl.map;
 
-import com.aaroncarsonart.imbroglio.Position;
+import com.aaroncarsonart.imbroglio.Position2D;
 
 import java.io.Serializable;
 
@@ -14,7 +14,6 @@ public class GameMap implements Serializable {
 
     private String name;
     private char[][] tileGrid;
-    private char[][] spriteLayer;
 
     private int height;  // NOTE: height/rows are equivalent terminology
     private int width;   // NOTE: width/columns are equivalent terminology
@@ -61,7 +60,7 @@ public class GameMap implements Serializable {
                 (0 <= px && px < width);
     }
 
-    public boolean withinBounds(Position pos) {
+    public boolean withinBounds(Position2D pos) {
         return withinBounds(pos.y(), pos.x());
     }
 
@@ -76,7 +75,7 @@ public class GameMap implements Serializable {
         return GameSprite.PASSABLE_TILES.contains(tile);
     }
 
-    public boolean isPassable(Position pos) {
+    public boolean isPassable(Position2D pos) {
         return isPassable(pos.y(), pos.x());
     }
 

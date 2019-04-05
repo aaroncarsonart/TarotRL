@@ -25,6 +25,8 @@ public class GameState implements Serializable {
     private int playerPosY;
     private int playerPosX;
 
+    private int turnCounter;
+
     @JsonIgnore
     private GameMap activeMap;
 
@@ -79,6 +81,14 @@ public class GameState implements Serializable {
 
     public void setActiveMap(GameMap activeMap) {
         this.activeMap = activeMap;
+    }
+
+    public void incrementTurnCounter() {
+        turnCounter++;
+    }
+
+    public int getTurnCounter() {
+        return turnCounter;
     }
 
     // ------------------------------------------------------

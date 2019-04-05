@@ -1,0 +1,9 @@
+{
+    "mapName": "An invalid maze map definition",
+    "mapType": "MAZE",
+    "mapTerrainData": [
+        "Whoops, I'm supposed to be empty!!!"
+    ],
+    "width": null,
+    "height": null
+}
