@@ -1,5 +1,6 @@
-package com.aaroncarsonart.tarotrl.game.zircon;
+package com.aaroncarsonart.tarotrl.map;
 
+import com.aaroncarsonart.tarotrl.game.zircon.GameColors;
 import org.hexworks.zircon.api.Tiles;
 import org.hexworks.zircon.api.color.TileColor;
 import org.hexworks.zircon.api.data.Tile;
@@ -21,6 +22,7 @@ public class GameTile {
     public static final GameTile UPSTAIRS    = gameTile('<', GameColors.GREEN, colors.bgOpen);
     public static final GameTile CLOSED_DOOR = gameTile('+', GameColors.YELLOW, colors.bgOpen);
     public static final GameTile OPEN_DOOR   = gameTile('-', GameColors.YELLOW, colors.bgOpen);
+    public static final GameTile WINDOW      = gameTile('=', GameColors.YELLOW, colors.bgOpen);
     public static final GameTile TREASURE    = gameTile('$', GameColors.YELLOW, colors.bgOpen);
 
     public static final GameTile UNKNOWN = gameTile('?', GameColors.WHITE, GameColors.MAGENTA);

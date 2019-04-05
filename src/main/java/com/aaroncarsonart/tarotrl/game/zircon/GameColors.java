@@ -19,15 +19,15 @@ public class GameColors {
     public static final TileColor CYAN    = TileColors.create(0, 255, 255);
     public static final TileColor MAGENTA = TileColors.create(255, 0, 255);
 
-    TileColor bgWall;
-    TileColor fgWall;
-    TileColor bgOpen;
-    TileColor fgOpen;
+    public TileColor bgWall;
+    public TileColor fgWall;
+    public TileColor bgOpen;
+    public TileColor fgOpen;
 
-    TileColor player;
+    public TileColor player;
 
-    TileColor bgEmpty;
-    TileColor fgEmpty;
+    public TileColor bgEmpty;
+    public TileColor fgEmpty;
 
     public static final GameColors FOREST_GREEN = new GameColors() {{
         bgWall = TileColors.create(0, 0, 0);

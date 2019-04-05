@@ -2,7 +2,7 @@ package com.aaroncarsonart.tarotrl.map.generator;
 
 import com.aaroncarsonart.imbroglio.Maze;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
-import com.aaroncarsonart.tarotrl.game.zircon.GameTile;
+import com.aaroncarsonart.tarotrl.map.GameTile;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
 

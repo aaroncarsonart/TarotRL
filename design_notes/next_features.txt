@@ -204,3 +204,153 @@ What is my goal?
 Validate game definitions loaded from JSON resource files meet some form of
 standard criteria, before ever trying to use them.
 
+Map Generators
+==============
+In an ideal world, my code base's map generators would have all these fancy,
+beautifully designed classes that were a breeze to work with, and all easily
+writable from a few simple and intuitive locations.
+
+Unfortunately, due to the necessity of code reuse and how I have chosen to
+redesign how I represent map data, I have a number of classes that now juggle
+one another to accomplish the final generation mission.  And even these have
+much room for improvement I can imagine for the future. The question is, how
+much refactoring is worthwhile now to create a game that is fun and keeps my
+inspiration's momentum moving forward?  Versus, what is simply a nice-to-have?
+
+This is the current map generation architecture I've created:
+
+
+
+                              ......JSON resource file
+                              :             |
+       GameMapDefinition .....:             |
+               |                           \_/
+     Maze      |                   JsonDefinitionLoader
+        \      |                            |
+         \     |                            |
+         __|  \_/                          \_/
+            GameMap  __             GameMapDefinition
+               :    |                       |
+               :       \                    |
+               :         \                 \_/
+               :           \_ _ _ _ GameMapGenerator
+               :
+               :
+   [used in actual game logic]
+
+
+
+GameMapDefinition
+-----------------
+JSON resource definition files (all in ONE class! oops).
+Contains fields that map to different GameMap types.
+
+GameMap
+-------
+The actual map type used in the game logic.  Has much room
+
+JsonDefinitionLoader
+--------------------
+Responsible for loading GameMapDefinitions from the resources
+folder into memory.  Has a validation and normalization step.
+I'm thinking, too heavily architectured for this point in
+game development.  I should remove the extra steps, and
+K.I.S.S.
+
+GameMapGenerator
+----------------
+Responsible for converting GameMapDefinitions into GameMaps.
+This is a finely designed class, and easily has room to extend
+or simply make extra generators, such as a VaultMapGenerator,
+that can be delegated to and called by this main enclosing
+class.
+
+Maze
+----
+This is an older but highly robust map generation algorithm
+class that I wrote for my MazeGame/Imbroglio projects while in
+college.  This is a highly sentimental file, as it is both the
+primary reason I fell in love with programming, and also my
+gateway into discovering my fascination with roguelikes and
+the more general topic of procedural generation algorithms.
+
+When I successfully implemented my first maze generation
+method and it carved out a two-dimensional maze of of paths
+and walls, I was super ecstatic.  I wrote an antire game based
+around exploring and showing off the output of that one chunk
+of code.  I still haven't created a final version of that app
+that fully satisfied me, and I will likely revisit and create
+the final, polished version of Imbroglio: Classic eventually,
+when the time is right and the project calls to me.
+
+But regardless of the history of this class, it has many
+incredibly helpful procedural generation algorithms defined
+within, so I've been importing and using its code for now.
+
+...
+
+However, the current design is a bit overall clunky and has a
+code smell of becoming monolithic with time.  For one, having
+to convert between byte[][] of Mazes and char[][] of GameMaps
+after generating a given grid is annoying.
+
+I could take the desired algorithms out of Maze and create a
+generics grid generator, which creates grids following
+whatever given algorithms, but instead instantiates an actual
+array of a specified ObjectType.  I'm not sure how beneficial
+this is in terms of performance though, so having a simple
+conversion algorithm written into the procedural generation
+classes to convert grid types may be preferable.
+
+What other algorithms can be implemented?  Consider graph
+based approaches that model conceptual relations that must
+be linked, and then these graphs drive the generation of
+related 2D tile grids that a roguelike game can display for
+the player to explore.
+
+For example, a house's room layout may be understood by the
+following graph design, representing my the first floor of
+my parent's house:
+
+                             ----------- Closet
+                            |
+                      MasterBedroom ---- Bathroom
+                            |
+                            |
+                            |
+                        DiningRoom ---------- Kitchen ---------- Breakfast Nook
+                            |                                          |
+                            |                                          |
+                            |                            Pantry ----   |
+                            |   ---- Bathroom                       |  |
+                            |  |                                    Hallway
+Entrance ---- Foyer ---- Hallway                                    |  |
+                            |  |                     Downstairs ----   |    ---- Entrance
+                            |   ---- Upstairs                          |   |
+                            |                                      ArtStudio
+                            |                                          |
+                            ---------------- LivingRoom ---------------
+
+This can then be used to generate any number of valid 2D grid
+representations of this house made of paths and walls, with the
+appropriate count of rooms laid out adjacent to one another with
+doorways connecting them.
+
+####=#####
+#.O..+...#
+=....#####
+#....+..O# #####
+###+########...#
+#.............0=
+=.....#.....#..#
+#.....#.....####
+##### #####.#
+#...#+..#..####=##
++...+.#####.#....+
+#...#.<# #>......#
+#####.#######....#
+#...........#....#
+=................#
+#...........#O...#
+#=########=#####=#
+

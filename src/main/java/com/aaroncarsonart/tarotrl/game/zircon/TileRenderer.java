@@ -5,6 +5,7 @@ import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.GameSprite;
+import com.aaroncarsonart.tarotrl.map.GameTile;
 import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.Tiles;
 import org.hexworks.zircon.api.color.TileColor;

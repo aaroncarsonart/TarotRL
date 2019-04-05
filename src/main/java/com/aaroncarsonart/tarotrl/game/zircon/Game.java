@@ -5,6 +5,7 @@ import com.aaroncarsonart.tarotrl.game.GameActionHandler;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.map.GameMap;
+import com.aaroncarsonart.tarotrl.map.GameTile;
 import com.aaroncarsonart.tarotrl.map.generator.GameMapGenerator;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
@@ -36,9 +37,10 @@ public class Game {
 
 //        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_vault.json");
 //        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_maze.json");
-        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_random.json");
+//        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_random.json");
 //        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_random_tunnels.json");
 //        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_cellular_automata.json");
+        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/vault_parents_house.json");
 
         GameMap gameMap = generator.generateMapFrom(definition);
 
@@ -62,8 +64,8 @@ public class Game {
 
        TilesetResource tileSet = CP437TilesetResources.rexPaint10x10();
 
-        int windowWidth = (int) screenWidth / tileSet.getWidth();
-        int windowHeight = (int) screenHeight / tileSet.getHeight();
+        int windowWidth = ((int) screenWidth / 3 * 2)  / tileSet.getWidth();
+        int windowHeight = ((int) screenHeight / 3 * 2) / tileSet.getHeight();
 
 
         TileGrid tileGrid = SwingApplications.startTileGrid(
