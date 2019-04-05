@@ -133,82 +133,7 @@ public class GameMapDefinition extends ValidatedDefinition {
      */
     @Override
     public List<String> validate() {
-        List<String> validationErrors = new ArrayList<>();
-        switch(mapType) {
-
-            case VAULT:
-                if (mapTerrainData == null || mapTerrainData.length == 0) {
-                    validationErrors.add("VAULT mapTypes must define the mapTerrainData.");
-                } else {
-                    int expectedLength = mapTerrainData[0].length();
-                    for (String row : mapTerrainData) {
-                        if (expectedLength != row.length()) {
-                            validationErrors.add("VAULT mapTypes must define the mapTerrainData " +
-                                    "as an array of strings with even length (forming a rectangle).");
-                            break;
-                        }
-                    }
-                }
-                if (width != null) {
-                    validationErrors.add("VAULT mapTypes must not define a width. " +
-                            "This property is calculated from the mapTerrainData.");
-                }
-                if (height != null) {
-                    validationErrors.add("VAULT mapTypes must not define a height. " +
-                            "This property is calculated from the mapTerrainData.");
-                }
-                break;
-
-            case MAZE:
-                if (mapTerrainData != null && mapTerrainData.length > 0) {
-                    validationErrors.add("MAZE mapTypes must not define the mapTerrainData, " +
-                            "as the map contents are generated later by the GameMapGenerator.");
-                }
-                if (width == null) {
-                    validationErrors.add("MAZE mapTypes must define a width.");
-                }
-                if (height == null) {
-                    validationErrors.add("MAZE mapTypes must define a height.");
-                }
-                break;
-
-            case CELLULAR_AUTOMATA:
-                if (mapTerrainData != null && mapTerrainData.length > 0) {
-                    validationErrors.add("CELLULAR_AUTOMATA mapTypes must not define the mapTerrainData, " +
-                            "as the map contents are generated later by the GameMapGenerator.");
-                }
-                if (iterations == null) {
-                    validationErrors.add("CELLULAR_AUTOMATA mapTypes must define the iterations field.");
-                }
-                if (width == null) {
-                    validationErrors.add("CELLULAR_AUTOMATA mapTypes must define a width.");
-                }
-                if (height == null) {
-                    validationErrors.add("CELLULAR_AUTOMATA mapTypes must define a height.");
-                }
-                break;
-
-            case RANDOM:
-                if (mapTerrainData != null && mapTerrainData.length > 0) {
-                    validationErrors.add("RANDOM mapTypes must not define the mapTerrainData, " +
-                            "as the map contents are generated later by the GameMapGenerator.");
-                }
-                if (width == null) {
-                    validationErrors.add("RANDOM mapTypes must define a width.");
-                }
-                if (height == null) {
-                    validationErrors.add("RANDOM mapTypes must define a height.");
-                }
-                if (digPercentage == null) {
-                    validationErrors.add("RANDOM mapTypes must define the digPercentage field.");
-                }
-                if (useTunnels == null) {
-                    validationErrors.add("RANDOM mapTypes must define the useTunnels field.");
-                }
-                break;
-        }
-
-        return validationErrors;
+        return new ArrayList<>();
     }
 
     /**
@@ -220,33 +145,11 @@ public class GameMapDefinition extends ValidatedDefinition {
      */
     public void normalize() {
         switch(mapType) {
-
             case VAULT:
                 int charactersPerRow = mapTerrainData[0].length();
                 int rowCount = mapTerrainData.length;
                 this.width = charactersPerRow;
                 this.height = rowCount;
-                this.iterations = null;
-                this.digPercentage = null;
-                this.useTunnels = null;
-                break;
-
-            case MAZE:
-                if (this.mazeDifficulty == null) {
-                    this.mazeDifficulty = Difficulty.HARD;
-                }
-                this.iterations = null;
-                this.digPercentage = null;
-                this.useTunnels = null;
-                break;
-
-            case RANDOM:
-                this.iterations = null;
-                break;
-
-            case CELLULAR_AUTOMATA:
-                this.digPercentage = null;
-                this.useTunnels = null;
                 break;
         }
     }

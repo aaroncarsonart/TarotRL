@@ -5,11 +5,6 @@ import com.aaroncarsonart.tarotrl.map.MapType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -34,88 +29,6 @@ class JsonDefinitionLoaderTest {
 
         loader.enableValidation();
         assertTrue(loader.getValidationEnabled(), "Validation should be disabled.");
-    }
-
-    @Test
-    void testLoadDefinition_invalidConstraints() {
-        loader.enableValidation();
-        try {
-            definition = loader.loadDefinition("/maps/invalid.json", GameMapDefinition.class);
-            fail("expected ValidatedDefinitionException for invalid map JSON definition.");
-        } catch (ValidatedDefinitionException e) {
-            System.out.println(e.toString());
-            List<String> validationErrors = e.getValidationErrors();
-            assertNotNull(validationErrors, "Expected validationErrors to not be null.");
-            assertEquals(2, validationErrors.size(), "Expected validationErrors to be present.");
-            assertTrue(validationErrors.contains("mapName must not be null"));
-            assertTrue(validationErrors.contains("mapType must not be null"));
-        }
-    }
-
-    @Test
-    void testLoadDefinition_invalidVault() {
-        loader.enableValidation();
-        try {
-            definition = loader.loadDefinition("/maps/invalid_vault.json", GameMapDefinition.class);
-            fail("expected ValidatedDefinitionException for invalid map JSON definition.");
-        } catch (ValidatedDefinitionException e) {
-            System.out.println(e.toString());
-            List<String> validationErrors = e.getValidationErrors();
-            assertNotNull(validationErrors, "Expected validationErrors to not be null.");
-            assertEquals(3, validationErrors.size(), "Expected validationErrors to be present.");
-            assertThat(validationErrors.get(0), startsWith("VAULT mapTypes must define the mapTerrainData"));
-            assertThat(validationErrors.get(1), startsWith("VAULT mapTypes must not define a width"));
-            assertThat(validationErrors.get(2), startsWith("VAULT mapTypes must not define a height"));
-        }
-    }
-
-    @Test
-    void testLoadDefinition_invalidVault_malformedTerrainData() {
-        loader.enableValidation();
-        try {
-            definition = loader.loadDefinition("/maps/invalid_vault-malformed_terrain_data.json",
-                    GameMapDefinition.class);
-            fail("expected ValidatedDefinitionException for invalid map JSON definition.");
-        } catch (ValidatedDefinitionException e) {
-            System.out.println(e.toString());
-            List<String> validationErrors = e.getValidationErrors();
-            assertNotNull(validationErrors, "Expected validationErrors to not be null.");
-            assertEquals(1, validationErrors.size(), "Expected validationErrors to be present.");
-            assertThat(validationErrors.get(0), equalTo("VAULT mapTypes must define the mapTerrainData " +
-                    "as an array of strings with even length (forming a rectangle)."));
-        }
-    }
-
-    @Test
-    void testLoadDefinition_invalidMaze() {
-        loader.enableValidation();
-        try {
-            definition = loader.loadDefinition("/maps/invalid_maze.json", GameMapDefinition.class);
-            fail("expected ValidatedDefinitionException for invalid map JSON definition.");
-        } catch (ValidatedDefinitionException e) {
-            System.out.println(e.toString());
-            List<String> validationErrors = e.getValidationErrors();
-            assertNotNull(validationErrors, "Expected validationErrors to not be null.");
-            assertEquals(3, validationErrors.size(), "Expected validationErrors to be present.");
-            assertThat(validationErrors.get(0), startsWith("MAZE mapTypes must not define the mapTerrainData"));
-            assertThat(validationErrors.get(1), startsWith("MAZE mapTypes must define a width"));
-            assertThat(validationErrors.get(2), startsWith("MAZE mapTypes must define a height"));
-        }
-    }
-
-    @Test
-    void testLoadDefinition_invalidCellularAutomata() {
-        loader.enableValidation();
-        try {
-            definition = loader.loadDefinition("/maps/invalid_cellular_automata.json", GameMapDefinition.class);
-            fail("expected ValidatedDefinitionException for invalid map JSON definition.");
-        } catch (ValidatedDefinitionException e) {
-            System.out.println(e.toString());
-            List<String> validationErrors = e.getValidationErrors();
-            assertNotNull(validationErrors, "Expected validationErrors to not be null.");
-            assertEquals(1, validationErrors.size(), "Expected validationErrors to be present.");
-            assertThat(validationErrors.get(0), startsWith("CELLULAR_AUTOMATA mapTypes must define the iterations field"));
-        }
     }
 
     /**
