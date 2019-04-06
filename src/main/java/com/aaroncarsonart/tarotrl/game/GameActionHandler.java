@@ -62,7 +62,7 @@ public class GameActionHandler {
                 break;
 
             case DOOR:
-                gameState.setStatus("Door mode. Open or close a door with ←↑↓→ keys.");
+                gameState.setStatus("Door mode. Open or close an adjacent door with ←↑↓→ keys.");
                 break;
 
             default:
@@ -123,7 +123,7 @@ public class GameActionHandler {
                 gameMap.setTile(newPosition, TileType.CLOSED_DOOR);
                 gameState.setStatus("You closed the door.");
             } else {
-                gameState.setStatus("There is no door in that direction.");
+                gameState.setStatus("There is no adjacent door in that direction.");
             }
             // As you have "confirmed" you are acting upon a door
             gameState.setCurrentAction(PlayerAction.CONFIRM);

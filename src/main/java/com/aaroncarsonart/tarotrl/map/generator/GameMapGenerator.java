@@ -70,7 +70,7 @@ public class GameMapGenerator {
         return gameMap;
     }
 
-    private char[][] createGridFrom(String[] lines) {
+    public static char[][] createGridFrom(String[] lines) {
         int gridWidth = lines[0].length();
         int gridHeight = lines.length;
 

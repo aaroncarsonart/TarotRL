@@ -28,7 +28,6 @@ public class TileRenderer {
     private GameMap renderedGameMap;
     private Tile[][] mapTiles;
     private Tile outOfBoundsTile;
-    private Tile playerTile;
 
     public TileRenderer() {
         colors = GameColors.FOREST_GREEN;
@@ -45,12 +44,6 @@ public class TileRenderer {
                 .withForegroundColor(definition.getForegroundColor())
                 .withCharacter(definition.getDisplaySprite())
                 .build();
-    }
-
-    private void calculatePlayerTile() {
-        char playerSprite = TileType.PLAYER.getSprite();
-        GameTileDefinition definition = renderedGameMap.getTileSprites().get(playerSprite);
-        playerTile = createZirconTileFrom(definition);
     }
 
     /**
@@ -70,7 +63,6 @@ public class TileRenderer {
             mapTiles = createMapTiles(activeGameMap);
             renderedGameMap = activeGameMap;
             calculateOutOfBoundsTile();
-            calculatePlayerTile();
         }
 
         List<Position2D> dirtyTiles = activeGameMap.getDirtyTiles();
@@ -259,7 +251,7 @@ public class TileRenderer {
     private void drawDecoratedCorners(TileGrid tileGrid, ViewPort viewport) {
         Tile swords = Tiles.newBuilder()
                 .withCharacter(Symbols.SPADES)
-                .withForegroundColor(GameColors.CYAN)
+                .withForegroundColor(GameColors.BLUE)
                 .withBackgroundColor(GameColors.BLACK)
                 .build();
 

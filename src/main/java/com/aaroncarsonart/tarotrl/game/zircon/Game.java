@@ -12,6 +12,7 @@ import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
 import org.hexworks.zircon.api.AppConfigs;
 import org.hexworks.zircon.api.CP437TilesetResources;
+import org.hexworks.zircon.api.Layers;
 import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.Sizes;
 import org.hexworks.zircon.api.SwingApplications;
@@ -82,6 +83,7 @@ public class Game {
                 .build();
 
         TileGrid tileGrid = SwingApplications.startTileGrid(appConfig);
+        tileGrid.pushLayer(Layers.newBuilder().build());
 
         int xOffset = 20;
         int topOffSet = 1;
@@ -122,7 +124,7 @@ public class Game {
         InputHandler inputHandler = new InputHandler();
         tileGrid.onKeyStroke(inputHandler::handleKeyStroke);
 
-        TileRenderer tileRenderer = new TileRenderer();
+        TileRenderer tileRenderer = new TarotRenderer();
         tileRenderer.renderGameMapThroughViewPort(tileGrid, gameState, mapViewPort);
         tileRenderer.drawGuiTextInfo(tileGrid, gameState, mapViewPort);
 

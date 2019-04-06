@@ -19,6 +19,43 @@ public class GameColors {
     public static final TileColor CYAN    = TileColors.create(0, 255, 255);
     public static final TileColor MAGENTA = TileColors.create(255, 0, 255);
 
+    public static final TileColor RED_1   = TileColors.fromString("#C80000");
+    public static final TileColor RED_2   = TileColors.fromString("#320000");
+    public static final TileColor RED_3   = TileColors.fromString("#2A0000");
+    public static final TileColor RED_4   = TileColors.fromString("#110000");
+
+    public static final TileColor GREEN_1   = TileColors.fromString("#00C800");
+    public static final TileColor GREEN_2   = TileColors.fromString("#003200");
+    public static final TileColor GREEN_3   = TileColors.fromString("#002A00");
+    public static final TileColor GREEN_4   = TileColors.fromString("#001100");
+
+    public static final TileColor BLUE_1   = TileColors.fromString("#0000C8");
+    public static final TileColor BLUE_2   = TileColors.fromString("#000032");
+    public static final TileColor BLUE_3   = TileColors.fromString("#00002A");
+    public static final TileColor BLUE_4   = TileColors.fromString("#000011");
+
+//    public static final TileColor BLUE_1   = TileColors.fromString("#0000F8");
+//    public static final TileColor BLUE_2   = TileColors.fromString("#000062");
+//    public static final TileColor BLUE_3   = TileColors.fromString("#00004A");
+//    public static final TileColor BLUE_4   = TileColors.fromString("#000021");
+
+    public static final TileColor YELLOW_1   = TileColors.fromString("#C8C800");
+    public static final TileColor YELLOW_2   = TileColors.fromString("#323200");
+    public static final TileColor YELLOW_3   = TileColors.fromString("#2A2A00");
+    public static final TileColor YELLOW_4   = TileColors.fromString("#111100");
+
+    public static final TileColor CYAN_1   = TileColors.fromString("#00C8C8");
+    public static final TileColor CYAN_2   = TileColors.fromString("#003232");
+    public static final TileColor CYAN_3   = TileColors.fromString("#002A2A");
+    public static final TileColor CYAN_4   = TileColors.fromString("#001111");
+
+    public static final TileColor CYAN_5   = TileColors.fromString("#008787");
+
+    public static final TileColor MAGENTA_1   = TileColors.fromString("#C800C8");
+    public static final TileColor MAGENTA_2   = TileColors.fromString("#320032");
+    public static final TileColor MAGENTA_3   = TileColors.fromString("#2A002A");
+    public static final TileColor MAGENTA_4   = TileColors.fromString("#110011");
+
     public TileColor bgWall;
     public TileColor fgWall;
     public TileColor bgOpen;

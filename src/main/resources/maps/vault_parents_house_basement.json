@@ -15,28 +15,6 @@
         " #######    "
     ],
     "backgroundSprite": " ",
-    "spriteKeyAlternateFormat": {
-        ".": {
-            "tileType": "PATH",
-            "foregroundColor": {
-                "r": 255,
-                "g": 0,
-                "b": 0,
-                "a": 255
-            },
-            "backgroundColor": {
-                "r": 0,
-                "g": 0,
-                "b": 0,
-                "a": 255
-            }
-        },
-        "#": {
-            "tileType": "WALL",
-            "foregroundColor": "#ffffff",
-            "backgroundColor": "#000000"
-        }
-    },
     "spriteKey": [
         {
             "sprite": "@",

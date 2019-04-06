@@ -388,3 +388,10 @@ Then, how might I configure stairs and portals for other maps?  Also,
 pull the spriteKey definitions out of GameMapDefinition, and into a
 more general tile definitions file.  Create four sprite sets, one for
 each element of the Quaternity.
+
+Tarot Cards:
+------------
+Actually, let's begin implementing the meat of the game: the appearance
+of the Tarot Cards.  I want to design the tiny cards, where you can
+create spreads and interact with the decks.
+
