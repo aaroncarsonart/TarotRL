@@ -1,7 +1,6 @@
 package com.aaroncarsonart.tarotrl.game;
 
 import com.aaroncarsonart.imbroglio.Position2D;
-import com.aaroncarsonart.tarotrl.game.console.ConsoleInputHandler;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
@@ -84,8 +83,6 @@ public class GameActionHandler {
      * Do execute the "HELP" game action.
      */
     private void doDisplayHelpScreen() {
-        String consoleHelpString = ConsoleInputHandler.getConsoleHelpString();
-        System.out.println(consoleHelpString);
     }
 
     /**

@@ -379,5 +379,12 @@ hours, if I designed my graphics interface and wrote adapters for both
 Zircon and my game engine's Swing implementation.
 
 That would be an interesting project.  I may do that after I get
-stairs and doors functionality working on the map navigation, so that
-the
+stairs and doors functionality working on the map navigation.
+
+Stairs:
+-------
+The next thing I desire to implement is, the stairs! First for vaults.
+Then, how might I configure stairs and portals for other maps?  Also,
+pull the spriteKey definitions out of GameMapDefinition, and into a
+more general tile definitions file.  Create four sprite sets, one for
+each element of the Quaternity.

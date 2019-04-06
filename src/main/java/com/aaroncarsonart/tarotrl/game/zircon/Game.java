@@ -42,10 +42,12 @@ public class Game {
 //        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_random.json");
 //        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_random_tunnels.json");
 //        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_cellular_automata.json");
+
+//        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/vault_parents_house_basement.json");
 //        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/vault_parents_house_lv_1.json");
 //        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/vault_parents_house_lv_2.json");
-        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/vault_parents_house_basement.json");
 
+        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/vault_parents_house_lv_1.json");
         GameMap gameMap = generator.generateMapFrom(definition);
 
         gameState.addGameMap(gameMap);
