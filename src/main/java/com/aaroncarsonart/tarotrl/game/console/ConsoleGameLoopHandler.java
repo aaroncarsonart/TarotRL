@@ -46,8 +46,8 @@ public class ConsoleGameLoopHandler {
         GameMap map = state.getActiveMap();
         char[][] tileGrid = map.getTileGridCopy();
 
-        int py = state.getPlayerPosY();
-        int px = state.getPlayerPosX();
+        int py = state.getPlayerPosition().x();
+        int px = state.getPlayerPosition().y();
         tileGrid[py][px] = GameSprite.PLAYER;
 
         GameMapUtils.printMap2D(tileGrid, map.getHeight(), map.getWidth());

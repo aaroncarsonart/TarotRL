@@ -15,10 +15,16 @@ public enum PlayerAction {
     MOVE_DOWN("Navigate the player down one tile on the game map"),
     MOVE_LEFT("Navigate the player left one tile on the game map"),
     MOVE_RIGHT("Navigate the player right one tile on the game map"),
+
+    WAIT("Player stands still, and allows the game clock to advance one step"),
     REST("Player stands still, and allows the game clock to advance one step"),
 
-    OK("Confirm current action. (Context-sensitive)"),
+    CONFIRM("Confirm current action. (Context-sensitive)"),
     CANCEL("Cancel current action. (Context-sensitive)"),
+
+    DOOR("Open or close a door."),
+
+    INSPECT("Inspect the focused position, reporting any relevant info.")
     ;
 
     /**

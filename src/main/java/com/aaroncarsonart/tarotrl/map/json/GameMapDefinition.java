@@ -7,7 +7,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class to represent GameMaps in JSON definition files.
@@ -33,6 +35,8 @@ public class GameMapDefinition extends ValidatedDefinition {
     private Integer width = null;
     private Integer height = null;
 
+    private Character backgroundSprite = null;
+
     /**
      * Easier mazes have more disconnected components, and thus have
      * multiple paths to reach most destinations within the maze.
@@ -53,6 +57,8 @@ public class GameMapDefinition extends ValidatedDefinition {
      * What digPercentage to dig RANDOM maps before stopping.
      */
     private Boolean useTunnels = null;
+
+    private List<GameTileDefinition> spriteKey;
 
     public String getMapName() {
         return mapName;
@@ -126,6 +132,22 @@ public class GameMapDefinition extends ValidatedDefinition {
         this.mazeDifficulty = mazeDifficulty;
     }
 
+    public Character getBackgroundSprite() {
+        return backgroundSprite;
+    }
+
+    public void setBackgroundSprite(Character backgroundSprite) {
+        this.backgroundSprite = backgroundSprite;
+    }
+
+    public List<GameTileDefinition> getSpriteKey() {
+        return spriteKey;
+    }
+
+    public void setSpriteKey(List<GameTileDefinition> spriteKey) {
+        this.spriteKey = spriteKey;
+    }
+
     /**
      * Custom pre-normalization validation that ensures the data is described consistently
      * within JSON definition files.
@@ -152,5 +174,17 @@ public class GameMapDefinition extends ValidatedDefinition {
                 this.height = rowCount;
                 break;
         }
+    }
+
+    /**
+     * Create a Map of sprite to definitions for the spriteKey.
+     * @return A
+     */
+    public Map<Character, GameTileDefinition> createSpriteToTile() {
+        HashMap<Character, GameTileDefinition> spriteToTileDefinition = new HashMap<>();
+        for (GameTileDefinition definition: spriteKey) {
+            spriteToTileDefinition.put(definition.getSprite(), definition);
+        }
+        return spriteToTileDefinition;
     }
 }

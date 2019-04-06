@@ -43,14 +43,33 @@ public enum Direction {
      */
     public static Direction getOpposite(Direction direction) {
         switch (direction) {
-            case LEFT:       return RIGHT;
-            case RIGHT:      return LEFT;
-            case UP:         return DOWN;
-            case DOWN:       return UP;
-            case NONE:       return NONE;
-//            case HORIZONTAL: return VERTICAL;
-//            case VERTICAL:   return HORIZONTAL;
-//            default:         return NONE;
+            case LEFT:  return RIGHT;
+            case RIGHT: return LEFT;
+            case UP:    return DOWN;
+            case DOWN:  return UP;
+            case NONE:  return NONE;
+        }
+        return null;
+    }
+
+    public String getInspectString() {
+        switch (this) {
+            case LEFT:  return "to the left";
+            case RIGHT: return "to the right";
+            case UP:    return "above";
+            case DOWN:  return "below";
+            default:    return "where you are standing,";
+        }
+
+    }
+
+    public com.aaroncarsonart.imbroglio.Direction getImbroglioDirection() {
+        switch (this) {
+            case LEFT:  return com.aaroncarsonart.imbroglio.Direction.LEFT;
+            case RIGHT: return com.aaroncarsonart.imbroglio.Direction.RIGHT;
+            case UP:    return com.aaroncarsonart.imbroglio.Direction.UP;
+            case DOWN:  return com.aaroncarsonart.imbroglio.Direction.DOWN;
+            case NONE:  return com.aaroncarsonart.imbroglio.Direction.NONE;
         }
         return null;
     }

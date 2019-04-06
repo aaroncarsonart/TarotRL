@@ -1,12 +1,15 @@
 package com.aaroncarsonart.tarotrl.game;
 
+import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
+import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.map.GameMap;
-import com.aaroncarsonart.tarotrl.map.GameSprite;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,21 +17,20 @@ import java.util.Map;
  */
 
 public class GameState implements Serializable {
-
-    // TODO refactor to use Map<String, GameMap> with the active map given by the key.
-    // TODO have GameMaps reference one another by warp portals.
-    // TODO warp portals can be one-directional or bi-directional, depending on the flavor text.
-
     private Map<String, GameMap> gameMaps = new HashMap<>();
 
     // Player info.
-    private int playerPosY;
-    private int playerPosX;
+    private Position2D playerPosition;
+    private Position2D inspectedPosition;
 
     private int turnCounter;
-
-    @JsonIgnore
     private GameMap activeMap;
+
+    private PlayerAction previousAction = PlayerAction.UNKNOWN;
+    private PlayerAction currentAction = PlayerAction.UNKNOWN;
+
+    private List<String> statusLog = new ArrayList<>();
+    private String status;
 
     /**
      * Default no-arg constructor
@@ -43,9 +45,6 @@ public class GameState implements Serializable {
     public GameState createDeepCopy() {
         GameState clonedState = new GameState();
 
-        clonedState.playerPosY = this.getPlayerPosY();
-        clonedState.playerPosX = this.getPlayerPosX();
-
         for (GameMap originalMap : gameMaps.values()) {
             GameMap clonedMap = originalMap.createDeepCopy();
             clonedState.addGameMap(clonedMap);
@@ -59,20 +58,20 @@ public class GameState implements Serializable {
     // Getters and Setters
     // ------------------------------------------------------
 
-    public int getPlayerPosY() {
-        return playerPosY;
+    public Position2D getPlayerPosition() {
+        return playerPosition;
     }
 
-    public void setPlayerPosY(int playerPosY) {
-        this.playerPosY = playerPosY;
+    public void setPlayerPosition(Position2D playerPosition) {
+        this.playerPosition = playerPosition;
     }
 
-    public int getPlayerPosX() {
-        return playerPosX;
+    public Position2D getInspectedPosition() {
+        return inspectedPosition;
     }
 
-    public void setPlayerPosX(int playerPosX) {
-        this.playerPosX = playerPosX;
+    public void setInspectedPosition(Position2D inspectedPosition) {
+        this.inspectedPosition = inspectedPosition;
     }
 
     public GameMap getActiveMap() {
@@ -91,6 +90,37 @@ public class GameState implements Serializable {
         return turnCounter;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+        if (StringUtils.isNotBlank(status)) {
+            this.statusLog.add(status);
+        }
+    }
+
+    public List<String> getStatusLog() {
+        return statusLog;
+    }
+
+    public PlayerAction getPreviousAction() {
+        return previousAction;
+    }
+
+    public void setPreviousAction(PlayerAction previousAction) {
+        this.previousAction = previousAction;
+    }
+
+    public PlayerAction getCurrentAction() {
+        return currentAction;
+    }
+
+    public void setCurrentAction(PlayerAction currentAction) {
+        this.currentAction = currentAction;
+    }
+
     // ------------------------------------------------------
     // Other Methods
     // ------------------------------------------------------
@@ -105,17 +135,4 @@ public class GameState implements Serializable {
     public GameMap lookupGameMap(String key) {
         return gameMaps.get(key);
     }
-
-
-
-    public char[][] getSpritedMapCopy() {
-        // copy the map state
-        char[][] mapCopy = activeMap.getTileGridCopy();
-
-        // draw sprites on the map
-        mapCopy[playerPosY][playerPosX] = GameSprite.PLAYER;
-
-        return mapCopy;
-    }
-
 }

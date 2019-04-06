@@ -3,9 +3,10 @@ package com.aaroncarsonart.tarotrl.game.zircon;
 import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.game.GameActionHandler;
 import com.aaroncarsonart.tarotrl.game.GameState;
+import com.aaroncarsonart.tarotrl.input.InputHandler;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.map.GameMap;
-import com.aaroncarsonart.tarotrl.map.GameTile;
+import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.generator.GameMapGenerator;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
@@ -14,6 +15,7 @@ import org.hexworks.zircon.api.CP437TilesetResources;
 import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.Sizes;
 import org.hexworks.zircon.api.SwingApplications;
+import org.hexworks.zircon.api.application.AppConfig;
 import org.hexworks.zircon.api.builder.graphics.LayerBuilder;
 import org.hexworks.zircon.api.data.Position;
 import org.hexworks.zircon.api.data.Size;
@@ -40,17 +42,21 @@ public class Game {
 //        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_random.json");
 //        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_random_tunnels.json");
 //        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/starting_cellular_automata.json");
-        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/vault_parents_house.json");
+//        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/vault_parents_house_lv_1.json");
+//        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/vault_parents_house_lv_2.json");
+        GameMapDefinition definition = loader.loadGameMapDefinition("/maps/vault_parents_house_basement.json");
 
         GameMap gameMap = generator.generateMapFrom(definition);
 
         gameState.addGameMap(gameMap);
         gameState.setActiveMap(gameMap);
 
-        Position2D start = gameMap.findFirstOccurrence(GameTile.PATH.getCharacter());
+        String initialStatus = gameMap.getName() + ".";
+        gameState.setStatus(initialStatus);
 
-        gameState.setPlayerPosY(start.y());
-        gameState.setPlayerPosX(start.x());
+        Position2D start = gameMap.findFirstOccurrence(TileType.PATH.getSprite());
+
+        gameState.setPlayerPosition(start);
 
         return gameState;
     }
@@ -62,20 +68,24 @@ public class Game {
         double screenWidth = screenSize.getWidth();
         double screenHeight = screenSize.getHeight() - 50;
 
-       TilesetResource tileSet = CP437TilesetResources.rexPaint10x10();
+        // Hey, neat!  Some tilesets have graphics build in.  For example: aesomatica16x16
+        TilesetResource tileSet = CP437TilesetResources.mdCurses16x16();
 
-        int windowWidth = ((int) screenWidth / 3 * 2)  / tileSet.getWidth();
-        int windowHeight = ((int) screenHeight / 3 * 2) / tileSet.getHeight();
+        int windowWidth = ((int) screenWidth)  / tileSet.getWidth();
+        int windowHeight = ((int) screenHeight) / tileSet.getHeight();
 
+        AppConfig appConfig = AppConfigs.newConfig()
+                .withSize(Sizes.create(windowWidth, windowHeight))
+                .withDefaultTileset(tileSet)
+                .build();
 
-        TileGrid tileGrid = SwingApplications.startTileGrid(
-                AppConfigs.newConfig()
-                        .withSize(Sizes.create(windowWidth, windowHeight))
-                        .withDefaultTileset(tileSet)
-                        .build());
+        TileGrid tileGrid = SwingApplications.startTileGrid(appConfig);
 
-        Position mapOffset = Positions.create(20, 2);
-        Size mapDimensions = Sizes.create(windowWidth - 40, windowHeight - 12);
+        int xOffset = 20;
+        int topOffSet = 1;
+        int bottomOffSet = 10;
+        Position mapOffset = Positions.create(xOffset, topOffSet);
+        Size mapDimensions = Sizes.create(windowWidth - (xOffset * 2), windowHeight - (topOffSet + bottomOffSet));
         ViewPort mapViewPort = new ViewPort(mapOffset, mapDimensions);
 
         Layer mapLayer1 = new LayerBuilder()

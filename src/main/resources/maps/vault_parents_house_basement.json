@@ -1,0 +1,123 @@
+{
+    "mapName": "The basement of my parent's house",
+    "mapType": "VAULT",
+    "mapTerrainData": [
+        "   #######  ",
+        "####.....###",
+        "#OO#.....#.#",
+        "#..+..O..+.#",
+        "#..#.....#.#",
+        "#..#..>..###",
+        "####+#####  ",
+        " #.+...#    ",
+        " #.#.O.#    ",
+        " #.#...#    ",
+        " #######    "
+    ],
+    "backgroundSprite": " ",
+    "spriteKeyAlternateFormat": {
+        ".": {
+            "tileType": "PATH",
+            "foregroundColor": {
+                "r": 255,
+                "g": 0,
+                "b": 0,
+                "a": 255
+            },
+            "backgroundColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 255
+            }
+        },
+        "#": {
+            "tileType": "WALL",
+            "foregroundColor": "#ffffff",
+            "backgroundColor": "#000000"
+        }
+    },
+    "spriteKey": [
+        {
+            "sprite": "@",
+            "tileType": "PLAYER",
+            "foregroundColor": "#FFFF00",
+            "backgroundColor": "#003200"
+        },
+        {
+            "sprite": ".",
+            "tileType": "PATH",
+            "passable": true,
+            "foregroundColor": "#00C800",
+            "backgroundColor": "#003200"
+        },
+        {
+            "sprite": "#",
+            "tileType": "WALL",
+            "passable": false,
+            "foregroundColor": "#002A00",
+            "backgroundColor": "#001100"
+        },
+        {
+            "sprite": "-",
+            "tileType": "OPEN_DOOR",
+            "passable": true,
+            "foregroundColor": "#FFFF00",
+            "backgroundColor": "#003200"
+        },
+        {
+            "sprite": "+",
+            "tileType": "CLOSED_DOOR",
+            "passable": false,
+            "openable": true,
+            "foregroundColor": "#FFFF00",
+            "backgroundColor": "#001100"
+        },
+        {
+            "sprite": "=",
+            "tileType": "WINDOW",
+            "passable": false,
+            "foregroundColor": "#00FFFF",
+            "backgroundColor": "#001100"
+        },
+        {
+            "sprite": "<",
+            "tileType": "UPSTAIRS",
+            "passable": true,
+            "portalTrigger": "ON_INSPECT_TILE",
+            "foregroundColor": "#FFFF00",
+            "backgroundColor": "#003200"
+        },
+        {
+            "sprite": ">",
+            "tileType": "DOWNSTAIRS",
+            "passable": true,
+            "portalTrigger": "ON_INSPECT_TILE",
+            "foregroundColor": "#FFFF00",
+            "backgroundColor": "#003200"
+        },
+        {
+            "sprite": "O",
+            "tileType": "FURNITURE",
+            "passable": false,
+            "foregroundColor": "#FFFFFF",
+            "backgroundColor": "#003200"
+        },
+        {
+            "sprite": "0",
+            "displaySprite": " ",
+            "tileType": "PORTAL",
+            "portalTrigger": "ON_OCCUPY_TILE",
+            "passable": true,
+            "foregroundColor": "#000000",
+            "backgroundColor": "#000000"
+        },
+        {
+            "sprite": " ",
+            "tileType": "EMPTY",
+            "passable": false,
+            "foregroundColor": "#000000",
+            "backgroundColor": "#000000"
+        }
+    ]
+}

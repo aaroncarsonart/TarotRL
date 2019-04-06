@@ -1,5 +1,6 @@
 package com.aaroncarsonart.tarotrl.game.console;
 
+import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.game.GameActionHandler;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.map.GameMap;
@@ -20,8 +21,7 @@ public class ConsoleGame {
     public static GameState initGameState() {
         GameState gameState = new GameState();
 
-        gameState.setPlayerPosY(1);
-        gameState.setPlayerPosX(1);
+        gameState.setPlayerPosition(new Position2D(1, 1));
 
 //        Maze maze = Maze.generateRandomWalledMaze(21, 21);
 //        GameMap gameMap = GameMapUtils.createGameMapFromMaze("Maze Map", maze);

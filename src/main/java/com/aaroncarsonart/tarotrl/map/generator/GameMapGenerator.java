@@ -2,9 +2,12 @@ package com.aaroncarsonart.tarotrl.map.generator;
 
 import com.aaroncarsonart.imbroglio.Maze;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
-import com.aaroncarsonart.tarotrl.map.GameTile;
 import com.aaroncarsonart.tarotrl.map.GameMap;
+import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
+import com.aaroncarsonart.tarotrl.map.json.GameTileDefinition;
+
+import java.util.Map;
 
 /**
  * Encapsulates logic for Generating GameMaps from GameMapDefinitions.
@@ -57,6 +60,13 @@ public class GameMapGenerator {
                 throw new TarotRLException("Unhandled MapType encountered: " + definition.getMapType());
         }
         GameMap gameMap = new GameMap(mapName, terrainGrid, height, width);
+
+        Map<Character, GameTileDefinition> tileSprites = definition.createSpriteToTile();
+        gameMap.setTileSprites(tileSprites);
+
+        char backgroundSprite = definition.getBackgroundSprite();
+        gameMap.setOutOfBoundsTile(backgroundSprite);
+
         return gameMap;
     }
 
@@ -70,7 +80,8 @@ public class GameMapGenerator {
             String row = lines[y];
             int rowWidth = row.length();
             for (int x = 0; x < rowWidth; x ++) {
-                characterGrid[y][x] = row.charAt(x);
+                char sprite = row.charAt(x);
+                characterGrid[y][x] = sprite;
             }
         }
         return characterGrid;
@@ -87,11 +98,11 @@ public class GameMapGenerator {
                 byte mazeCell = maze.getCell(x, y);
                 char character;
                 if (mazeCell == Maze.PATH) {
-                    character = GameTile.PATH.getCharacter();
+                    character = TileType.PATH.getSprite();
                 } else if (mazeCell == Maze.WALL) {
-                    character = GameTile.WALL.getCharacter();
+                    character = TileType.WALL.getSprite();
                 } else {
-                    character = GameTile.EMPTY.getCharacter();
+                    character = TileType.EMPTY.getSprite();
                 }
                 characterGrid[y][x] = character;
             }

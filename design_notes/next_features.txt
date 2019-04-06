@@ -354,3 +354,30 @@ doorways connecting them.
 #...........#O...#
 #=########=#####=#
 
+Graphics Implementations
+========================
+Currently, I am using Zircon.  This is convenient as it has built-in,
+simplified functionality for drawing characters in a tile grid to the
+screen with specified foreground and background characters.
+
+One annoyance is the fullscreen functionality doesn't work the way
+that I prefer.
+
+I could go back to adding full Swing functionality, but that would be
+quite a bit of work to isolate the GOOD bits of my old JGameEngine's
+graphics engine and make a simplified tile display.  I know I got a
+simple character display working at some point, and I also know that
+my implementation is far less CPU-intensive, as I can have microscopic
+control over when each sprite is updated and the screen is re-rendered.
+
+This would be highly preferrable to having my Mac running hot if Zircon
+is running for longer than say 30 seconds on my machine.
+
+Unfortunately, the amount of work to design this tile grid interface
+would be ... a few days of work.  Maybe I could bash it out in a few
+hours, if I designed my graphics interface and wrote adapters for both
+Zircon and my game engine's Swing implementation.
+
+That would be an interesting project.  I may do that after I get
+stairs and doors functionality working on the map navigation, so that
+the

@@ -289,6 +289,7 @@ public final class Position2D implements Serializable {
             case DOWN: return below();
             case LEFT: return left();
             case RIGHT:return right();
+            case NONE: return new Position2D(this);
             default: return null;
         }
     }

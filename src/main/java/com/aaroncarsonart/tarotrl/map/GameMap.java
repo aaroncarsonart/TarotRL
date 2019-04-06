@@ -1,8 +1,12 @@
 package com.aaroncarsonart.tarotrl.map;
 
 import com.aaroncarsonart.imbroglio.Position2D;
+import com.aaroncarsonart.tarotrl.map.json.GameTileDefinition;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Encapsulates essential 2d tileGrid information in one class.
@@ -18,6 +22,14 @@ public class GameMap implements Serializable {
     private int height;  // NOTE: height/rows are equivalent terminology
     private int width;   // NOTE: width/columns are equivalent terminology
 
+    private Map<Character, GameTileDefinition> tileSprites;
+    private char outOfBoundsTile = '#';
+
+    /**
+     * Any tiles that need re-rendering, as the game state has changed.
+     */
+    private List<Position2D> dirtyTiles = new ArrayList<>();
+
     public GameMap(String name, char[][] tileGrid, int height, int width) {
         this.name = name;
         this.tileGrid = tileGrid;
@@ -26,6 +38,22 @@ public class GameMap implements Serializable {
     }
 
     private GameMap() {
+    }
+
+    public Map<Character, GameTileDefinition> getTileSprites() {
+        return tileSprites;
+    }
+
+    public void setTileSprites(Map<Character, GameTileDefinition> tileSprites) {
+        this.tileSprites = tileSprites;
+    }
+
+    public char getOutOfBoundsTile() {
+        return outOfBoundsTile;
+    }
+
+    public void setOutOfBoundsTile(char outOfBoundsTile) {
+        this.outOfBoundsTile = outOfBoundsTile;
     }
 
     public GameMap createDeepCopy() {
@@ -71,8 +99,9 @@ public class GameMap implements Serializable {
      * @return True, if the position lands on the tileGrid; otherwise, false.
      */
     public boolean isPassable(int py, int px) {
-        char tile = tileGrid[py][px];
-        return GameSprite.PASSABLE_TILES.contains(tile);
+        char sprite = tileGrid[py][px];
+        GameTileDefinition tile = tileSprites.get(sprite);
+        return tile.isPassable();
     }
 
     public boolean isPassable(Position2D pos) {
@@ -108,8 +137,32 @@ public class GameMap implements Serializable {
         return getName();
     }
 
+    public List<Position2D> getDirtyTiles() {
+        return dirtyTiles;
+    }
+
     public char getTile(int y, int x) {
         return tileGrid[y][x];
+    }
+
+    public char getTile(Position2D pos) {
+        return getTile(pos.y(), pos.x());
+    }
+
+    public void setTile(Position2D pos, TileType newTileType) {
+        tileGrid[pos.y()][pos.x()] = newTileType.getSprite();
+        dirtyTiles.add(pos);
+    }
+
+    public GameTileDefinition getTileDefinition(Position2D pos) {
+        char tileSprite;
+        if (withinBounds(pos)) {
+            tileSprite = getTile(pos);
+        } else {
+            tileSprite = outOfBoundsTile;
+        }
+        GameTileDefinition tileDefinition = tileSprites.get(tileSprite);
+        return tileDefinition;
     }
 
     /**

@@ -1,6 +1,5 @@
-package com.aaroncarsonart.tarotrl.game.zircon;
+package com.aaroncarsonart.tarotrl.input;
 
-import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import org.hexworks.zircon.api.input.KeyStroke;
 
 import java.util.LinkedHashMap;
@@ -23,12 +22,14 @@ public class InputHandler {
 
         inputActionsMap.put("q", PlayerAction.QUIT);
 
-        inputActionsMap.put("w", PlayerAction.MOVE_UP);
-        inputActionsMap.put("s", PlayerAction.MOVE_DOWN);
-        inputActionsMap.put("a", PlayerAction.MOVE_LEFT);
-        inputActionsMap.put("d", PlayerAction.MOVE_RIGHT);
+//        inputActionsMap.put("w", PlayerAction.MOVE_UP);
+//        inputActionsMap.put("s", PlayerAction.MOVE_DOWN);
+//        inputActionsMap.put("a", PlayerAction.MOVE_LEFT);
+//        inputActionsMap.put("d", PlayerAction.MOVE_RIGHT);
 
-        inputActionsMap.put("x", PlayerAction.OK);
+        inputActionsMap.put("d", PlayerAction.DOOR);
+
+        inputActionsMap.put("x", PlayerAction.CONFIRM);
         inputActionsMap.put("c", PlayerAction.CANCEL);
 
         inputActionsMap.put("up", PlayerAction.MOVE_UP);
@@ -58,7 +59,7 @@ public class InputHandler {
             case ArrowLeft:  return PlayerAction.MOVE_LEFT;
             case ArrowRight: return PlayerAction.MOVE_RIGHT;
             case Space:      return PlayerAction.REST;
-            case Enter:  return PlayerAction.OK;
+            case Enter:  return PlayerAction.CONFIRM;
             case Escape: return PlayerAction.CANCEL;
         }
         char key = keyStroke.getCharacter();
