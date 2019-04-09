@@ -15,6 +15,8 @@ public enum PlayerAction {
     MOVE_DOWN("Navigate the player down one tile on the game map"),
     MOVE_LEFT("Navigate the player left one tile on the game map"),
     MOVE_RIGHT("Navigate the player right one tile on the game map"),
+    ASCEND("Navigate the player one tile of higher elevation"),
+    DESCEND("Navigate the player one tile of lower elevation"),
 
     WAIT("Player stands still, and allows the game clock to advance one step"),
     REST("Player stands still, and allows the game clock to advance one step"),
@@ -24,7 +26,7 @@ public enum PlayerAction {
 
     DOOR("Open or close a door."),
 
-    INSPECT("Inspect the focused position, reporting any relevant info.")
+    INSPECT("Inspect the focused origin, reporting any relevant info.")
     ;
 
     /**
@@ -45,5 +47,19 @@ public enum PlayerAction {
      */
     public String getDescription() {
         return description;
+    }
+
+    public boolean isMovementAction() {
+        switch (this) {
+            case MOVE_LEFT:
+            case MOVE_RIGHT:
+            case MOVE_UP:
+            case MOVE_DOWN:
+            case ASCEND:
+            case DESCEND:
+                return true;
+            default:
+                return false;
+        }
     }
 }

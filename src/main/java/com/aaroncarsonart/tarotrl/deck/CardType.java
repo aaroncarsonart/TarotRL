@@ -1,6 +1,6 @@
 package com.aaroncarsonart.tarotrl.deck;
 
-import com.aaroncarsonart.tarotrl.game.zircon.GameColors;
+import com.aaroncarsonart.tarotrl.graphics.GameColors;
 import org.hexworks.zircon.api.color.TileColor;
 
 import java.util.EnumSet;

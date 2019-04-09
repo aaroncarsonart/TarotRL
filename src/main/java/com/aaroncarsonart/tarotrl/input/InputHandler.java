@@ -14,6 +14,8 @@ public class InputHandler {
     private static final Map<String, PlayerAction> inputActionsMap = initInputActionsMap();
 
     private PlayerAction nextAction = PlayerAction.UNKNOWN;
+    private boolean devMode = false;
+    private boolean shiftDown = false;
 
     private static Map<String, PlayerAction> initInputActionsMap() {
         Map<String, PlayerAction> inputActionsMap = new LinkedHashMap<>();
@@ -53,6 +55,9 @@ public class InputHandler {
     }
 
     private synchronized PlayerAction computeNextAction(KeyStroke keyStroke) {
+        this.devMode = keyStroke.isAltDown();
+        this.shiftDown = keyStroke.isShiftDown();
+
         switch (keyStroke.inputType()) {
             case ArrowUp:    return PlayerAction.MOVE_UP;
             case ArrowDown:  return PlayerAction.MOVE_DOWN;
@@ -72,5 +77,13 @@ public class InputHandler {
         PlayerAction consumedAction = nextAction;
         nextAction = PlayerAction.UNKNOWN;
         return consumedAction;
+    }
+
+    public boolean getDevMove() {
+        return devMode;
+    }
+
+    public boolean getShiftDown() {
+        return shiftDown;
     }
 }

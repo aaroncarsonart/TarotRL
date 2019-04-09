@@ -429,7 +429,7 @@ public class Maze
                 int x = pos.x();
                 int y = pos.y();
 
-                // remove if position has already been visited, or is out of
+                // remove if origin has already been visited, or is out of
                 // bounds
                 if (!(0 <= x && x < halfWidth && 0 <= y && y < halfHeight)
                         || visited[x][y]) it.remove();
@@ -464,7 +464,7 @@ public class Maze
                 // mark as visited
                 visited[target.x()][target.y()] = true;
 
-                // set target position as new digger
+                // set target origin as new digger
                 digger = new Position2D(target);
 
             }
@@ -472,11 +472,11 @@ public class Maze
             // otherwise
             else {
 
-                // digger position is removed from the checklist
+                // digger origin is removed from the checklist
                 checklist.remove(digger);
 
                 // finished if the algorithm is empty; otherwise, get another
-                // random position
+                // random origin
                 if (checklist.size() == 0) return m;
                 else digger = checklist.get(rand.nextInt(checklist.size()));
             }
@@ -523,7 +523,7 @@ public class Maze
                     else {
                         //System.out.println("found path from " + current + " to " + neighbor);
 
-                        // mark this position as added
+                        // mark this origin as added
                         visited.add(neighbor);
 
                         graph.addVertex(neighbor);
@@ -585,7 +585,7 @@ public class Maze
                     else {
                         //System.out.println("found path from " + current + " to " + neighbor);
 
-                        // mark this position as added
+                        // mark this origin as added
                         visited.add(neighbor);
 
                         //graph.addVertex(neighbor);
@@ -689,7 +689,7 @@ public class Maze
      * This path may meander over existing paths or walls to get there.  It
      * does not modify the underlying data structure.
      * @param component The set of Positions to find a path to.
-     * @param start The starting position.
+     * @param start The starting origin.
      * @return
      */
     public List<Position2D> findPathToComponent(Set<Position2D> component, Position2D start){
@@ -722,7 +722,7 @@ public class Maze
 
             switch(neighbors.size()){
                 case 0:
-                    // position is exhausted.
+                    // origin is exhausted.
                     path.pop();
                     break;
 
@@ -780,7 +780,7 @@ public class Maze
      *
      * @param cellType The type of cell to find.
      * @param visited The array of booleans that contain visited data
-     * @return The top, left-most unvisited position, or null if every position
+     * @return The top, left-most unvisited origin, or null if every origin
      *         has been visited.
      */
     public Position2D findFirstUnvisitedCell(byte cellType, boolean[][] visited) {
@@ -800,7 +800,7 @@ public class Maze
      *
      * @param cellType The type of cell to find.
      * @param visited The array of booleans that contain visited data
-     * @return The top, left-most unvisited position, or null if every position
+     * @return The top, left-most unvisited origin, or null if every origin
      *         has been visited.
      */
     public Position2D findFirstUnvisitedCell(byte cellType,
@@ -820,7 +820,7 @@ public class Maze
      * Get the top-left most cell from this Maze of the given type.
      *
      * @param cellType The type of cell to find.
-     * @return The top, left-most unvisited position, or null if not found.
+     * @return The top, left-most unvisited origin, or null if not found.
      */
     public Position2D findFirstOccurrence(byte cellType) {
         for (int y = 0; y < height; y++) {
@@ -961,7 +961,7 @@ public class Maze
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
                 int counter = 0;
-                // if the position is a wall
+                // if the origin is a wall
                 if ((cells[x - 1][y + 1] == 0 && cells[x][y + 1] == 0
                         && cells[x + 1][y + 1] == 0 && cells[x - 1][y] == 0
                         && cells[x][y] == 1 && cells[x + 1][y] == 0
@@ -1034,7 +1034,7 @@ public class Maze
 		 * //remove neighbors outside of maze while (it.hasNext()) { Position2D
 		 * pos = it.next(); int x = pos.x(); int y = pos.y();
 		 *
-		 * // remove if position has already been visited, or is out of bounds
+		 * // remove if origin has already been visited, or is out of bounds
 		 * if (!(0 <= x && x < halfWidth && 0 <= y && y < halfHeight) ||
 		 * visited[x][y]) it.remove();
 		 *
@@ -1060,17 +1060,17 @@ public class Maze
 		 *
 		 * // mark as visited visited[target.x()][target.y()] = true;
 		 *
-		 * // set target position as new digger digger = new Position2D(target);
+		 * // set target origin as new digger digger = new Position2D(target);
 		 *
 		 * }
 		 *
 		 * // otherwise else {
 		 *
-		 * //digger position is removed from the checklist
+		 * //digger origin is removed from the checklist
 		 * checklist.remove(digger);
 		 *
 		 * // finished if the algorithm is empty; otherwise, get another random
-		 * position if (checklist.size() == 0) return m; else digger =
+		 * origin if (checklist.size() == 0) return m; else digger =
 		 * checklist.get(rand.nextInt(checklist.size())); } }
 		 */
         // 5. Done.
@@ -1279,7 +1279,7 @@ public class Maze
 
     /**
      * Run one iteration of cellular automata with the given threshold values.
-     * For each position, if the neighboring cells' wall count is beneath the
+     * For each origin, if the neighboring cells' wall count is beneath the
      * threshold, the cell becomes a wall; otherwise, it becomes a path.
      * @param wallThreshold The minimum neighboring WALLs for a WALL cell.
      * @param pathThreshold The minimum neighboring WALLs for a PATH cell.

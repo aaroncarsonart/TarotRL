@@ -16,7 +16,7 @@ public class TarotDeck {
     private List<Suit> suits;
 
     /**
-     * Note: the 0th position is the top card.
+     * Note: the 0th origin is the top card.
      */
     private List<TarotCard> cards;
     private int[] ordering;

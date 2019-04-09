@@ -4,6 +4,9 @@ import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.map.GameMap;
+import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
+import com.aaroncarsonart.tarotrl.world.GameWorld;
+import com.aaroncarsonart.tarotrl.world.Position3D;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -19,18 +22,23 @@ import java.util.Map;
 public class GameState implements Serializable {
     private Map<String, GameMap> gameMaps = new HashMap<>();
 
-    // Player info.
     private Position2D playerPosition;
-    private Position2D inspectedPosition;
+    private Position3D inspectedPosition;
 
     private int turnCounter;
     private GameMap activeMap;
+    private GameWorld gameWorld;
 
     private PlayerAction previousAction = PlayerAction.UNKNOWN;
     private PlayerAction currentAction = PlayerAction.UNKNOWN;
 
+    private Map<Character, TileDefinition> tileDefinitions;
+
     private List<String> statusLog = new ArrayList<>();
     private String status;
+
+    private boolean devMode;
+    private boolean shiftDown;
 
     /**
      * Default no-arg constructor
@@ -38,25 +46,10 @@ public class GameState implements Serializable {
     public GameState() {
     }
 
-    /**
-     * Create a deep copy of this GameState.  Makes some assumptions about values of fields.
-     * @return A deep copy of the GameState.
-     */
-    public GameState createDeepCopy() {
-        GameState clonedState = new GameState();
-
-        for (GameMap originalMap : gameMaps.values()) {
-            GameMap clonedMap = originalMap.createDeepCopy();
-            clonedState.addGameMap(clonedMap);
-        }
-        GameMap clonedActiveMap = clonedState.lookupGameMap(activeMap.getKey());
-        clonedState.setActiveMap(clonedActiveMap);
-        return clonedState;
-    }
-
     // ------------------------------------------------------
     // Getters and Setters
     // ------------------------------------------------------
+
 
     public Position2D getPlayerPosition() {
         return playerPosition;
@@ -66,11 +59,11 @@ public class GameState implements Serializable {
         this.playerPosition = playerPosition;
     }
 
-    public Position2D getInspectedPosition() {
+    public Position3D getInspectedPosition() {
         return inspectedPosition;
     }
 
-    public void setInspectedPosition(Position2D inspectedPosition) {
+    public void setInspectedPosition(Position3D inspectedPosition) {
         this.inspectedPosition = inspectedPosition;
     }
 
@@ -119,6 +112,38 @@ public class GameState implements Serializable {
 
     public void setCurrentAction(PlayerAction currentAction) {
         this.currentAction = currentAction;
+    }
+
+    public void setGameWorld(GameWorld gameWorld) {
+        this.gameWorld = gameWorld;
+    }
+
+    public GameWorld getGameWorld() {
+        return gameWorld;
+    }
+
+    public Map<Character, TileDefinition> getTileDefinitions() {
+        return tileDefinitions;
+    }
+
+    public void setTileDefinitions(Map<Character, TileDefinition> tileDefinitions) {
+        this.tileDefinitions = tileDefinitions;
+    }
+
+    public boolean isDevMode() {
+        return devMode;
+    }
+
+    public void setDevMode(boolean devMode) {
+        this.devMode = devMode;
+    }
+
+    public boolean isShiftDown() {
+        return shiftDown;
+    }
+
+    public void setShiftDown(boolean shiftDown) {
+        this.shiftDown = shiftDown;
     }
 
     // ------------------------------------------------------

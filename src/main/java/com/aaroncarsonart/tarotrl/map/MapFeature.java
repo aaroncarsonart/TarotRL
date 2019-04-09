@@ -4,7 +4,7 @@ public enum MapFeature {
 
     /**
      * Portals are any feature type that teleport the player from
-     * one map and position to another map and position.  These may
+     * one map and origin to another map and origin.  These may
      * be logically upstairs/downstairs, map boundaries, doors, etc.
      */
     PORTAL,

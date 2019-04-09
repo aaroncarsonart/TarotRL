@@ -1,7 +1,7 @@
 package com.aaroncarsonart.imbroglio;
 
 /**
- * Orientation is similar to Direction, but gives different information, it says
+ * Orientation is similar to Direction2D, but gives different information, it says
  * where one object is in relation to another.
  * 
  * @author Aaron Carson

@@ -1,0 +1,62 @@
+The GameWorld object loads GameMaps into a cohesive 3 dimensional
+array of game blocks.  These game blocks are dynamically loaded
+as more maps are explored and must be loaded into the game memory.
+
+GameMaps are the templates used to generate individual layers of the
+GameWorld.  For example, going underground you are likely to find
+tunnels and mazes that are sprawling with all manner of complexity,
+which don't need to be aligned atop one another.  However, buildings
+above ground should have some internal logical consistency to that
+fits in with the game world, for example normal buildings usually
+don't grow to be larger on the upper floors as they do with the
+lower floors.
+
+If the game was designed entirely by hand, there would be no need
+to model the world this way.  Maps could simply be linked with
+teleport locations to new maps and positions.  However, to more
+easily and accurately place procedurally generated content,
+choosing to represent the game's world with tiles within a three
+dimensional grid allows for 3 dimensional structures to be
+generated and placed in the world more easily, rather than having
+to manage a likely jagged digraph of GameMaps. Also, this makes
+traversal upward and downward more intuitive, if I choose to
+implement variety to such features in the future.
+
+How do GameMaps translate onto a GameWorld?  GameMaps intuitively
+are creating a world with many layers.  There is the terrain,
+which represents the ground layer, and a variety of open and
+closed spaces on the player layer, representing walls, objects,
+and entities to interact with.
+
+There are options for how to approach the z-axis:
+
+1. One option I'm seeing is to not model a GameWorld's terrain
+as voxels representing even game space.  Rather, having it more
+logically abstracted that each Position3D represents one interactable
+and displayable layer of the GameWorld, that would produce a
+smoother and more intuitive gameplay experience.
+
+Meaning that along the GameWorld's Z-axis, voxelPosition 0 would
+represent the surface of the game world.  This surface itself
+could have varying elevations, which the player can ascend or
+descend.
+
+2. A perhaps more intuitive way to model and play would be to
+take the typical voxel approach.  Then, tiles of certain terrain
+types would be traversable between different elevations, based
+on different types:
+ - General open ground that is off by an elevation of 1 would
+   be traversable with a slightly increased energy cost.
+ - Walls demonstrate a more abrupt change in altitude that
+   would prevent a player from ascending up a layer.
+ - Abrupt changes in altitude down a layer are demonstrated with
+   a more intense color pallete shift.
+
+
+
+
+Increasing and decreasing elevation changes how the game terrain
+is displayed to the player.  Lower elevations would fade darker,
+and higher elevations would fade lighter, with the foreground
+and background colors gradually blending closer and closer in
+color the further away they are from the player.

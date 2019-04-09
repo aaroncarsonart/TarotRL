@@ -15,9 +15,21 @@ import java.net.URL;
  */
 public class JsonDefinitionLoader {
 
-    private ObjectMapper mapper  = Globals.OBJECT_MAPPER;
-    private DefinitionValidator validator = new DefinitionValidator();
+    private static final ObjectMapper mapper  = Globals.OBJECT_MAPPER;
+    private static final DefinitionValidator validator = new DefinitionValidator();
     private boolean validationEnabled = true;
+
+    public void enableValidation() {
+        validationEnabled = true;
+    }
+
+    public void disableValidation() {
+        validationEnabled = false;
+    }
+
+    public boolean getValidationEnabled() {
+        return validationEnabled;
+    }
 
     public <T> T loadDefinition(String path, Class<T> type) throws ValidatedDefinitionException {
         URL url = JsonDefinitionLoader.class.getResource(path);
@@ -54,15 +66,20 @@ public class JsonDefinitionLoader {
         }
     }
 
-    public void enableValidation() {
-        validationEnabled = true;
+    public GameConfigDefinition loadGameConfig(String path) {
+        try {
+            GameConfigDefinition config = loadDefinition(path, GameConfigDefinition.class);
+            return config;
+        } catch (ValidatedDefinitionException e) {
+            throw new TarotRLException(e);
+        }
     }
-
-    public void disableValidation() {
-        validationEnabled = false;
-    }
-
-    public boolean getValidationEnabled() {
-        return validationEnabled;
+    public TileDefinitionSet loadTileDefinitionSet(String path) {
+        try {
+            TileDefinitionSet result = loadDefinition(path, TileDefinitionSet.class);
+            return result;
+        } catch (ValidatedDefinitionException e) {
+            throw new TarotRLException(e);
+        }
     }
 }

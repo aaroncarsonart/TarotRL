@@ -115,7 +115,7 @@ public class GameMapUtils {
     }
 
     /**
-     * Check if the given position is empty (accessable to be moved upon).
+     * Check if the given origin is empty (accessable to be moved upon).
      * @param map The map to check.
      * @param py The y coordinate.
      * @param px The x coordinate.

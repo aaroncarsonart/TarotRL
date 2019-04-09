@@ -1,38 +1,6 @@
 {
-    "mapName": "The first floor of my parent's house",
-    "mapType": "VAULT",
-    "mapTerrainData": [
-        " ####=#####         ",
-        " #.O..+...#         ",
-        " =....#####         ",
-        " #....+..O# #####   ",
-        " ###+########...#   ",
-        " #.............O=   ",
-        " =.....#.....#..#   ",
-        " #.....#.....####   ",
-        " #####.#####.#      ",
-        " #...#.+.O#..####=# ",
-        "0+...+.#####.#....# ",
-        " #....<# #>.......+0",
-        " #####.#######....# ",
-        " #...........#....# ",
-        " =................# ",
-        " #...........#O...# ",
-        " ##=#######=#####=# "
-    ],
-    "backgroundSprite": " ",
-     "MapEvents": [
-         {
-             "position": [11, 6],
-             "eventType": "TELEPORT",
-             "eventTrigger": "ON_CONFIRM",
-             "eventMetadata": {
-                 "targetPosition": [1, 1],
-                 "targetMap": "/maps/parents_house_lv_2.json"
-             }
-         }
-     ],
-    "spriteKey": [
+    "name": "FOREST_GREEN",
+    "tileDefinitions": [
         {
             "sprite": "@",
             "tileType": "PLAYER",

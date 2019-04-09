@@ -1,5 +1,7 @@
 package com.aaroncarsonart.imbroglio;
 
+ import com.aaroncarsonart.tarotrl.world.Position3D;
+
  import java.io.Serializable;
  import java.util.ArrayList;
  import java.util.Random;
@@ -21,7 +23,7 @@ public final class Position2D implements Serializable {
     private int y;
 
     /**
-     * Constructor - creates a new position variable at x/y.
+     * Constructor - creates a new origin variable at x/y.
      */
     public Position2D() {
         x = 0;
@@ -30,7 +32,7 @@ public final class Position2D implements Serializable {
 
     /**
      * Non-default constructor - this takes an x and y variable to start the
-     * position.
+     * origin.
      */
     public Position2D(int x, int y) {
         this.x = x;
@@ -39,11 +41,19 @@ public final class Position2D implements Serializable {
 
     /**
      * Non-default constructor - this takes an x and y variable to start the
-     * position.
+     * origin.
      */
     public Position2D(Position2D newPos) {
         x = newPos.x();
         y = newPos.y();
+    }
+
+    public Position3D to3D(int z) {
+        return new Position3D(x, y, z);
+    }
+
+    public Position3D to3D() {
+        return new Position3D(x, y, 0);
     }
 
     @Override
@@ -52,8 +62,8 @@ public final class Position2D implements Serializable {
     }
 
     /**
-     * Compare for content equality against another position.
-     * @param p The position against which to compare.
+     * Compare for content equality against another origin.
+     * @param p The origin against which to compare.
      * @return True, if the Position2D has the same x and y values.
      */
     public boolean equals(Position2D p) {
@@ -71,7 +81,7 @@ public final class Position2D implements Serializable {
     }
 
     /**
-     * Sets the x and y position to the new values.
+     * Sets the x and y origin to the new values.
      * @param x The new x coordinate.
      * @param y The new y coordinate.
      */
@@ -81,7 +91,7 @@ public final class Position2D implements Serializable {
     }
 
     /**
-     * Sets the x and y position to new values held by the new position.
+     * Sets the x and y origin to new values held by the new origin.
      * @param newPosition The Position2D to move this to.
      */
     public void set(Position2D newPosition) {
@@ -118,35 +128,35 @@ public final class Position2D implements Serializable {
     }
 
     /**
-     * moves the current position left by 1.
+     * moves the current origin left by 1.
      */
     public void moveLeft() {
         x -= 1;
     }
 
     /**
-     * moves the current position right by 1.
+     * moves the current origin right by 1.
      */
     public void moveRight() {
         x += 1;
     }
 
     /**
-     * moves the current position up by 1.
+     * moves the current origin up by 1.
      */
     public void moveUp() {
         y -= 1;
     }
 
     /**
-     * moves the current position down by 1.
+     * moves the current origin down by 1.
      */
     public void moveDown() {
         y += 1;
     }
 
     /**
-     * Move this position in a random direction.
+     * Move this origin in a random direction.
      */
     public void moveRandom() {
         int next = RANDOM.nextInt(4);
@@ -174,9 +184,9 @@ public final class Position2D implements Serializable {
 
     /**
      * Returns true if this Position2D is adjacent and above the passed check
-     * position.
+     * origin.
      *
-     * @param checkPos The position to check against.
+     * @param checkPos The origin to check against.
      */
     public boolean isAdjacentAbove(Position2D checkPos) {
         if (this.x == checkPos.x && (this.y - 1) == checkPos.y) {
@@ -188,9 +198,9 @@ public final class Position2D implements Serializable {
 
     /**
      * Returns true if this Position2D is adjacent and below the passed check
-     * position.
+     * origin.
      *
-     * @param checkPos The position to check against.
+     * @param checkPos The origin to check against.
      */
     public boolean isAdjacentBelow(Position2D checkPos) {
         if (this.x == checkPos.x && (this.y + 1) == checkPos.y) {
@@ -202,9 +212,9 @@ public final class Position2D implements Serializable {
 
     /**
      * Returns true if this Position2D is adjacent and to the left the passed
-     * check position.
+     * check origin.
      *
-     * @param checkPos The position to check against.
+     * @param checkPos The origin to check against.
      */
     public boolean isAdjacentLeft(Position2D checkPos) {
         if ((this.x - 1) == checkPos.x && this.y == checkPos.y) {
@@ -216,9 +226,9 @@ public final class Position2D implements Serializable {
 
     /**
      * Returns true if this Position2D is adjacent and to the right of the passed
-     * check position.
+     * check origin.
      *
-     * @param checkPos The position to check against.
+     * @param checkPos The origin to check against.
      */
     public boolean isAdjacentRight(Position2D checkPos) {
         if ((this.x + 1) == checkPos.x && this.y == checkPos.y) {
@@ -262,7 +272,7 @@ public final class Position2D implements Serializable {
 
 
     /**
-     * Convenience method to get every neighbor of this position, i.e. get below(), right(),
+     * Convenience method to get every neighbor of this origin, i.e. get below(), right(),
      * above(), and left(), called in that order.
      * @return An ArrayList of Positions.
      */
@@ -278,10 +288,10 @@ public final class Position2D implements Serializable {
 
 
     /**
-     * Get a position from the specified direction
-     * @param direction A Direction enum, either UP, DOWN, LEFT, or RIGHT.
+     * Get a origin from the specified direction
+     * @param direction A Direction2D enum, either UP, DOWN, LEFT, or RIGHT.
      *                  Returns null if an invalid direction was passed.
-     * @return A new Position2D, oriented from the original Position2D by the input Direction.
+     * @return A new Position2D, oriented from the original Position2D by the input Direction2D.
      */
     public Position2D moveTowards(Direction direction) {
         switch (direction) {
@@ -295,7 +305,7 @@ public final class Position2D implements Serializable {
     }
 
     /**
-     * Move in the specified Direction.
+     * Move in the specified Direction2D.
      * @param direction
      */
     public void move(Direction direction){
@@ -312,6 +322,34 @@ public final class Position2D implements Serializable {
 
     }
 
+    public Position2D add(Position2D v) {
+        int nx = this.x + v.x;
+        int ny = this.y + v.y;
+        return new Position2D(nx, ny);
+    }
+
+    public Position2D subtract(Position2D p) {
+        int nx = this.x - p.x;
+        int ny = this.y - p.y;
+        return new Position2D(nx, ny);
+    }
+
+    public Position2D multiply(Position2D p) {
+        int nx = this.x * p.x;
+        int ny = this.y * p.y;
+        return new Position2D(nx, ny);
+    }
+
+    public Position2D divide(Position2D p) {
+        int nx = this.x / p.x;
+        int ny = this.y / p.y;
+        return new Position2D(nx, ny);
+    }
+
+    public double distance(Position2D p1) {
+        Position2D p2 = this;
+        return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+    }
 
     @Override
     public String toString(){

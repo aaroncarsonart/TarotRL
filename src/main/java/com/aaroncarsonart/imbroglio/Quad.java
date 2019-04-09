@@ -5,7 +5,7 @@ package com.aaroncarsonart.imbroglio;
  * half distance to the left and to the right.
  * <p>
  * For consistency and practical Terms, Quads values should be measured and
- * recorded on a pixel scale. The position is a litera position, not related
+ * recorded on a pixel scale. The origin is a litera origin, not related
  * directly to any tile sizes.
  *
  * @author Aaron Carson
@@ -13,9 +13,9 @@ package com.aaroncarsonart.imbroglio;
  */
 public final class Quad
 {
-    /** The center x coordinate position. */
+    /** The center x coordinate origin. */
     public double	x;
-    /** The center y coordinate position. */
+    /** The center y coordinate origin. */
     public double	y;
     /** The half-width of the Quad. */
     public double	halfWidth;
@@ -25,7 +25,7 @@ public final class Quad
     /**
      * Make a Quad.
      *
-     * @param x The center x position.
+     * @param x The center x origin.
      * @param y The center y Position2D.
      * @param halfWidth The distance to the left and right edges.
      * @param halfHeight The distance to the top and bottom edges.
@@ -72,7 +72,7 @@ public final class Quad
         if (xAbs < xMin && yAbs < yMin) {
             // adjust the greater distance first.
             if (xAbs > yAbs) {
-                // adjust based on relative position.
+                // adjust based on relative origin.
                 if (this.x < quad.x) {
                     this.x = quad.x - quad.halfWidth - this.halfWidth;
                     // System.out.println("collides!");
@@ -83,7 +83,7 @@ public final class Quad
                 }
             }
             else {
-                // adjust based on relative position.
+                // adjust based on relative origin.
                 if (this.y < quad.y) {
                     this.y = quad.y - quad.halfHeight - this.halfHeight;
                     // System.out.println("collides!");
@@ -146,7 +146,7 @@ public final class Quad
      * Quads overlap, then the default
      *
      * @param quad The quad to get the orientation from.
-     * @return Direction.UP, DOWN, LEFT, or RIGHT, based on if this Quad is
+     * @return Direction2D.UP, DOWN, LEFT, or RIGHT, based on if this Quad is
      *         above, velow, or to the left or right respectively.
      */
     public Orientation getOrientationFrom(Quad quad) {
@@ -233,7 +233,7 @@ public final class Quad
 
     @Override
     public String toString() {
-        return String.format("Quad: position: (%f, %f) dimensions: (%f, %f)",
+        return String.format("Quad: origin: (%f, %f) DIMENSIONS: (%f, %f)",
                 x, y, halfWidth * 2, halfHeight * 2);
     }
 }

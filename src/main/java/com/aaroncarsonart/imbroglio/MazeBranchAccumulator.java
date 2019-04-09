@@ -69,7 +69,7 @@ public class MazeBranchAccumulator {
         }
 
         /**
-         * Convenience method to get every neighbor of this position, i.e. get
+         * Convenience method to get every neighbor of this origin, i.e. get
          * below(), right(), above(), and left(), called in that order.
          * @return An ArrayList of Positions.
          */
@@ -78,7 +78,7 @@ public class MazeBranchAccumulator {
         }
 
         /**
-         * Convenience method to get every neighbor of this position, i.e. get
+         * Convenience method to get every neighbor of this origin, i.e. get
          * below(), right(), above(), and left(), called in that order.
          * @return An ArrayList of Positions.
          */
@@ -271,7 +271,7 @@ public class MazeBranchAccumulator {
 
                             // add to queue
                             else {
-                                // mark this position as added
+                                // mark this origin as added
                                 visited.add(neighbor);
 
                                 graph.addVertex(neighbor);
@@ -297,7 +297,7 @@ public class MazeBranchAccumulator {
 
     /**
      * This sets the cell's distance values according to their distance from a
-     * forking cell starting with the cell at position (1,1) (the top-left
+     * forking cell starting with the cell at origin (1,1) (the top-left
      * corner). A forking cell is any cell that is a path and has more than two
      * neighbors.
      * <p>
@@ -317,10 +317,10 @@ public class MazeBranchAccumulator {
      * This will begin by assigning the initial cell to a zero distance, to
      * ensure this method will fix altered tables; however, if the initial cell
      * is NOT a fork, this will be fixed when it hits a fork and backtracks to
-     * the initial position again.
+     * the initial origin again.
      * <p>
-     * @param x The x position of the starting cell.
-     * @param y The y position of the starting cell.
+     * @param x The x origin of the starting cell.
+     * @param y The y origin of the starting cell.
      * @param terminalOffset the amount to increase the distance of terminal
      *        cells (cells with only one neighbor) by.  Having a value greater
      *        than zero will increase the likelihood of these single-neighbor

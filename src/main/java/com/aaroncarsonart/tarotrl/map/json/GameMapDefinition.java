@@ -58,7 +58,7 @@ public class GameMapDefinition extends ValidatedDefinition {
      */
     private Boolean useTunnels = null;
 
-    private List<GameTileDefinition> spriteKey;
+    private List<TileDefinition> spriteKey;
 
     public String getMapName() {
         return mapName;
@@ -140,11 +140,11 @@ public class GameMapDefinition extends ValidatedDefinition {
         this.backgroundSprite = backgroundSprite;
     }
 
-    public List<GameTileDefinition> getSpriteKey() {
+    public List<TileDefinition> getSpriteKey() {
         return spriteKey;
     }
 
-    public void setSpriteKey(List<GameTileDefinition> spriteKey) {
+    public void setSpriteKey(List<TileDefinition> spriteKey) {
         this.spriteKey = spriteKey;
     }
 
@@ -180,9 +180,9 @@ public class GameMapDefinition extends ValidatedDefinition {
      * Create a Map of sprite to definitions for the spriteKey.
      * @return A
      */
-    public Map<Character, GameTileDefinition> createSpriteToTile() {
-        HashMap<Character, GameTileDefinition> spriteToTileDefinition = new HashMap<>();
-        for (GameTileDefinition definition: spriteKey) {
+    public Map<Character, TileDefinition> createSpriteToTile() {
+        HashMap<Character, TileDefinition> spriteToTileDefinition = new HashMap<>();
+        for (TileDefinition definition: spriteKey) {
             spriteToTileDefinition.put(definition.getSprite(), definition);
         }
         return spriteToTileDefinition;

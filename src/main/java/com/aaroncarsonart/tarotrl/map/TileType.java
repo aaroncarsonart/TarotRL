@@ -1,5 +1,10 @@
 package com.aaroncarsonart.tarotrl.map;
 
+import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public enum TileType {
     PLAYER('@', "you have found yourself"),
     WALL(  '#', "there is a wall"),
@@ -20,12 +25,21 @@ public enum TileType {
 
     private char defaultSprite;
     private String description;
+    private TileDefinition metadata;
 
     TileType(char defaultSprite, String description) {
         this.defaultSprite = defaultSprite;
         this.description = description;
+        Constants.TILE_TYPE_MAP.put(defaultSprite, this);
     }
 
+    public static TileType valueOf(Character character) {
+        return Constants.TILE_TYPE_MAP.get(character);
+    }
+
+    private interface Constants {
+        Map<Character, TileType> TILE_TYPE_MAP = new HashMap<>();
+    }
     public char getSprite() {
         return defaultSprite;
     }
@@ -40,5 +54,21 @@ public enum TileType {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public TileDefinition getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(TileDefinition metadata) {
+        this.metadata = metadata;
+    }
+
+    public boolean isDoor() {
+        return this == OPEN_DOOR || this == CLOSED_DOOR;
+    }
+
+    public boolean isStairs() {
+        return this == UPSTAIRS || this == DOWNSTAIRS;
     }
 }

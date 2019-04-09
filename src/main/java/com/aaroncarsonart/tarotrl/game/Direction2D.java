@@ -1,6 +1,9 @@
 package com.aaroncarsonart.tarotrl.game;
 
-public enum Direction {
+import com.aaroncarsonart.imbroglio.Direction;
+import com.aaroncarsonart.tarotrl.world.Direction3D;
+
+public enum Direction2D {
     UP   ("\u2191", -1,  0),
     DOWN ("\u2193",  1,  0),
     LEFT ("\u2190",  0, -1),
@@ -11,7 +14,7 @@ public enum Direction {
     private int dy;
     private int dx;
 
-    Direction(String unicode, int dy, int dx) {
+    Direction2D(String unicode, int dy, int dx) {
         this.unicode = unicode;
         this.dy = dy;
         this.dx = dx;
@@ -41,7 +44,7 @@ public enum Direction {
      * @param direction The direction to get the opposite of.
      * @return The opposite direction.
      */
-    public static Direction getOpposite(Direction direction) {
+    public static Direction2D getOpposite(Direction2D direction) {
         switch (direction) {
             case LEFT:  return RIGHT;
             case RIGHT: return LEFT;
@@ -63,13 +66,23 @@ public enum Direction {
 
     }
 
-    public com.aaroncarsonart.imbroglio.Direction getImbroglioDirection() {
+    public Direction getImbroglioDirection() {
         switch (this) {
-            case LEFT:  return com.aaroncarsonart.imbroglio.Direction.LEFT;
-            case RIGHT: return com.aaroncarsonart.imbroglio.Direction.RIGHT;
-            case UP:    return com.aaroncarsonart.imbroglio.Direction.UP;
-            case DOWN:  return com.aaroncarsonart.imbroglio.Direction.DOWN;
-            case NONE:  return com.aaroncarsonart.imbroglio.Direction.NONE;
+            case LEFT:  return Direction.LEFT;
+            case RIGHT: return Direction.RIGHT;
+            case UP:    return Direction.UP;
+            case DOWN:  return Direction.DOWN;
+            case NONE:  return Direction.NONE;
+        }
+        return null;
+    }
+
+    public Direction3D getDirection3D() {
+        switch (this) {
+            case LEFT:  return Direction3D.WEST;
+            case RIGHT: return Direction3D.EAST;
+            case UP:    return Direction3D.NORTH;
+            case DOWN:  return Direction3D.SOUTH;
         }
         return null;
     }

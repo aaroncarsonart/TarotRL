@@ -1,6 +1,7 @@
 package com.aaroncarsonart.tarotrl.map.generator;
 
 import com.aaroncarsonart.tarotrl.Globals;
+import com.aaroncarsonart.tarotrl.generator.GameMapGenerator;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.MapType;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;

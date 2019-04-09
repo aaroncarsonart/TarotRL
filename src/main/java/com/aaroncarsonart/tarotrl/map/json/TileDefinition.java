@@ -2,6 +2,7 @@ package com.aaroncarsonart.tarotrl.map.json;
 
 import com.aaroncarsonart.tarotrl.map.PortalTrigger;
 import com.aaroncarsonart.tarotrl.map.TileType;
+import com.aaroncarsonart.tarotrl.map.json.deserializer.TileColorDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -9,7 +10,7 @@ import org.hexworks.zircon.api.color.TileColor;
 import org.hexworks.zircon.api.data.Tile;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GameTileDefinition {
+public class TileDefinition {
 
     private static final char NULL_CHAR = '\u0000';
 

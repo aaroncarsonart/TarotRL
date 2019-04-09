@@ -1,12 +1,13 @@
-package com.aaroncarsonart.tarotrl.game.zircon;
+package com.aaroncarsonart.tarotrl.graphics;
 
 import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
-import com.aaroncarsonart.tarotrl.map.json.GameTileDefinition;
+import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 import com.aaroncarsonart.tarotrl.util.TextUtils;
+import com.aaroncarsonart.tarotrl.world.Position3D;
 import org.apache.commons.lang3.StringUtils;
 import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.Tiles;
@@ -35,7 +36,7 @@ public class TileRenderer {
 
     private void calculateOutOfBoundsTile() {
         char outOfBoundsSprite = renderedGameMap.getOutOfBoundsTile();
-        GameTileDefinition definition = renderedGameMap.getTileSprites().get(outOfBoundsSprite);
+        TileDefinition definition = renderedGameMap.getTileSprites().get(outOfBoundsSprite);
         if (definition == null) {
             definition = renderedGameMap.getTileSprites().get('#');
         }
@@ -68,7 +69,7 @@ public class TileRenderer {
         List<Position2D> dirtyTiles = activeGameMap.getDirtyTiles();
         if (!dirtyTiles.isEmpty()) {
             for(Position2D pos : dirtyTiles) {
-                GameTileDefinition updated = renderedGameMap.getTileDefinition(pos);
+                TileDefinition updated = renderedGameMap.getTileDefinition(pos);
                 mapTiles[pos.y()][pos.x()] = createZirconTileFrom(updated);
             }
         }
@@ -115,11 +116,11 @@ public class TileRenderer {
         int entityOffsetX = viewPort.x - cx + offsetX;
         int entityOffsetY = viewPort.y - cy + offsetY;
 
-        // screen player position
+        // screen player voxelPosition
         int spx = gameState.getPlayerPosition().x() + entityOffsetX;
         int spy = gameState.getPlayerPosition().y() + entityOffsetY;
 
-        GameTileDefinition playerTile = activeGameMap.getTileSprites().get(TileType.PLAYER.getSprite());
+        TileDefinition playerTile = activeGameMap.getTileSprites().get(TileType.PLAYER.getSprite());
         tileGrid.setTileAt(
                 Positions.create(spx, spy),
                 createZirconTileFrom(playerTile));
@@ -127,7 +128,7 @@ public class TileRenderer {
         drawSimpleBorder(tileGrid, viewPort, true);
     }
 
-    private void checkCoordinatesFit(TileGrid tileGrid, ViewPort viewPort) {
+    public void checkCoordinatesFit(TileGrid tileGrid, ViewPort viewPort) {
         int gridWidth = tileGrid.getWidth();
         int gridHeight = tileGrid.getHeight();
 
@@ -140,7 +141,7 @@ public class TileRenderer {
                     "width = " + viewPort.width + ", " +
                     "height = " + viewPort.height +
                     "} " +
-                    " has dimensions that don't fit on TileGrid with {" +
+                    " has DIMENSIONS that don't fit on TileGrid with {" +
                     "width = " + gridWidth + ", " +
                     "height = " + gridWidth + ", " +
                     "} ";
@@ -328,11 +329,13 @@ public class TileRenderer {
         int vw = 18;
         int vh = 10;
         ViewPort infoViewPort = new ViewPort(0, 0, vw, vh);
-        drawSimpleBorder(tileGrid, infoViewPort, false);
+//        drawSimpleBorder(tileGrid, infoViewPort, false);
 
-        int px = gameState.getPlayerPosition().x();
-        int py = gameState.getPlayerPosition().y();
-        String playerCoordinates = "Position: " + px + ", "+  py + "   ";
+        Position3D camera = gameState.getGameWorld().getCamera();
+        int px = camera.x;
+        int py = camera.y;
+        int pz = camera.z;
+        String playerCoordinates = "Pos: " + px + ", "+  py + ", " + pz;
         writeText(tileGrid, playerCoordinates, 1, 1);
 
         String gameTurns = "turns: " +  gameState.getTurnCounter();;
@@ -347,6 +350,13 @@ public class TileRenderer {
         writeText(tileGrid, "current action:", 1, 8);
         String currentAction = String.format(format, gameState.getCurrentAction().name());
         writeText(tileGrid, currentAction , 1, 9);
+
+        String devMode = String.format(format, "devMode: " + gameState.isDevMode());
+        writeText(tileGrid, devMode , 1, 11);
+
+        String shiftDown = String.format(format, "shiftDown: " + gameState.isShiftDown());
+        writeText(tileGrid, shiftDown , 1, 13);
+
 
         // draw status log
         int lx = mapViewPort.x;
@@ -431,21 +441,21 @@ public class TileRenderer {
         int width = gameMap.getWidth();
         int height = gameMap.getHeight();
 
-        Map<Character, GameTileDefinition> tileMetadata = gameMap.getTileSprites();
+        Map<Character, TileDefinition> tileMetadata = gameMap.getTileSprites();
 
         mapTiles = new Tile[height][width];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
 
                 char mapTileCharacter = gameMap.getTile(y, x);
-                GameTileDefinition tile = tileMetadata.get(mapTileCharacter);
+                TileDefinition tile = tileMetadata.get(mapTileCharacter);
                 mapTiles[y][x] = createZirconTileFrom(tile);
             }
         }
         return mapTiles;
     }
 
-    public Tile createZirconTileFrom(GameTileDefinition definition) {
+    public Tile createZirconTileFrom(TileDefinition definition) {
         TileColor bgColor = definition.getBackgroundColor();
         TileColor fgColor = definition.getForegroundColor();
         char displaySprite = definition.getDisplaySprite();

@@ -1,7 +1,7 @@
 package com.aaroncarsonart.imbroglio;
 
 /**
- * Direction enum for abstracting directional input.
+ * Direction2D enum for abstracting directional input.
  */
 public enum Direction {
     LEFT       ("\u2190"),
@@ -15,9 +15,9 @@ public enum Direction {
     private String	unicode;
 
     /**
-     * Create a new Direction with the specified arrow character.
+     * Create a new Direction2D with the specified arrow character.
      *
-     * @param unicode The unicode character string to represent this Direction.
+     * @param unicode The unicode character string to represent this Direction2D.
      */
     Direction(String unicode) {
         this.unicode = unicode;

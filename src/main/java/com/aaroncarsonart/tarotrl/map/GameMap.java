@@ -1,7 +1,7 @@
 package com.aaroncarsonart.tarotrl.map;
 
 import com.aaroncarsonart.imbroglio.Position2D;
-import com.aaroncarsonart.tarotrl.map.json.GameTileDefinition;
+import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class GameMap implements Serializable {
     private int height;  // NOTE: height/rows are equivalent terminology
     private int width;   // NOTE: width/columns are equivalent terminology
 
-    private Map<Character, GameTileDefinition> tileSprites;
+    private Map<Character, TileDefinition> tileSprites;
     private char outOfBoundsTile = '#';
 
     /**
@@ -40,11 +40,11 @@ public class GameMap implements Serializable {
     private GameMap() {
     }
 
-    public Map<Character, GameTileDefinition> getTileSprites() {
+    public Map<Character, TileDefinition> getTileSprites() {
         return tileSprites;
     }
 
-    public void setTileSprites(Map<Character, GameTileDefinition> tileSprites) {
+    public void setTileSprites(Map<Character, TileDefinition> tileSprites) {
         this.tileSprites = tileSprites;
     }
 
@@ -78,10 +78,10 @@ public class GameMap implements Serializable {
     }
 
     /**
-     * Is the given position within the bounds of the tileGrid?
+     * Is the given origin within the bounds of the tileGrid?
      * @param py The y coordinate to check
      * @param px The x coordinate to check
-     * @return True, if the position lands on the tileGrid; otherwise, false.
+     * @return True, if the origin lands on the tileGrid; otherwise, false.
      */
     public boolean withinBounds(int py, int px) {
         return (0 <= py && py < height) &&
@@ -93,14 +93,14 @@ public class GameMap implements Serializable {
     }
 
     /**
-     * Is the given position within the bounds of the tileGrid?
+     * Is the given origin within the bounds of the tileGrid?
      * @param py The y coordinate to check
      * @param px The x coordinate to check
-     * @return True, if the position lands on the tileGrid; otherwise, false.
+     * @return True, if the origin lands on the tileGrid; otherwise, false.
      */
     public boolean isPassable(int py, int px) {
         char sprite = tileGrid[py][px];
-        GameTileDefinition tile = tileSprites.get(sprite);
+        TileDefinition tile = tileSprites.get(sprite);
         return tile.isPassable();
     }
 
@@ -154,22 +154,22 @@ public class GameMap implements Serializable {
         dirtyTiles.add(pos);
     }
 
-    public GameTileDefinition getTileDefinition(Position2D pos) {
+    public TileDefinition getTileDefinition(Position2D pos) {
         char tileSprite;
         if (withinBounds(pos)) {
             tileSprite = getTile(pos);
         } else {
             tileSprite = outOfBoundsTile;
         }
-        GameTileDefinition tileDefinition = tileSprites.get(tileSprite);
+        TileDefinition tileDefinition = tileSprites.get(tileSprite);
         return tileDefinition;
     }
 
     /**
-     * Get the top-left most position of this map that matches the given character.
+     * Get the top-left most origin of this map that matches the given character.
      *
      * @param character The type of cell to find.
-     * @return The top, left-most unvisited position, or null if not found.
+     * @return The top, left-most unvisited origin, or null if not found.
      */
     public Position2D findFirstOccurrence(char character) {
         for (int y = 0; y < height; y++) {

@@ -1,11 +1,11 @@
-package com.aaroncarsonart.tarotrl.map.generator;
+package com.aaroncarsonart.tarotrl.generator;
 
 import com.aaroncarsonart.imbroglio.Maze;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
-import com.aaroncarsonart.tarotrl.map.json.GameTileDefinition;
+import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 
 import java.util.Map;
 
@@ -61,7 +61,7 @@ public class GameMapGenerator {
         }
         GameMap gameMap = new GameMap(mapName, terrainGrid, height, width);
 
-        Map<Character, GameTileDefinition> tileSprites = definition.createSpriteToTile();
+        Map<Character, TileDefinition> tileSprites = definition.createSpriteToTile();
         gameMap.setTileSprites(tileSprites);
 
         char backgroundSprite = definition.getBackgroundSprite();

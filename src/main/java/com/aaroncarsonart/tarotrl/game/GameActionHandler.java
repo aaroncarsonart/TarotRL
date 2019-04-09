@@ -1,10 +1,12 @@
 package com.aaroncarsonart.tarotrl.game;
 
-import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
-import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
-import com.aaroncarsonart.tarotrl.map.json.GameTileDefinition;
+import com.aaroncarsonart.tarotrl.util.TextUtils;
+import com.aaroncarsonart.tarotrl.world.Direction3D;
+import com.aaroncarsonart.tarotrl.world.GameWorld;
+import com.aaroncarsonart.tarotrl.world.Position3D;
+import com.aaroncarsonart.tarotrl.world.WorldVoxel;
 
 /**
  * Handle All proper GameActions, which update the GameState in some way.
@@ -30,19 +32,19 @@ public class GameActionHandler {
                 break;
 
             case MOVE_UP:
-                doMove(gameState, Direction.UP);
+                doMove(gameState, Direction2D.UP);
                 break;
 
             case MOVE_DOWN:
-                doMove(gameState, Direction.DOWN);
+                doMove(gameState, Direction2D.DOWN);
                 break;
 
             case MOVE_LEFT:
-                doMove(gameState, Direction.LEFT);
+                doMove(gameState, Direction2D.LEFT);
                 break;
 
             case MOVE_RIGHT:
-                doMove(gameState, Direction.RIGHT);
+                doMove(gameState, Direction2D.RIGHT);
                 break;
 
             case WAIT:
@@ -83,6 +85,7 @@ public class GameActionHandler {
      * Do execute the "HELP" game action.
      */
     private void doDisplayHelpScreen() {
+        // TODO implement
     }
 
     /**
@@ -98,60 +101,118 @@ public class GameActionHandler {
      * @param gameState The game state to update.
      * @param direction The direction to attempt to move.
      */
-    private void doMove(GameState gameState, Direction direction) {
-        // check if requested position is available to be moved into.
-        int py = gameState.getPlayerPosition().y();
-        int px = gameState.getPlayerPosition().x();
-        int ny = py + direction.getDy();
-        int nx = px + direction.getDx();
-        Position2D newPosition = new Position2D(nx, ny);
+    private void doMove(GameState gameState, Direction2D direction) {
+        GameWorld world = gameState.getGameWorld();
 
-        GameMap gameMap = gameState.getActiveMap();
+        // check if requested origin is available to be moved into.
+        Position3D camera = world.getCamera();
+        Position3D targetPosition = camera.moveTowards(direction);
+        WorldVoxel targetVoxel = world.getVoxel(targetPosition);
+        TileType tileType = targetVoxel.getTileType();
 
-        boolean withinBounds = gameMap.withinBounds(ny, nx);
-        boolean canMove = withinBounds && gameMap.isPassable(ny, nx);
-
-        PlayerAction previousAction = gameState.getPreviousAction();
-        if (previousAction == PlayerAction.DOOR) {
-
-            // toggle the door open/closed, if the target position is a door.
-            char tile = gameMap.getTile(newPosition);
-            if (tile == TileType.CLOSED_DOOR.getSprite()) {
-                gameMap.setTile(newPosition, TileType.OPEN_DOOR);
-                gameState.setStatus("You opened the door.");
-            } else if (tile == TileType.OPEN_DOOR.getSprite()) {
-                gameMap.setTile(newPosition, TileType.CLOSED_DOOR);
-                gameState.setStatus("You closed the door.");
+        // SHIFT mode: context-sensitive CONFIRM.
+        if (gameState.isShiftDown()) {
+            if (tileType.isDoor()) {
+                toggleDoor(gameState, targetVoxel);
             } else {
-                gameState.setStatus("There is no adjacent door in that direction.");
+                doInspect(gameState, direction);
             }
-            // As you have "confirmed" you are acting upon a door
-            gameState.setCurrentAction(PlayerAction.CONFIRM);
-            return;
+//            else if (tileType.isStairs())
+//                attemptStairs(gameState, targetVoxel);
+//            else {
+//                attemptMove(gameState, targetVoxel);
+//            }
         }
 
-        if (canMove) {
-            gameState.setPlayerPosition(newPosition);
-            String status = getMoveStatus(gameState, gameMap, newPosition);
+        // DOOR mode: open or close a door.
+        else if (gameState.getPreviousAction() == PlayerAction.DOOR) {
+            toggleDoor(gameState, targetVoxel);
+
+            // As you have "confirmed" you are acting upon a door
+            gameState.setCurrentAction(PlayerAction.CONFIRM);
+        }
+
+        // BUMP to open a doors.
+        else if (tileType == TileType.CLOSED_DOOR &&
+                targetPosition.equals(gameState.getInspectedPosition())) {
+            toggleDoor(gameState, targetVoxel);
+        }
+
+        // MOVE mode: try to move into the next position on the map.
+        else {
+            attemptMove(gameState, targetVoxel, direction);
+        }
+    }
+
+    private void attemptMove(GameState gameState, WorldVoxel voxel, Direction2D originDirection) {
+        if (gameState.isDevMode() || voxel.isPassable()) {
+            voxel.world.setCamera(voxel.position);
+            String status = getMoveStatus(voxel.world, voxel.position);
             gameState.setStatus(status);
-        } else {
+        }
+
+        // INSPECT mode; if can't move, just inspect the current space.
+        else {
             gameState.setCurrentAction(PlayerAction.INSPECT);
-            doInspect(gameState, direction);
+            doInspect(gameState, originDirection);
+        }
+    }
+
+
+    private void toggleDoor(GameState gameState, WorldVoxel voxel) {
+        TileType tileType = voxel.getTileType();
+        // toggle the door open/closed, if the target origin is a door.
+        if (tileType == TileType.CLOSED_DOOR) {
+            voxel.setTileType(TileType.OPEN_DOOR);
+            gameState.setStatus("You opened the door.");
+        } else if (tileType == TileType.OPEN_DOOR) {
+            voxel.setTileType(TileType.CLOSED_DOOR);
+            gameState.setStatus("You closed the door.");
+        } else {
+            gameState.setStatus("There is no adjacent door in that direction.");
+        }
+    }
+
+    private void attemptStairs(GameState gameState, WorldVoxel voxel) {
+        TileType tileType = voxel.getTileType();
+        if (tileType == TileType.UPSTAIRS) {
+            WorldVoxel upstairs = voxel.getNeighbor(Direction3D.ABOVE);
+            if (gameState.isDevMode() || upstairs.isPassable()) {
+                voxel.world.setCamera(upstairs.position);
+                gameState.setStatus("You ascended the stairs.");
+                gameState.setCurrentAction(PlayerAction.ASCEND);
+            } else {
+                // TODO reference above tile's material type, when implemented.
+                gameState.setStatus("You tried to ascend the stairs, " +
+                        "but the stairway was obstructed by immovable debris.");
+            }
+        } else if (tileType == TileType.DOWNSTAIRS) {
+            WorldVoxel downstairs = voxel.getNeighbor(Direction3D.BELOW);
+            if (gameState.isDevMode() || downstairs.isPassable()) {
+                voxel.world.setCamera(downstairs.position);
+                gameState.setStatus("You descended the stairs.");
+                gameState.setCurrentAction(PlayerAction.DESCEND);
+            } else {
+                // TODO reference above tile's material type, when implemented.
+                gameState.setStatus("You tried to descend the stairs, " +
+                        "but the stairway was obstructed by immovable debris.");
+            }
         }
     }
 
     /**
      * Create a special status message for tiles that are worth mentioning
      * to the player in the StatusLog, simply for walking over them.
-     * @param gameState The current GameState.
-     * @param gameMap The current GameMap.
-     * @param pos The position being moved over.
+     * @param world The current GameWorld.
+     * @param position The origin being moved over.
      * @return The special status message, otherwise null.
      */
-    public String getMoveStatus(GameState gameState, GameMap gameMap, Position2D pos) {
-        GameTileDefinition tile = gameMap.getTileDefinition(pos);
-        if (tile.getTileType() == TileType.DOWNSTAIRS || tile.getTileType() == TileType.UPSTAIRS) {
-            String inspectMessage = getTileInspectMessage(gameState, pos, Direction.NONE);
+    public String getMoveStatus(GameWorld world, Position3D position) {
+        WorldVoxel voxel = world.getVoxel(position);
+        TileType tileType = voxel.getTileType();
+        if (tileType == TileType.DOWNSTAIRS || tileType == TileType.UPSTAIRS) {
+            String inspectMessage = Direction2D.NONE.getInspectString() + " " + tileType.getDescription() + ".";
+            inspectMessage = TextUtils.capitalize(inspectMessage);
             return inspectMessage;
         }
         return null;
@@ -171,24 +232,18 @@ public class GameActionHandler {
     private void doRest(GameState gameState) {
     }
 
-    private void doInspect(GameState gameState, Direction inspectDirection) {
-        Position2D playerPosition = gameState.getPlayerPosition();
-        String inspectStatus = getTileInspectMessage(gameState, playerPosition, inspectDirection);
+    private void doInspect(GameState gameState, Direction2D inspectDirection) {
+        GameWorld world = gameState.getGameWorld();
+        Position3D playerPosition = world.getCamera();
+        Position3D target = playerPosition.moveTowards(inspectDirection);
+        gameState.setInspectedPosition(target);
+
+        WorldVoxel voxel = world.getVoxel(target);
+        TileType tileType = voxel.getTileType();
+        String inspectStatus = inspectDirection.getInspectString() + " " + tileType.getDescription() + ".";
+        inspectStatus = TextUtils.capitalize(inspectStatus);
+
         gameState.setStatus(inspectStatus);
-    }
-
-    private String getTileInspectMessage(GameState gameState, Position2D pos, Direction inspectDirection ) {
-        Position2D positionToInspect = pos.moveTowards(inspectDirection.getImbroglioDirection());
-        gameState.setInspectedPosition(positionToInspect);
-
-        GameMap gameMap = gameState.getActiveMap();
-        GameTileDefinition tile = gameMap.getTileDefinition(positionToInspect);
-
-        String inspectString = inspectDirection.getInspectString();
-        inspectString = inspectString.substring(0, 1).toUpperCase() + inspectString.substring(1);
-
-        String description = tile.getTileType().getDescription();
-        return inspectString + " " + description + ".";
     }
 
     /**
@@ -197,12 +252,21 @@ public class GameActionHandler {
      * @param gameState The current GameState.
      */
     private void doConfirm(GameState gameState) {
-        GameMap gameMap = gameState.getActiveMap();
+        GameWorld world = gameState.getGameWorld();
+        Position3D current = world.getCamera();
+        WorldVoxel voxel = world.getVoxel(current);
+        TileType tileType = voxel.getTileType();
+
+        // handle stairs
+        if (tileType.isStairs()) {
+            attemptStairs(gameState, voxel);
+            if (gameState.getCurrentAction() != PlayerAction.CONFIRM) {
+                return;
+            }
+        }
 
         // handle inspect ground
-        PlayerAction previousAction = gameState.getPreviousAction();
-//        PlayerAction currentAction = gameState.getCurrentAction();
-        switch (previousAction) {
+        switch (gameState.getPreviousAction()) {
             case UNKNOWN:
             case MOVE_DOWN:
             case MOVE_UP:
@@ -210,20 +274,21 @@ public class GameActionHandler {
             case MOVE_RIGHT:
             case WAIT:
                 gameState.setCurrentAction(PlayerAction.INSPECT);
-                doInspect(gameState, Direction.NONE);
+                doInspect(gameState, Direction2D.NONE);
                 return;
         }
+
 
         // If the previous action inspected a door, and the
         // player is standing next to that door, the next CONFIRM
         // action will open that door.
-        if (previousAction == PlayerAction.INSPECT) {
-            Position2D inspectedPosition = gameState.getInspectedPosition();
-            GameTileDefinition inspectedTile = gameMap.getTileDefinition(inspectedPosition);
-            if (inspectedTile.getTileType() == TileType.CLOSED_DOOR) {
-                gameMap.setTile(inspectedPosition, TileType.OPEN_DOOR);
+        if (gameState.getPreviousAction() == PlayerAction.INSPECT) {
+            Position3D inspectedPosition = gameState.getInspectedPosition();
+            WorldVoxel inspectedVoxel = world.getVoxel(inspectedPosition);
+            TileType inspectedTileType = inspectedVoxel.getTileType();
+            if (inspectedTileType == TileType.CLOSED_DOOR) {
+                inspectedVoxel.setTileType(TileType.OPEN_DOOR);
                 gameState.setStatus("You opened the door.");
-                gameState.setCurrentAction(PlayerAction.CONFIRM);
             }
         }
     }
