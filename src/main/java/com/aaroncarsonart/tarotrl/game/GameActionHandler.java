@@ -133,7 +133,8 @@ public class GameActionHandler {
         TileType tileType = targetVoxel.getTileType();
 
         // SHIFT mode: context-sensitive CONFIRM.
-        if (gameState.isShiftDown()) {
+        boolean shiftDown = gameState.isShiftDown();
+        if (shiftDown) {
             if (tileType.isDoor()) {
                 toggleDoor(gameState, targetVoxel);
             } else if (gameState.isAutoCollectMode()) {

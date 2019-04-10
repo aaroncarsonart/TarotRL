@@ -616,8 +616,8 @@ public class Maze
         //Graph<Position2D> graph = getPositionGraph();
         //List<Set<Position2D>> components = graph.getDisconnectedComponents();
         List<Set<Position2D>> components = this.getConnectedComponents();
-        System.out.printf("Disconnected Components: %d\n", components.size());
-        System.out.printf("Paths: %d\n", countPaths());
+//        System.out.printf("Disconnected Components: %d\n", components.size());
+//        System.out.printf("Paths: %d\n", countPaths());
 
         // *******************************************************
         // 2. remove the front set, as a starting point.
@@ -1254,7 +1254,7 @@ public class Maze
             }
         }
 
-        System.out.printf("%d:\n%s\n", 0, m.toBorderedString('.', '#'));
+//        System.out.printf("%d:\n%s\n", 0, m.toBorderedString('.', '#'));
         // run a number of cellular automata iterations
         int iterations = 6;
         int wallThreshold = WALL_THRESHOLD;

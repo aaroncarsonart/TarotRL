@@ -4,8 +4,8 @@ import com.aaroncarsonart.tarotrl.generator.GameStateGenerator;
 import com.aaroncarsonart.tarotrl.graphics.GameWorldRenderer;
 import com.aaroncarsonart.tarotrl.graphics.TileRenderer;
 import com.aaroncarsonart.tarotrl.graphics.ViewPort;
-import com.aaroncarsonart.tarotrl.input.InputHandler;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
+import com.aaroncarsonart.tarotrl.input.ZirconInputEventHandler;
 import org.hexworks.zircon.api.AppConfigs;
 import org.hexworks.zircon.api.CP437TilesetResources;
 import org.hexworks.zircon.api.Layers;
@@ -29,7 +29,7 @@ public class TarotRLGame {
 
     private TileRenderer tileRenderer;
     private GameActionHandler actionHandler;
-    private InputHandler inputHandler;
+    private ZirconInputEventHandler inputHandler;
     private TileGrid tileGrid;
     private ViewPort mapViewPort;
     private GameState gameState;
@@ -44,18 +44,21 @@ public class TarotRLGame {
 
         TilesetResource tileSet = CP437TilesetResources.mdCurses16x16();
 
-        int windowWidth = ((int) screenWidth)  / tileSet.getWidth();
-        int windowHeight = ((int) screenHeight) / tileSet.getHeight();
+        int windowWidth = ((int) screenWidth)  / tileSet.getWidth() - 40;
+        int windowHeight = ((int) screenHeight) / tileSet.getHeight() - 10;
 
         int xOffset = 20;
         int topOffSet = 1;
         int bottomOffSet = 10;
         Position vOffset = Positions.create(xOffset, topOffSet);
-        Size vDimensions = Sizes.create(windowWidth - (xOffset * 2), windowHeight - (topOffSet + bottomOffSet));
+
+        int vWidth = windowWidth - (xOffset) - 2;
+        int vHeight = windowHeight - (topOffSet + bottomOffSet);
+
+        Size vDimensions = Sizes.create(vWidth, vHeight);
         mapViewPort = new ViewPort(vOffset, vDimensions);
 
         actionHandler = new GameActionHandler();
-        inputHandler = new InputHandler();
         tileRenderer = new GameWorldRenderer();
 
         // Begin Displaying TileGrid
@@ -72,15 +75,17 @@ public class TarotRLGame {
                 .build();
 
         tileGrid.pushLayer(layer1);
-        tileGrid.onKeyStroke(keyStroke -> inputHandler.handleKeyStroke(keyStroke, gameState));
+        inputHandler = new ZirconInputEventHandler();
+        inputHandler.listenForInput(tileGrid, gameState);
     }
 
     private void update() {
         tileRenderer.renderTarotRLGame(tileGrid, gameState, mapViewPort);
 
         while (!gameState.isGameOver()) {
-            PlayerAction nextAction = inputHandler.consumeNextAction();
+            PlayerAction nextAction = inputHandler.getNextAction();
             if (nextAction != PlayerAction.UNKNOWN) {
+                inputHandler.clearNextAction();
                 actionHandler.processPlayerAction(nextAction, gameState);
                 tileRenderer.renderTarotRLGame(tileGrid, gameState, mapViewPort);
             }

@@ -4,8 +4,8 @@ import com.aaroncarsonart.tarotrl.generator.GameStateGenerator;
 import com.aaroncarsonart.tarotrl.graphics.GameWorldRenderer;
 import com.aaroncarsonart.tarotrl.graphics.TileRenderer;
 import com.aaroncarsonart.tarotrl.graphics.ViewPort;
-import com.aaroncarsonart.tarotrl.input.InputHandler;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
+import com.aaroncarsonart.tarotrl.input.ZirconInputEventHandler;
 import org.hexworks.zircon.api.AppConfigs;
 import org.hexworks.zircon.api.CP437TilesetResources;
 import org.hexworks.zircon.api.Layers;
@@ -26,7 +26,7 @@ public class ImbroglioGame {
 
     private TileRenderer tileRenderer;
     private GameActionHandler actionHandler;
-    private InputHandler inputHandler;
+    private ZirconInputEventHandler inputHandler;
     private TileGrid tileGrid;
     private ViewPort mapViewPort;
     private GameState gameState;
@@ -52,7 +52,6 @@ public class ImbroglioGame {
         mapViewPort = new ViewPort(vOffset, vDimensions);
 
         actionHandler = new GameActionHandler();
-        inputHandler = new InputHandler();
         tileRenderer = new GameWorldRenderer();
 
         // Begin Displaying TileGrid
@@ -69,14 +68,17 @@ public class ImbroglioGame {
                 .build();
 
         tileGrid.pushLayer(layer1);
-        tileGrid.onKeyStroke(keyStroke -> inputHandler.handleKeyStroke(keyStroke, gameState));
+
+        inputHandler = new ZirconInputEventHandler();
+        inputHandler.listenForInput(tileGrid, gameState);
     }
 
     private void update() {
         tileRenderer.renderImbroglioGame(tileGrid, gameState, mapViewPort);
 
         while (!gameState.isGameOver()) {
-            PlayerAction nextAction = inputHandler.consumeNextAction();
+//            PlayerAction nextAction = inputHandler.consumeNextAction();
+            PlayerAction nextAction = PlayerAction.UNKNOWN;
             if (nextAction != PlayerAction.UNKNOWN) {
                 actionHandler.processPlayerAction(nextAction, gameState);
                 tileRenderer.renderImbroglioGame(tileGrid, gameState, mapViewPort);
