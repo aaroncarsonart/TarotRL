@@ -18,13 +18,12 @@ import java.util.Map;
  * Note: this only works with Zircon version 2018.12.25-XMAS.
  * for newer builds, use
  */
-public class ZirconInputEventHandler {
-
-    private boolean DEBUG = true;
-
+public class InputHandler {
+    private static final boolean DEBUG = true;
     private static final Map<String, PlayerAction> inputActionsMap = initInputActionsMap();
 
-    private PlayerAction nextAction = PlayerAction.UNKNOWN;
+    private PlayerActionEmitter playerActionEmitter = new PlayerActionEmitter();
+
     private boolean devMode = false;
     private boolean shiftDown = false;
 
@@ -55,28 +54,39 @@ public class ZirconInputEventHandler {
         grid.onKeyboardEvent(KeyboardEventType.KEY_RELEASED, (event, phase) -> handleKeyReleased(event, state));
     }
 
+    public void addPlayerActionListener(PlayerActionListener listener) {
+        playerActionEmitter.addListener(listener);
+    }
+
     @SuppressWarnings("unused")
     private UIEventResponse handleKeyTyped(KeyboardEvent event, GameState state) {
         if (DEBUG) System.out.println("handleKeyTyped(): " + event);
-        nextAction = inputActionsMap.getOrDefault(event.getKey(), PlayerAction.UNKNOWN);
+
+        PlayerAction nextAction = inputActionsMap.getOrDefault(event.getKey(), PlayerAction.UNKNOWN);
+        playerActionEmitter.broadcastPlayerAction(nextAction);
         return UIEventResponses.processed();
     }
 
     private UIEventResponse handleKeyPressed(KeyboardEvent event, GameState state) {
         if (DEBUG) System.out.println("handleKeyPressed(): " + event);
-        nextAction = getPlayerActionFromKeyCode(event.getCode());
 
         toggleBooleanFlags(event);
         state.setShiftDown(shiftDown);
         state.setDevMode(devMode);
+
+        PlayerAction nextAction = getPlayerActionFromKeyCode(event.getCode());
+        playerActionEmitter.broadcastPlayerAction(nextAction);
         return UIEventResponses.processed();
     }
 
     private UIEventResponse handleKeyReleased(KeyboardEvent event, GameState state) {
         if (DEBUG) System.out.println("handleKeyReleased(): " + event);
+
         toggleBooleanFlags(event);
         state.setShiftDown(shiftDown);
         state.setDevMode(devMode);
+
+        playerActionEmitter.broadcastPlayerAction(PlayerAction.UNKNOWN);
         return UIEventResponses.processed();
     }
 
@@ -101,20 +111,5 @@ public class ZirconInputEventHandler {
             case ESCAPE: return PlayerAction.CANCEL;
         }
         return PlayerAction.UNKNOWN;
-    }
-
-    public synchronized PlayerAction getNextAction() {
-        return nextAction;
-    }
-    public synchronized void clearNextAction() {
-        nextAction = PlayerAction.UNKNOWN;
-    }
-
-    public boolean getDevMove() {
-        return devMode;
-    }
-
-    public boolean getShiftDown() {
-        return shiftDown;
     }
 }

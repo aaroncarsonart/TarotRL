@@ -5,7 +5,7 @@ import com.aaroncarsonart.tarotrl.graphics.GameWorldRenderer;
 import com.aaroncarsonart.tarotrl.graphics.TileRenderer;
 import com.aaroncarsonart.tarotrl.graphics.ViewPort;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
-import com.aaroncarsonart.tarotrl.input.ZirconInputEventHandler;
+import com.aaroncarsonart.tarotrl.input.InputHandler;
 import org.hexworks.zircon.api.AppConfigs;
 import org.hexworks.zircon.api.CP437TilesetResources;
 import org.hexworks.zircon.api.Layers;
@@ -23,18 +23,18 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 /**
- * The main class for encapsulating all game logic when using the Zircon UI.
+ * The main class for encapsulating all TarotRL game logic.
  */
 public class TarotRLGame {
 
     private TileRenderer tileRenderer;
     private GameActionHandler actionHandler;
-    private ZirconInputEventHandler inputHandler;
+    private InputHandler inputHandler;
     private TileGrid tileGrid;
     private ViewPort mapViewPort;
     private GameState gameState;
 
-    private void init() {
+    private void start() {
         GameStateGenerator gameStateGenerator = new GameStateGenerator();
         gameState = gameStateGenerator.generateTarotRLGameState();
 
@@ -75,28 +75,30 @@ public class TarotRLGame {
                 .build();
 
         tileGrid.pushLayer(layer1);
-        inputHandler = new ZirconInputEventHandler();
+
+        inputHandler = new InputHandler();
         inputHandler.listenForInput(tileGrid, gameState);
+        inputHandler.addPlayerActionListener(this::update);
+
+        tileRenderer.renderTarotRLGame(tileGrid, gameState, mapViewPort);
     }
 
-    private void update() {
-        tileRenderer.renderTarotRLGame(tileGrid, gameState, mapViewPort);
+    int updates = 0;
 
-        while (!gameState.isGameOver()) {
-            PlayerAction nextAction = inputHandler.getNextAction();
-            if (nextAction != PlayerAction.UNKNOWN) {
-                inputHandler.clearNextAction();
-                actionHandler.processPlayerAction(nextAction, gameState);
-                tileRenderer.renderTarotRLGame(tileGrid, gameState, mapViewPort);
-            }
+    private void update(PlayerAction nextAction) {
+        if (nextAction != PlayerAction.UNKNOWN) {
+            System.out.println("update " + updates++);
+            actionHandler.processPlayerAction(nextAction, gameState);
+            tileRenderer.renderTarotRLGame(tileGrid, gameState, mapViewPort);
         }
         // TODO: show a game over screen, based on the GameState.
-        System.exit(0);
+        if (gameState.isGameOver()) {
+            System.exit(0);
+        }
     }
 
     public static void main(String[] args) throws Exception {
         TarotRLGame game = new TarotRLGame();
-        game.init();
-        game.update();
+        game.start();
     }
 }
