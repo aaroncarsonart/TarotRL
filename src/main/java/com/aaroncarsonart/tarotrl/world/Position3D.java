@@ -1,11 +1,13 @@
 package com.aaroncarsonart.tarotrl.world;
 
 import com.aaroncarsonart.imbroglio.Position2D;
-import com.aaroncarsonart.tarotrl.game.Direction2D;
+import com.aaroncarsonart.tarotrl.map.Direction2D;
 import com.aaroncarsonart.tarotrl.util.TriIntSupplier;
 import com.aaroncarsonart.tarotrl.util.TriIntVisitor;
 
 import java.lang.reflect.Array;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -169,9 +171,10 @@ public class Position3D {
         return new Position3D(x, y, z);
     }
 
-//    public static Position3D[][][] createGrid3D(Position3D origin, Position3D DIMENSIONS) {
-//        return createGrid3D(origin, DIMENSIONS, Position3D::new);
-//    }
+    @Override
+    public String toString(){
+        return "(" + x + "," + y + "," + z + ")";
+    }
 
     /**
      * Create a 3-dimensional array of of the given DIMENSIONS and type.
@@ -208,7 +211,6 @@ public class Position3D {
     }
 
     public static void forEach(Position3D start, Position3D max, Consumer<Position3D> visitor) {
-        int iterations = (max.x - start.x) * (max.y - start.y) * (max.z - start.z);
         for (int x = start.x; x < max.x; x++) {
             for (int y = start.y; y < max.y; y++) {
                 for (int z = start.z; z < max.z; z++) {
@@ -217,5 +219,17 @@ public class Position3D {
                 }
             }
         }
+    }
+
+    public static List<Position3D> range(Region3D region) {
+        Position3D start = region.position;
+        Position3D max = region.dimensions.add(region.dimensions);
+        return range(start, max);
+    }
+
+    public static List<Position3D> range(Position3D start, Position3D max) {
+        LinkedList<Position3D> list = new LinkedList<>();
+        Position3D.forEach(start, max, list::add);
+        return list;
     }
 }

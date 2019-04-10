@@ -1,6 +1,6 @@
 package com.aaroncarsonart.tarotrl.deck;
 
-import com.aaroncarsonart.tarotrl.Globals;
+import com.aaroncarsonart.tarotrl.util.Globals;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -335,13 +335,15 @@ public class TileRenderer {
         int px = camera.x;
         int py = camera.y;
         int pz = camera.z;
-        String playerCoordinates = "Pos: " + px + ", "+  py + ", " + pz;
-        writeText(tileGrid, playerCoordinates, 1, 1);
-
-        String gameTurns = "turns: " +  gameState.getTurnCounter();;
-        writeText(tileGrid, gameTurns, 1, 3);
 
         String format = "%-" + (vw - 1) + "s";
+
+        String playerCoordinates = "Pos: " + px + ", "+  py + ", " + pz;
+        String pcf = String.format(format, playerCoordinates);
+        writeText(tileGrid, pcf, 1, 1);
+
+        String gameTurns = "turns: " +  gameState.getTurnCounter();
+        writeText(tileGrid, gameTurns, 1, 3);
 
         writeText(tileGrid, "last action:", 1, 5);
         String previousAction = String.format(format, gameState.getPreviousAction().name());
@@ -427,12 +429,16 @@ public class TileRenderer {
     }
 
     public void writeText(TileGrid tileGrid, String text, int x, int y) {
+        writeText(tileGrid, text, x, y, tileGrid.getForegroundColor(), tileGrid.getBackgroundColor());
+    }
+
+    public void writeText(TileGrid tileGrid, String text, int x, int y, TileColor fg, TileColor bg) {
         for (int cursor = 0; cursor < text.length(); cursor++) {
             tileGrid.setTileAt(Positions.create(x + cursor, y),
                     Tiles.newBuilder()
                             .withCharacter(text.charAt(cursor))
-                            .withBackgroundColor(tileGrid.getBackgroundColor())
-                            .withForegroundColor(tileGrid.getForegroundColor())
+                            .withForegroundColor(fg)
+                            .withBackgroundColor(bg)
                             .build());
         }
     }
@@ -465,5 +471,57 @@ public class TileRenderer {
                 .withForegroundColor(fgColor)
                 .withCharacter(displaySprite)
                 .build();
+    }
+
+    protected void renderImbroglioStatus(TileGrid tileGrid, GameState gameState) {
+        int width = tileGrid.getWidth();
+        int height = tileGrid.getHeight();
+
+        // top left
+        String status = gameState.getStatus();
+        if (status == null) {
+            status = "";
+        }
+
+        int sx = 0;
+        int sy = 0;
+
+        String statusMsg = String.format("%-" + width + "s", status);
+        writeText(tileGrid, statusMsg, sx, sy, GameColors.LIGHT_GRAY, GameColors.DARKER_GRAY);
+
+        // top right
+        int level = 1 - gameState.getGameWorld().getCamera().z;
+        String levelMsg = "Level " + level;
+
+        sx = width - levelMsg.length();
+        sy = 0;
+
+        writeText(tileGrid, levelMsg, sx, sy, GameColors.LIGHT_GRAY, GameColors.DARKER_GRAY);
+
+        // bottom left
+        int collectedCount = gameState.getPlayerItems().size();
+        String magicMsg = String.format("Remaining magic: %-" + width + "s", collectedCount);
+
+        sx = 0;
+        sy = height - 1;
+
+        writeText(tileGrid, magicMsg, sx, sy, GameColors.MAGENTA, GameColors.DARKER_GRAY);
+
+        // bottom right
+        int stepsRemaining = gameState.getTreasure() - gameState.getStepCount();
+        String stepsMsg = "Remaining steps: " + stepsRemaining;
+
+        sx = width - stepsMsg.length();
+        sy = height - 1;
+        writeText(tileGrid, stepsMsg, sx, sy, GameColors.GREEN, GameColors.DARKER_GRAY);
+    }
+
+    public void renderTarotRLGame(TileGrid tileGrid, GameState gameState, ViewPort viewPort) {
+        renderGameMapThroughViewPort(tileGrid, gameState, viewPort);
+    }
+
+    public void renderImbroglioGame(TileGrid tileGrid, GameState gameState, ViewPort viewPort) {
+        renderGameMapThroughViewPort(tileGrid, gameState, viewPort);
+        renderImbroglioStatus(tileGrid, gameState);
     }
 }

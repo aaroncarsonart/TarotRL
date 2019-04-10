@@ -12,7 +12,6 @@ import org.hexworks.zircon.api.Layers;
 import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.Sizes;
 import org.hexworks.zircon.api.SwingApplications;
-import org.hexworks.zircon.api.application.AppConfig;
 import org.hexworks.zircon.api.builder.graphics.LayerBuilder;
 import org.hexworks.zircon.api.data.Position;
 import org.hexworks.zircon.api.data.Size;
@@ -26,68 +25,73 @@ import java.awt.Toolkit;
 /**
  * The main class for encapsulating all game logic when using the Zircon UI.
  */
-public class Game {
+public class TarotRLGame {
 
-    public static void runZirconGame() {
+    private TileRenderer tileRenderer;
+    private GameActionHandler actionHandler;
+    private InputHandler inputHandler;
+    private TileGrid tileGrid;
+    private ViewPort mapViewPort;
+    private GameState gameState;
+
+    private void init() {
         GameStateGenerator gameStateGenerator = new GameStateGenerator();
-        GameState gameState = gameStateGenerator.generateInitialGameState();
+        gameState = gameStateGenerator.generateTarotRLGameState();
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double screenWidth = screenSize.getWidth();
         double screenHeight = screenSize.getHeight() - 50;
 
-        // Hey, neat!  Some tilesets have graphics build in.  For example: aesomatica16x16
         TilesetResource tileSet = CP437TilesetResources.mdCurses16x16();
 
         int windowWidth = ((int) screenWidth)  / tileSet.getWidth();
         int windowHeight = ((int) screenHeight) / tileSet.getHeight();
 
-        AppConfig appConfig = AppConfigs.newConfig()
-                .withSize(Sizes.create(windowWidth, windowHeight))
-                .withDefaultTileset(tileSet)
-                .build();
-
-        TileGrid tileGrid = SwingApplications.startTileGrid(appConfig);
-        tileGrid.pushLayer(Layers.newBuilder().build());
-
         int xOffset = 20;
         int topOffSet = 1;
         int bottomOffSet = 10;
-        Position mapOffset = Positions.create(xOffset, topOffSet);
-        Size mapDimensions = Sizes.create(windowWidth - (xOffset * 2), windowHeight - (topOffSet + bottomOffSet));
-        ViewPort mapViewPort = new ViewPort(mapOffset, mapDimensions);
+        Position vOffset = Positions.create(xOffset, topOffSet);
+        Size vDimensions = Sizes.create(windowWidth - (xOffset * 2), windowHeight - (topOffSet + bottomOffSet));
+        mapViewPort = new ViewPort(vOffset, vDimensions);
 
-        Layer mapLayer1 = new LayerBuilder()
-                .withOffset(mapOffset)
-                .withSize(mapDimensions)
+        actionHandler = new GameActionHandler();
+        inputHandler = new InputHandler();
+        tileRenderer = new GameWorldRenderer();
+
+        // Begin Displaying TileGrid
+        tileGrid = SwingApplications.startTileGrid(AppConfigs.newConfig()
+                .withTitle("TarotRL")
+                .withSize(Sizes.create(windowWidth, windowHeight))
+                .withDefaultTileset(tileSet)
+                .build());
+
+        tileGrid.pushLayer(Layers.newBuilder().build());
+        Layer layer1 = new LayerBuilder()
+                .withOffset(vOffset)
+                .withSize(vDimensions)
                 .build();
 
-        tileGrid.pushLayer(mapLayer1);
+        tileGrid.pushLayer(layer1);
+        tileGrid.onKeyStroke(keyStroke -> inputHandler.handleKeyStroke(keyStroke, gameState));
+    }
 
-        GameActionHandler actionHandler = new GameActionHandler();
-        InputHandler inputHandler = new InputHandler();
+    private void update() {
+        tileRenderer.renderTarotRLGame(tileGrid, gameState, mapViewPort);
 
-        tileGrid.onKeyStroke(keyStroke -> {
-            inputHandler.handleKeyStroke(keyStroke);
-            gameState.setDevMode(inputHandler.getDevMove());
-            gameState.setShiftDown(inputHandler.getShiftDown());
-        });
-
-        TileRenderer tileRenderer = new GameWorldRenderer();
-        tileRenderer.renderGameMapThroughViewPort(tileGrid, gameState, mapViewPort);
-        tileRenderer.drawGuiTextInfo(tileGrid, gameState, mapViewPort);
-
-        while (true) {
+        while (!gameState.isGameOver()) {
             PlayerAction nextAction = inputHandler.consumeNextAction();
             if (nextAction != PlayerAction.UNKNOWN) {
                 actionHandler.processPlayerAction(nextAction, gameState);
-                tileRenderer.renderGameMapThroughViewPort(tileGrid, gameState, mapViewPort);
-                tileRenderer.drawGuiTextInfo(tileGrid, gameState, mapViewPort);
+                tileRenderer.renderTarotRLGame(tileGrid, gameState, mapViewPort);
             }
         }
+        // TODO: show a game over screen, based on the GameState.
+        System.exit(0);
     }
 
     public static void main(String[] args) throws Exception {
-        runZirconGame();
+        TarotRLGame game = new TarotRLGame();
+        game.init();
+        game.update();
     }
 }

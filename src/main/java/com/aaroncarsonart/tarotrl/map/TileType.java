@@ -11,15 +11,18 @@ public enum TileType {
     PATH(  '.', "there is an open path"),
     EMPTY( ' ', "there is nothing"),
 
-    DOWNSTAIRS( '>', "there are stairs going up"),
-    UPSTAIRS(   '<', "there are stairs going down"),
+    DOWNSTAIRS( '>', "there are stairs going down"),
+    UPSTAIRS(   '<', "there are stairs going up"),
     CLOSED_DOOR('+', "there is a closed door"),
     OPEN_DOOR(  '-', "there is an open door"),
     WINDOW(     '=', "there is a window"),
-    TREASURE(   '$', "there is treasure"),
 
     FURNITURE('O', "there is a piece of furniture"),
     PORTAL(   '0', "there is an open path"),
+
+    ENTITY(  'C', "there is a living entity"),
+    ITEM(    '^', "there lies a collectable item"),
+    TREASURE('$', "there lies a pile of treasure"),
 
     UNKNOWN('?', "there is something unknown");
 

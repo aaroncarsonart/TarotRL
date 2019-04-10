@@ -1,10 +1,10 @@
 package com.aaroncarsonart.tarotrl.game;
 
 import com.aaroncarsonart.imbroglio.Position2D;
-import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
+import com.aaroncarsonart.tarotrl.inventory.GameItem;
 import com.aaroncarsonart.tarotrl.map.GameMap;
-import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
+import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.world.GameWorld;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import org.apache.commons.lang3.StringUtils;
@@ -29,16 +29,22 @@ public class GameState implements Serializable {
     private GameMap activeMap;
     private GameWorld gameWorld;
 
+    private int stepCount;
+    private int treasure;
+
     private PlayerAction previousAction = PlayerAction.UNKNOWN;
     private PlayerAction currentAction = PlayerAction.UNKNOWN;
 
-    private Map<Character, TileDefinition> tileDefinitions;
+    private List<GameItem> playerItems = new ArrayList<>();
+    private TileType undefinedTileType;
 
     private List<String> statusLog = new ArrayList<>();
     private String status;
 
+    private boolean gameOver;
     private boolean devMode;
     private boolean shiftDown;
+    private boolean autoCollect;
 
     /**
      * Default no-arg constructor
@@ -122,12 +128,28 @@ public class GameState implements Serializable {
         return gameWorld;
     }
 
-    public Map<Character, TileDefinition> getTileDefinitions() {
-        return tileDefinitions;
+    public int getStepCount() {
+        return stepCount;
     }
 
-    public void setTileDefinitions(Map<Character, TileDefinition> tileDefinitions) {
-        this.tileDefinitions = tileDefinitions;
+    public void incrementStepCount() {
+        this.stepCount += 1;
+    }
+
+    public int getTreasure() {
+        return treasure;
+    }
+
+    public void gainTreasure(int amount) {
+        this.treasure += amount;
+    }
+
+    public TileType getUndefinedTileType() {
+        return undefinedTileType;
+    }
+
+    public void setUndefinedTileType(TileType undefinedTileType) {
+        this.undefinedTileType = undefinedTileType;
     }
 
     public boolean isDevMode() {
@@ -146,18 +168,28 @@ public class GameState implements Serializable {
         this.shiftDown = shiftDown;
     }
 
-    // ------------------------------------------------------
-    // Other Methods
-    // ------------------------------------------------------
-
-    public void addGameMap(GameMap gameMap) {
-        if (gameMaps.containsKey(gameMap.getKey())) {
-            throw new TarotRLException("Map '" + gameMap.getKey() + "' has non-unique key.");
-        }
-        gameMaps.put(gameMap.getKey(), gameMap);
+    public List<GameItem> getPlayerItems() {
+        return playerItems;
     }
 
-    public GameMap lookupGameMap(String key) {
-        return gameMaps.get(key);
+    public void setPlayerItems(List<GameItem> playerItems) {
+        this.playerItems = playerItems;
+    }
+
+
+    public void toggleAutoCollect() {
+        autoCollect = !autoCollect;
+    }
+
+    public boolean isAutoCollectMode() {
+        return autoCollect;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }

@@ -1,8 +1,9 @@
 package com.aaroncarsonart.tarotrl.map.json;
 
-import com.aaroncarsonart.tarotrl.Globals;
+import com.aaroncarsonart.tarotrl.deck.TarotDeck;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.exception.ValidatedDefinitionException;
+import com.aaroncarsonart.tarotrl.util.Globals;
 import com.aaroncarsonart.tarotrl.validation.DefinitionValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -48,6 +49,18 @@ public class JsonDefinitionLoader {
             throw e;
         }
     }
+
+    /**
+     * Load The deck deck from the config.
+     * @return The deck deck.
+     */
+    public TarotDeck loadTarotDeck() {
+        try {
+        TarotDeck tarotDeck = loadDefinition("/tarot_deck.json", TarotDeck.class);
+            return tarotDeck;
+          } catch (ValidatedDefinitionException e) {
+            throw new TarotRLException(e);
+        }    }
 
     /**
      * Validate, normalize, and return the GameMapDefinition described by

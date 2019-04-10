@@ -1,6 +1,5 @@
 package com.aaroncarsonart.tarotrl.util;
 
-import com.aaroncarsonart.tarotrl.Globals;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 

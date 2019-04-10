@@ -1,10 +1,14 @@
 package com.aaroncarsonart.imbroglio;
 
- import com.aaroncarsonart.tarotrl.world.Position3D;
+import com.aaroncarsonart.tarotrl.world.Position3D;
+import com.aaroncarsonart.tarotrl.map.Region2D;
 
- import java.io.Serializable;
- import java.util.ArrayList;
- import java.util.Random;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Consumer;
 
 /**
  * The class Position2D, used to hold positional data.
@@ -165,7 +169,7 @@ public final class Position2D implements Serializable {
 
     /**
      * Move this Position2D in one of the four cardinal directions according to the input value,
-     * which is dependent on the remainder of absolute value of next when divided by four. The
+     * which is dependent on the remainder of absolute value of nextInt when divided by four. The
      * associations are: (0 :: up, 1 :: down, 2 :: left, 3 :: right).
      * @param next The number to calculate the move from.
      */
@@ -349,6 +353,27 @@ public final class Position2D implements Serializable {
     public double distance(Position2D p1) {
         Position2D p2 = this;
         return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+    }
+
+    public static void forEach(Position2D start, Position2D max, Consumer<Position2D> visitor) {
+        for (int x = start.x; x < max.x; x++) {
+            for (int y = start.y; y < max.y; y++) {
+                Position2D next = new Position2D(x, y);
+                visitor.accept(next);
+            }
+        }
+    }
+
+    public static List<Position2D> range(Region2D region) {
+        Position2D start = region.position;
+        Position2D max = region.position.add(region.dimensions);
+        return range(start, max);
+    }
+
+    public static List<Position2D> range(Position2D start, Position2D max) {
+        LinkedList<Position2D> list = new LinkedList<>();
+        Position2D.forEach(start, max, list::add);
+        return list;
     }
 
     @Override

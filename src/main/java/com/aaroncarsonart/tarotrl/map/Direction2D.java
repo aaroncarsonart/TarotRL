@@ -1,4 +1,4 @@
-package com.aaroncarsonart.tarotrl.game;
+package com.aaroncarsonart.tarotrl.map;
 
 import com.aaroncarsonart.imbroglio.Direction;
 import com.aaroncarsonart.tarotrl.world.Direction3D;

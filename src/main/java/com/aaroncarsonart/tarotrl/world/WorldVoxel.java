@@ -1,5 +1,6 @@
 package com.aaroncarsonart.tarotrl.world;
 
+import com.aaroncarsonart.tarotrl.entity.Entity;
 import com.aaroncarsonart.tarotrl.map.TileType;
 
 import java.util.Arrays;
@@ -48,11 +49,38 @@ public class WorldVoxel {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Check if an entity can occupy this WorldVoxel.
+     * @return
+     */
     public boolean isPassable() {
         return tileType.getMetadata().isPassable();
     }
 
+    public boolean isUndefined() {
+        return tileType == TileType.EMPTY;
+    }
+
+    public boolean hasEntity() {
+        return world.hasEntity(position);
+    }
+
+    public boolean hasItem() {
+        return world.hasItem(position);
+    }
+
     public String getDescription() {
-        return tileType.getDescription();
+        String tileDescription = tileType.getDescription() + ".";
+        if (hasEntity()) {
+            Entity entity = world.getEntity(position);
+            String entityDescription = entity.getDescription() + ".";
+
+            // for some tiles, only show the entity description.
+            if (tileType == TileType.EMPTY || tileType == TileType.PATH) {
+                return entityDescription;
+            }
+            return entityDescription + " " + tileType.getDescription();
+        }
+        return tileDescription;
     }
 }

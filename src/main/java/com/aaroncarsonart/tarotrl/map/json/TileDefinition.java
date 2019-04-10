@@ -6,6 +6,7 @@ import com.aaroncarsonart.tarotrl.map.json.deserializer.TileColorDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.hexworks.zircon.api.TileColors;
 import org.hexworks.zircon.api.color.TileColor;
 import org.hexworks.zircon.api.data.Tile;
 
@@ -48,6 +49,27 @@ public class TileDefinition {
     private boolean openable;
 
     private PortalTrigger portalTrigger;
+
+    public TileDefinition() {
+    }
+
+    public static TileDefinition custom(char sprite, TileType tileType, TileColor foregroundColor, TileColor backgroundColor) {
+        TileDefinition definition = new TileDefinition();
+        definition.sprite = sprite;
+        definition.tileType = tileType;
+        definition.foregroundColor = foregroundColor;
+        definition.backgroundColor = backgroundColor;
+        return definition;
+    }
+
+    public static TileDefinition custom(char sprite, TileType tileType, String foregroundColor, String backgroundColor) {
+        TileDefinition definition = new TileDefinition();
+        definition.sprite = sprite;
+        definition.tileType = tileType;
+        definition.foregroundColor = TileColors.fromString(foregroundColor);
+        definition.backgroundColor = TileColors.fromString(backgroundColor);
+        return definition;
+    }
 
     @JsonIgnore
     private Tile zirconTile;

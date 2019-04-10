@@ -1,6 +1,11 @@
 package com.aaroncarsonart.tarotrl.game;
 
+import com.aaroncarsonart.tarotrl.entity.Entity;
+import com.aaroncarsonart.tarotrl.entity.ItemEntity;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
+import com.aaroncarsonart.tarotrl.inventory.GameItem;
+import com.aaroncarsonart.tarotrl.inventory.Treasure;
+import com.aaroncarsonart.tarotrl.map.Direction2D;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.util.TextUtils;
 import com.aaroncarsonart.tarotrl.world.Direction3D;
@@ -14,7 +19,7 @@ import com.aaroncarsonart.tarotrl.world.WorldVoxel;
 public class GameActionHandler {
 
     /**
-     * ConsoleGame method of class. Handle the next PlayerAction, and update the game state.
+     * ConsoleGame method of class. Handle the nextInt PlayerAction, and update the game state.
      * @param nextAction
      */
     public void processPlayerAction(PlayerAction nextAction, GameState gameState) {
@@ -24,7 +29,8 @@ public class GameActionHandler {
         switch (nextAction) {
 
             case QUIT:
-                doQuitGame();
+                gameState.setGameOver(true);
+                System.out.println("GameOver: " + gameState.isGameOver());
                 break;
 
             case HELP:
@@ -67,11 +73,27 @@ public class GameActionHandler {
                 gameState.setStatus("Door mode. Open or close an adjacent door with ←↑↓→ keys.");
                 break;
 
+            case AUTO_PICKUP_ITEMS:
+                doToggleAutoCollect(gameState);
+
             default:
                 System.out.println("Handle PlayerAction." + nextAction.name());
         }
         gameState.incrementTurnCounter();
     }
+
+    private void doToggleAutoCollect( GameState gameState) {
+        gameState.toggleAutoCollect();
+        boolean autoCollect = gameState.isAutoCollectMode();
+        if (autoCollect) {
+            gameState.setStatus("Auto-collect mode enabled. Automatically collect items " +
+                    "and add them to your inventory when you cross the tile they ocuppy.");
+        } else {
+            gameState.setStatus("Auto-collect mode disabled. Items must be collected using " +
+                    "CONFIRM to be added to your inventory.");
+        }
+    }
+
 
     /**
      * Do execute the "QUIT" game action.
@@ -114,6 +136,8 @@ public class GameActionHandler {
         if (gameState.isShiftDown()) {
             if (tileType.isDoor()) {
                 toggleDoor(gameState, targetVoxel);
+            } else if (gameState.isAutoCollectMode()) {
+                attemptCollectItem(gameState, targetPosition);
             } else {
                 doInspect(gameState, direction);
             }
@@ -132,15 +156,34 @@ public class GameActionHandler {
             gameState.setCurrentAction(PlayerAction.CONFIRM);
         }
 
-        // BUMP to open a doors.
+        // BUMP to open doors.
         else if (tileType == TileType.CLOSED_DOOR &&
                 targetPosition.equals(gameState.getInspectedPosition())) {
             toggleDoor(gameState, targetVoxel);
         }
 
-        // MOVE mode: try to move into the next position on the map.
+        // MOVE mode: try to move into the nextInt position on the map.
         else {
             attemptMove(gameState, targetVoxel, direction);
+        }
+    }
+
+    private void attemptCollectItem(GameState gameState, Position3D position) {
+        GameWorld world = gameState.getGameWorld();
+        if (world.hasItem(position)) {
+            ItemEntity itemEntity = (ItemEntity) world.removeEntity(position);
+            GameItem item = itemEntity.getItem();
+
+            if (item instanceof Treasure) {
+                Treasure treasure = (Treasure) item;
+                int amount = treasure.getAmount();
+                gameState.gainTreasure(amount);
+                gameState.setStatus("Gained " + amount + " coins of treasure!");
+            } else {
+                gameState.getPlayerItems().add(item);
+                gameState.setStatus(TextUtils.capitalize(item.getName())
+                        + " has been added to your inventory.");
+            }
         }
     }
 
@@ -149,6 +192,11 @@ public class GameActionHandler {
             voxel.world.setCamera(voxel.position);
             String status = getMoveStatus(voxel.world, voxel.position);
             gameState.setStatus(status);
+            gameState.incrementStepCount();
+
+            if (gameState.isAutoCollectMode()) {
+                attemptCollectItem(gameState, voxel.position);
+            }
         }
 
         // INSPECT mode; if can't move, just inspect the current space.
@@ -179,6 +227,7 @@ public class GameActionHandler {
             WorldVoxel upstairs = voxel.getNeighbor(Direction3D.ABOVE);
             if (gameState.isDevMode() || upstairs.isPassable()) {
                 voxel.world.setCamera(upstairs.position);
+                gameState.incrementStepCount();
                 gameState.setStatus("You ascended the stairs.");
                 gameState.setCurrentAction(PlayerAction.ASCEND);
             } else {
@@ -190,6 +239,7 @@ public class GameActionHandler {
             WorldVoxel downstairs = voxel.getNeighbor(Direction3D.BELOW);
             if (gameState.isDevMode() || downstairs.isPassable()) {
                 voxel.world.setCamera(downstairs.position);
+                gameState.incrementStepCount();
                 gameState.setStatus("You descended the stairs.");
                 gameState.setCurrentAction(PlayerAction.DESCEND);
             } else {
@@ -210,8 +260,13 @@ public class GameActionHandler {
     public String getMoveStatus(GameWorld world, Position3D position) {
         WorldVoxel voxel = world.getVoxel(position);
         TileType tileType = voxel.getTileType();
-        if (tileType == TileType.DOWNSTAIRS || tileType == TileType.UPSTAIRS) {
-            String inspectMessage = Direction2D.NONE.getInspectString() + " " + tileType.getDescription() + ".";
+        if (world.hasEntity(position)) {
+            Entity entity = world.getEntity(position);
+            String inspectMessage = Direction2D.NONE.getInspectString() + " " + voxel.getDescription();
+            inspectMessage = TextUtils.capitalize(inspectMessage);
+            return inspectMessage;
+        } else if (tileType == TileType.DOWNSTAIRS || tileType == TileType.UPSTAIRS) {
+            String inspectMessage = Direction2D.NONE.getInspectString() + " " + voxel.getDescription();
             inspectMessage = TextUtils.capitalize(inspectMessage);
             return inspectMessage;
         }
@@ -240,7 +295,7 @@ public class GameActionHandler {
 
         WorldVoxel voxel = world.getVoxel(target);
         TileType tileType = voxel.getTileType();
-        String inspectStatus = inspectDirection.getInspectString() + " " + tileType.getDescription() + ".";
+        String inspectStatus = inspectDirection.getInspectString() + " " + voxel.getDescription();
         inspectStatus = TextUtils.capitalize(inspectStatus);
 
         gameState.setStatus(inspectStatus);
@@ -254,6 +309,12 @@ public class GameActionHandler {
     private void doConfirm(GameState gameState) {
         GameWorld world = gameState.getGameWorld();
         Position3D current = world.getCamera();
+
+        if (world.hasItem(current)) {
+            attemptCollectItem(gameState, current);
+            return;
+        }
+
         WorldVoxel voxel = world.getVoxel(current);
         TileType tileType = voxel.getTileType();
 
@@ -278,9 +339,8 @@ public class GameActionHandler {
                 return;
         }
 
-
         // If the previous action inspected a door, and the
-        // player is standing next to that door, the next CONFIRM
+        // player is standing nextInt to that door, the nextInt CONFIRM
         // action will open that door.
         if (gameState.getPreviousAction() == PlayerAction.INSPECT) {
             Position3D inspectedPosition = gameState.getInspectedPosition();

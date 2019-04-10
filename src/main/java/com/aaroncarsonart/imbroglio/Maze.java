@@ -1,6 +1,6 @@
 package com.aaroncarsonart.imbroglio;
 
-import com.aaroncarsonart.tarotrl.Globals;
+import com.aaroncarsonart.tarotrl.util.Globals;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -631,12 +631,12 @@ public class Maze
 
         // connect each other component to this one.
         while(setIterator.hasNext()){
-            // get and remove the next element.
+            // get and remove the nextInt element.
             Set<Position2D> nextComponent = setIterator.next();
             setIterator.remove();
 
             // dig a path from this set to the result.
-            //TODO: dig to the next thing.
+            //TODO: dig to the nextInt thing.
             boolean connected = false;
             Iterator<Position2D> it = nextComponent.iterator();
             Position2D digger = null;
@@ -677,7 +677,7 @@ public class Maze
         List<Position2D> neighbors = position.getNeighbors();
         Iterator<Position2D> it = neighbors.iterator();
         while(it.hasNext()){
-            // if the next element is not within bounds, remove it.
+            // if the nextInt element is not within bounds, remove it.
             if(!withinBounds(it.next())) it.remove();
         }
         return neighbors;
@@ -748,10 +748,10 @@ public class Maze
 		List<Position2D> path = new LinkedList<Position2D>();
 
 		while(!stack.isEmpty()){
-			Position2D next = stack.pop();
-			if(!visited.contains(next)){
-				visited.add(next);
-				List<Position2D> neighbors = getNeighbors(next);
+			Position2D nextInt = stack.pop();
+			if(!visited.contains(nextInt)){
+				visited.add(nextInt);
+				List<Position2D> neighbors = getNeighbors(nextInt);
 				for(int i = 0; i < neighbors.size(); i++){
 					Position2D neighbor = neighbors.remove(r.nextInt(neighbors.size()));
 					stack.push(neighbor);
@@ -871,7 +871,7 @@ public class Maze
         for (int i = 0; i < addedPaths; i++) {
             // 1. get a wall from the priority queue
             MazeBranchAccumulator.Cell cell = walls.poll();
-            System.out.println("Remove: " + cell + " " + cell.distance);
+            // System.out.println("Remove: " + cell + " " + cell.distance);
 
             // 2. make it a path
             cells[cell.x][cell.y] = PATH;
@@ -1032,7 +1032,7 @@ public class Maze
 		 * Iterator<Position2D> it = neighbors.iterator();
 		 *
 		 * //remove neighbors outside of maze while (it.hasNext()) { Position2D
-		 * pos = it.next(); int x = pos.x(); int y = pos.y();
+		 * pos = it.nextInt(); int x = pos.x(); int y = pos.y();
 		 *
 		 * // remove if origin has already been visited, or is out of bounds
 		 * if (!(0 <= x && x < halfWidth && 0 <= y && y < halfHeight) ||

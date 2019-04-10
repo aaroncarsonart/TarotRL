@@ -1,6 +1,6 @@
 package com.aaroncarsonart.tarotrl.graphics;
 
-import com.aaroncarsonart.tarotrl.deck.CardType;
+import com.aaroncarsonart.tarotrl.deck.TarotCardType;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.TileColors;
@@ -57,7 +57,7 @@ public class TarotRenderer extends TileRenderer {
         // Print all of the MINOR ARCANA cards.
         sx = sx + 16;
         int yOffset = 0;
-        for (CardType minorArcana : CardType.getMinorArcana()) {
+        for (TarotCardType minorArcana : TarotCardType.getMinorArcana()) {
             for (int i = 1; i <= 14; i++) {
                 char rank = getRankSymbol(i);
                 char suit = minorArcana.suit;
@@ -103,9 +103,9 @@ public class TarotRenderer extends TileRenderer {
         renderBackOfTarotCard(tileGrid, pos);
 
         Tile edgeTile = Tiles.newBuilder()
-                .withForegroundColor(CardType.EDGE.fgColor)
-                .withBackgroundColor(CardType.EDGE.darkColor)
-                .withCharacter(CardType.EDGE.symbol)
+                .withForegroundColor(TarotCardType.EDGE.fgColor)
+                .withBackgroundColor(TarotCardType.EDGE.darkColor)
+                .withCharacter(TarotCardType.EDGE.symbol)
                 .buildCharacterTile();
 
         Position leftEdgePosition = Positions.create(pos.getX(), pos.getY() + 3);
@@ -135,7 +135,7 @@ public class TarotRenderer extends TileRenderer {
     private void renderTarotCard(TileGrid tileGrid, String key, Position pos, TileColor fg, TileColor bg, boolean asOverlay) {
         char rankChar = key.charAt(0);
         char suitChar = key.charAt(1);
-        CardType suit = CardType.fromCharacter(suitChar);
+        TarotCardType suit = TarotCardType.fromCharacter(suitChar);
 
         if (suit.symbol != null) {
             suitChar = suit.symbol;
@@ -155,7 +155,7 @@ public class TarotRenderer extends TileRenderer {
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 2; x++) {
                 Tile tile;
-                if (suit == CardType.BACK && rankChar != suit.symbol) {
+                if (suit == TarotCardType.BACK && rankChar != suit.symbol) {
                     Tile backTile = Tiles.newBuilder()
                             .withForegroundColor(fg)
                             .withBackgroundColor(bg)

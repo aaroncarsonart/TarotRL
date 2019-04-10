@@ -1,7 +1,7 @@
 package com.aaroncarsonart.tarotrl.deck;
 
 
-import com.aaroncarsonart.tarotrl.Globals;
+import com.aaroncarsonart.tarotrl.util.Globals;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 
 import java.io.IOException;

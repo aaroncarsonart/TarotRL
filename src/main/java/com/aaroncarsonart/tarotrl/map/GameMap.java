@@ -2,14 +2,20 @@ package com.aaroncarsonart.tarotrl.map;
 
 import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
+import com.aaroncarsonart.tarotrl.world.Position3D;
+import com.aaroncarsonart.tarotrl.world.Region3D;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
- * Encapsulates essential 2d tileGrid information in one class.
+ * GameMaps are one element available for use during GameWorld generation.
+ * They represent a finite rectangular grid of tiles to be placed within
+ * a GameWorld along the x/y plane.
  *
  * This coordinate plane always starts with (0,0) as the top-left corner,
  * with (mapHeight, mapWidth) as the bottom right corner of the tileGrid.
@@ -165,6 +171,10 @@ public class GameMap implements Serializable {
         return tileDefinition;
     }
 
+    public Region3D getMapRegionWith(Position3D origin) {
+        return new Region3D(origin, width, height, 1);
+    }
+
     /**
      * Get the top-left most origin of this map that matches the given character.
      *
@@ -181,6 +191,31 @@ public class GameMap implements Serializable {
         }
         return null;
     }
+
+    public List<Position2D> getMapRegion(Region2D region) {
+        return Position2D.range(region);
+    }
+
+    private TileType getTileType(Position2D p) {
+        if (withinBounds(p)) {
+            char tile = tileGrid[p.y()][p.x()];
+            return TileType.valueOf(tile);
+        } else {
+            return TileType.EMPTY;
+        }
+    }
+
+    public ArrayList<Position2D> getMapRegionMatching(Region2D region, Predicate<TileType> predicate) {
+        return Position2D.range(region).stream()
+                .filter(position -> predicate.test(getTileType(position)))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Position2D> getPositionsMatching( Predicate<TileType> predicate) {
+        Region2D region = new Region2D(0, 0, width, height);
+        return getMapRegionMatching(region, predicate);
+    }
+
 
     public String createTileDataString() {
         // go ahead and make room for spaces and newlines

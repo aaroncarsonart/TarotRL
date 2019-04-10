@@ -1,4 +1,4 @@
-package com.aaroncarsonart.tarotrl;
+package com.aaroncarsonart.tarotrl.util;
 
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;

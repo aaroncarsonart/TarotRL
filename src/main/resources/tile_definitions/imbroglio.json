@@ -1,66 +1,79 @@
 {
-    "name": "FOREST_GREEN",
+    "name": "IMBROGLIO",
     "tileDefinitions": [
         {
             "sprite": "@",
+            "displaySprite": "█",
             "tileType": "PLAYER",
-            "foregroundColor": "#FFFF00",
-            "backgroundColor": "#003200"
+            "foregroundColor": "#00FF00",
+            "backgroundColor": "#404040"
         },
         {
             "sprite": ".",
+            "displaySprite": " ",
             "tileType": "PATH",
             "passable": true,
-            "foregroundColor": "#00C800",
-            "backgroundColor": "#003200"
+            "foregroundColor": "#404040",
+            "backgroundColor": "#C0C0C0"
         },
         {
             "sprite": "#",
+            "displaySprite": "█",
             "tileType": "WALL",
             "passable": false,
-            "foregroundColor": "#002A00",
-            "backgroundColor": "#001100"
+            "foregroundColor": "#404040",
+            "backgroundColor": "#C0C0C0"
         },
         {
             "sprite": "-",
+            "displaySprite": " ",
             "tileType": "OPEN_DOOR",
             "passable": true,
-            "foregroundColor": "#FFFF00",
-            "backgroundColor": "#003200"
+            "foregroundColor": "#808080",
+            "backgroundColor": "#C0C0C0"
         },
         {
             "sprite": "+",
+            "displaySprite": "█",
             "tileType": "CLOSED_DOOR",
             "passable": false,
             "openable": true,
-            "foregroundColor": "#FFFF00",
-            "backgroundColor": "#001100"
+            "foregroundColor": "#808080",
+            "backgroundColor": "#C0C0C0"
         },
         {
             "sprite": "=",
+            "displaySprite": " ",
             "tileType": "WINDOW",
             "passable": false,
             "foregroundColor": "#00FFFF",
-            "backgroundColor": "#001100"
+            "backgroundColor": "#C0C0C0"
         },
         {
             "sprite": "<",
+            "displaySprite": "▀",
             "tileType": "UPSTAIRS",
             "passable": true,
-            "portalTrigger": "ON_INSPECT_TILE",
-            "foregroundColor": "#FFFF00",
-            "backgroundColor": "#003200"
+            "2foregroundColor": "#707070",
+            "2backgroundColor": "#909090",
+            "3foregroundColor": "#606080",
+            "3backgroundColor": "#8080A0",
+            "foregroundColor": "#707090",
+            "backgroundColor": "#9090B0",
+            "portalTrigger": "ON_INSPECT_TILE"
         },
         {
             "sprite": ">",
+            "displaySprite": "▄",
             "tileType": "DOWNSTAIRS",
             "passable": true,
-            "portalTrigger": "ON_INSPECT_TILE",
-            "foregroundColor": "#FFFF00",
-            "backgroundColor": "#003200"
+            "foregroundColor": "#707090",
+            "backgroundColor": "#9090B0",
+            "portalTrigger": "ON_INSPECT_TILE"
         },
         {
             "sprite": "O",
+            "displaySprite": "█",
             "tileType": "FURNITURE",
             "passable": false,
             "foregroundColor": "#FFFFFF",
@@ -84,6 +97,7 @@
         },
         {
             "sprite": "C",
+            "displaySprite": "█",
             "tileType": "ENTITY",
             "passable": false,
             "foregroundColor": "#FFFF00",
@@ -91,13 +105,15 @@
         },
         {
             "sprite": "^",
+            "displaySprite": "█",
             "tileType": "ITEM",
             "passable": false,
-            "foregroundColor": "#AAAAAA",
-            "backgroundColor": "#003200"
+            "foregroundColor": "#FF00FF",
+            "backgroundColor": "#FF00FF"
         },
         {
             "sprite": "$",
+            "displaySprite": "█",
             "tileType": "TREASURE",
             "passable": false,
             "foregroundColor": "#FFFF00",

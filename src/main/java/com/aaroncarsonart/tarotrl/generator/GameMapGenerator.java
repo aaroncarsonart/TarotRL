@@ -70,7 +70,7 @@ public class GameMapGenerator {
         return gameMap;
     }
 
-    public static char[][] createGridFrom(String[] lines) {
+    private static char[][] createGridFrom(String[] lines) {
         int gridWidth = lines[0].length();
         int gridHeight = lines.length;
 
@@ -87,7 +87,7 @@ public class GameMapGenerator {
         return characterGrid;
     }
 
-    private char[][] createGridFrom(Maze maze) {
+    private static char[][] createGridFrom(Maze maze) {
         int gridWidth = maze.getWidth();
         int gridHeight = maze.getHeight();
 
@@ -110,12 +110,18 @@ public class GameMapGenerator {
         return characterGrid;
     }
 
+    public static GameMap generateMapFrom(Maze maze) {
+        char[][] grid = createGridFrom(maze);
+        return new GameMap("Maze", grid, maze.getHeight(), maze.getWidth());
+    }
+
+
     /**
      * Helper method to generateMapFrom a byte[][] of paths and walls.
      *
      * @return a 2d byte array.
      */
-    private Maze generateCellularAutomataRoom(int width, int height, int iterations) {
+    public static Maze generateCellularAutomataRoom(int width, int height, int iterations) {
         Maze maze = Maze.generateCellularAutomataRoom(width, height);
         maze.connectDisconnectedComponents();
         for (int i = 0; i < iterations; i++) {

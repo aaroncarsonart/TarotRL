@@ -19,7 +19,7 @@ import java.util.Map;
  * define entity population and behavior, etc can be added as
  * needed here without polluting the actual GameMap class files.
  *
- * This class represents one GameMap.  For the enclosing class
+ * This class represents one GameMap.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GameMapDefinition extends ValidatedDefinition {

@@ -1,5 +1,6 @@
 package com.aaroncarsonart.tarotrl.graphics;
 
+import com.aaroncarsonart.tarotrl.entity.Entity;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
@@ -10,21 +11,27 @@ import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.data.Tile;
 import org.hexworks.zircon.api.grid.TileGrid;
 
-import java.util.Map;
-
 /**
  * Encapsulate special logic for rendering GameWorlds
  * to the TileGrid display.
  */
 public class GameWorldRenderer extends TileRenderer {
 
-    @Override
+    public void renderTarotRLGame(TileGrid tileGrid, GameState gameState, ViewPort viewPort) {
+        renderGameMapThroughViewPort(tileGrid, gameState, viewPort, true);
+        drawGuiTextInfo(tileGrid, gameState, viewPort);
+    }
+
+    public void renderImbroglioGame(TileGrid tileGrid, GameState gameState, ViewPort viewPort) {
+        renderGameMapThroughViewPort(tileGrid, gameState, viewPort, false);
+        renderImbroglioStatus(tileGrid, gameState);
+    }
+
     public void renderGameMapThroughViewPort(TileGrid tileGrid,
                                              GameState gameState,
-                                             ViewPort viewPort) {
+                                             ViewPort viewPort,
+                                             boolean drawViewportBorder) {
         GameWorld world = gameState.getGameWorld();
-
-        Map<Character, TileDefinition> tileSprites = gameState.getTileDefinitions();
 
         // ensure coordinate spaces of viewport fit on the TileGrid.
         checkCoordinatesFit(tileGrid, viewPort);
@@ -54,14 +61,39 @@ public class GameWorldRenderer extends TileRenderer {
 
                 WorldVoxel voxel = world.getVoxel(mapPos);
                 TileType tileType = voxel.getTileType();
-                char sprite = tileType.getSprite();
-                TileDefinition tileDefinition = tileSprites.get(sprite);
+                if (tileType == TileType.EMPTY) {
+                    tileType = gameState.getUndefinedTileType();
+                }
+
+                TileDefinition tileDefinition = tileType.getMetadata();
                 Tile tile = createZirconTileFrom(tileDefinition);
                 tileGrid.setTileAt(Positions.create(sx, sy), tile);
             }
         }
 
         // draw entities
+        for (int vx = 0; vx < viewPort.width; vx++) {
+            for (int vy = 0; vy < viewPort.height; vy++) {
+                // map coordinates
+                int mx = cx - offsetX + vx;
+                int my = cy - offsetY + vy;
+                Position3D mapPos = new Position3D(mx, my, camera.z);
+
+                Entity entity = world.getEntity(mapPos);
+                if (entity != null) {
+
+                    // screen coordinates
+                    int sx = viewPort.x + vx;
+                    int sy = viewPort.y + vy;
+
+                    TileDefinition tileDefinition = entity.getTileDefinition();
+                    Tile tile = createZirconTileFrom(tileDefinition);
+                    tileGrid.setTileAt(Positions.create(sx, sy), tile);
+                }
+            }
+        }
+
+        // draw player
 
         // tile grid entity offsets
         int entityOffsetX = viewPort.x - cx + offsetX;
@@ -71,11 +103,15 @@ public class GameWorldRenderer extends TileRenderer {
         int spx = camera.x + entityOffsetX;
         int spy = camera.y + entityOffsetY;
 
-        TileDefinition playerTile = tileSprites.get(TileType.PLAYER.getSprite());
+        TileDefinition playerTile = TileType.PLAYER.getMetadata();
         tileGrid.setTileAt(
                 Positions.create(spx, spy),
                 createZirconTileFrom(playerTile));
 
-        drawSimpleBorder(tileGrid, viewPort, true);
+//      writeText(tileGrid, "█ ▄ ▌▐ ▀", 40, 10);
+
+        if (drawViewportBorder) {
+            drawSimpleBorder(tileGrid, viewPort, true);
+        }
     }
 }

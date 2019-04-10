@@ -60,8 +60,10 @@ public class TarotCard extends Keywordable {
             String displayRank = getDisplayRank();
             if (displayRank.equals("10")) {
                 displayRank = "X";
-            } else if (displayRank == "Knight") {
-                displayRank = "T";
+            } else if (displayRank.equals("Page")) {
+                displayRank = "p";
+            } else if (displayRank.equals("Knight")) {
+                displayRank = "k";
             } else {
                 displayRank = displayRank.substring(0,1);
             }
@@ -83,6 +85,11 @@ public class TarotCard extends Keywordable {
             default: displayRank = Integer.toString(getRank()); break;
         }
         return displayRank;
+    }
+
+    public TarotCardType getTarotCardType() {
+        String shorthandName = getShorthandName();
+        return TarotCardType.fromShorthandName(shorthandName);
     }
 
     @Override

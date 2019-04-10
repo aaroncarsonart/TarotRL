@@ -1,10 +1,11 @@
 package com.aaroncarsonart.tarotrl.deck;
 
-import com.aaroncarsonart.tarotrl.Globals;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
+import com.aaroncarsonart.tarotrl.util.Globals;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Stack;
@@ -20,6 +21,10 @@ public class TarotDeck {
      */
     private List<TarotCard> cards;
     private int[] ordering;
+
+    public int cardCount() {
+        return cards.size();
+    }
 
     public String getName() {
         return name;
@@ -125,8 +130,6 @@ public class TarotDeck {
         return draws;
     }
 
-
-
     @Override
     public String toString() {
         try {
@@ -135,4 +138,9 @@ public class TarotDeck {
             throw new TarotRLException(e);
         }
     }
+
+    public List<TarotCard> getSetOfCards() {
+        return new ArrayList<>(cards);
+    }
+
 }

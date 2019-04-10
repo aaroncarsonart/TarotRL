@@ -1,6 +1,6 @@
 package com.aaroncarsonart.tarotrl.map.json.deserializer;
 
-import com.aaroncarsonart.tarotrl.Globals;
+import com.aaroncarsonart.tarotrl.util.Globals;
 import com.aaroncarsonart.tarotrl.map.json.RgbaColorDefinition;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

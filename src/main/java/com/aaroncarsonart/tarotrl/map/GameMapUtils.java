@@ -230,7 +230,7 @@ public class GameMapUtils {
     /**
      * The format is:
      * @param scanner The input scanner to read from.
-     * @return The name of the Game map, from the input file read by the scanner.
+     * @return The name of the TarotRLGame map, from the input file read by the scanner.
      */
     private static boolean containsHeader(Scanner scanner, String headerString) {
         // Consume the necessary header, erroring out if not found!

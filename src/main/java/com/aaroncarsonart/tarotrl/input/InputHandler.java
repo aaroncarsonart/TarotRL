@@ -1,5 +1,6 @@
 package com.aaroncarsonart.tarotrl.input;
 
+import com.aaroncarsonart.tarotrl.game.GameState;
 import org.hexworks.zircon.api.input.KeyStroke;
 
 import java.util.LinkedHashMap;
@@ -24,12 +25,8 @@ public class InputHandler {
 
         inputActionsMap.put("q", PlayerAction.QUIT);
 
-//        inputActionsMap.put("w", PlayerAction.MOVE_UP);
-//        inputActionsMap.put("s", PlayerAction.MOVE_DOWN);
-//        inputActionsMap.put("a", PlayerAction.MOVE_LEFT);
-//        inputActionsMap.put("d", PlayerAction.MOVE_RIGHT);
-
         inputActionsMap.put("d", PlayerAction.DOOR);
+        inputActionsMap.put("p", PlayerAction.AUTO_PICKUP_ITEMS);
 
         inputActionsMap.put("x", PlayerAction.CONFIRM);
         inputActionsMap.put("c", PlayerAction.CANCEL);
@@ -43,18 +40,21 @@ public class InputHandler {
     }
 
     /**
-     * Compute the next action to take, only if an existing action isn't
+     * Compute the nextInt action to take, only if an existing action isn't
      * already queued up waiting to be consumed.
      * @param keyStroke The KeyStroke to be consumed.
      */
-    public void handleKeyStroke(KeyStroke keyStroke) {
-//        System.out.println(keyStroke);
+    public void handleKeyStroke(KeyStroke keyStroke, GameState gameState) {
+        System.out.println(keyStroke);
         if (nextAction == PlayerAction.UNKNOWN) {
             nextAction = computeNextAction(keyStroke);
         }
+        gameState.setDevMode(this.getDevMove());
+        gameState.setShiftDown(this.getShiftDown());
     }
 
     private synchronized PlayerAction computeNextAction(KeyStroke keyStroke) {
+
         this.devMode = keyStroke.isAltDown();
         this.shiftDown = keyStroke.isShiftDown();
 

@@ -11,6 +11,11 @@ public class GameColors {
     public static final TileColor BLACK = TileColors.create(0, 0, 0);
     public static final TileColor WHITE = TileColors.create(255, 255, 255);
 
+    public static final TileColor LIGHT_GRAY = TileColors.create(192, 192, 192); // C0C0C0
+    public static final TileColor GRAY       = TileColors.create(128, 128, 128); // 808080
+    public static final TileColor DARK_GRAY  = TileColors.create(64, 64, 64);    // 404040
+    public static final TileColor DARKER_GRAY = TileColors.create(32, 32, 32);
+
     public static final TileColor RED   = TileColors.create(255, 0, 0);
     public static final TileColor GREEN = TileColors.create(0, 255, 0);
     public static final TileColor BLUE  = TileColors.create(0, 0, 255);
