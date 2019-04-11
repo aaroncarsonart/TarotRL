@@ -19,7 +19,7 @@ class Position3DTest {
 //        Position3D point = new Position3D(6, 6, 6);
         Position3D point = new Position3D(-6, 6, -6);
 
-        LOG.testing(point.isWithinVoxelGridOf(dimension, origin));
-        LOG.testing(point.isWithinVoxelGridOf_2(dimension, origin));
+        LOG.logTest(point.isWithinVoxelGridOf(dimension, origin));
+        LOG.logTest(point.isWithinVoxelGridOf_2(dimension, origin));
     }
 }

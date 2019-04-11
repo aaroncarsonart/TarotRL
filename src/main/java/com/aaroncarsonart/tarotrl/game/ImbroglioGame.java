@@ -2,10 +2,10 @@ package com.aaroncarsonart.tarotrl.game;
 
 import com.aaroncarsonart.tarotrl.generator.GameStateGenerator;
 import com.aaroncarsonart.tarotrl.graphics.GameWorldRenderer;
-import com.aaroncarsonart.tarotrl.graphics.TileRenderer;
 import com.aaroncarsonart.tarotrl.graphics.ViewPort;
-import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.input.InputHandler;
+import com.aaroncarsonart.tarotrl.input.PlayerAction;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import org.hexworks.zircon.api.AppConfigs;
 import org.hexworks.zircon.api.CP437TilesetResources;
 import org.hexworks.zircon.api.Layers;
@@ -26,8 +26,9 @@ import java.awt.Toolkit;
  * Play the game Imbroglio, with the classic colors and rules.
  */
 public class ImbroglioGame {
+    private static final Logger LOG = new Logger(ImbroglioGame.class);
 
-    private TileRenderer tileRenderer;
+    private GameWorldRenderer tileRenderer;
     private GameActionHandler actionHandler;
     private InputHandler inputHandler;
     private TileGrid tileGrid;
@@ -79,10 +80,15 @@ public class ImbroglioGame {
         tileRenderer.renderImbroglioGame(tileGrid, gameState, mapViewPort);
     }
 
+    /** Dumb little instance variable cached here, used only for log. NO APOLOGIES. **/
+    private int updateCount = 0;
+
     private void update(PlayerAction nextAction) {
+        LOG.trace("update()", ++updateCount);
         if (nextAction != PlayerAction.UNKNOWN) {
-                actionHandler.processPlayerAction(nextAction, gameState);
-                tileRenderer.renderImbroglioGame(tileGrid, gameState, mapViewPort);
+            LOG.debug("process PlayerAction.%s", nextAction);
+            actionHandler.processPlayerAction(nextAction, gameState);
+            tileRenderer.renderImbroglioGame(tileGrid, gameState, mapViewPort);
         }
         // TODO: show a game over screen, based on the GameState.
         if (gameState.isGameOver()) {

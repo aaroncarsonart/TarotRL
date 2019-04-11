@@ -5,14 +5,13 @@ import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
-import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
-
-import java.util.Map;
+import com.aaroncarsonart.tarotrl.util.Logger;
 
 /**
  * Encapsulates logic for Generating GameMaps from GameMapDefinitions.
  */
 public class GameMapGenerator {
+    private static final Logger LOG = new Logger(GameWorldGenerator.class);
 
     /**
      * This is the main outward facing interface of this class.
@@ -21,6 +20,7 @@ public class GameMapGenerator {
      * @return The generated GameMap that is defined by the GameMapDefinition.
      */
     public GameMap generateMapFrom(GameMapDefinition definition) {
+        LOG.debug("generate GameMap from definition: \"%s\"", definition.getMapName());
 
         String mapName = definition.getMapName();
         int width = definition.getWidth();
@@ -57,16 +57,11 @@ public class GameMapGenerator {
                 break;
 
             default:
-                throw new TarotRLException("Unhandled MapType encountered: " + definition.getMapType());
+                String errorMessage = "Unhandled MapType encountered: " + definition.getMapType();
+                LOG.error(errorMessage);
+                throw new TarotRLException(errorMessage);
         }
         GameMap gameMap = new GameMap(mapName, terrainGrid, height, width);
-
-        Map<Character, TileDefinition> tileSprites = definition.createSpriteToTile();
-        gameMap.setTileSprites(tileSprites);
-
-        char backgroundSprite = definition.getBackgroundSprite();
-        gameMap.setOutOfBoundsTile(backgroundSprite);
-
         return gameMap;
     }
 

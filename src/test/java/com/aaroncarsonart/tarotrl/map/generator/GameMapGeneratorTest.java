@@ -79,7 +79,7 @@ class GameMapGeneratorTest {
     void testGenerateVaultMap() throws Exception {
         GameMapDefinition vaultMapDefinition = getVaultMapDefinition();
         GameMap vaultGameMap = generator.generateMapFrom(vaultMapDefinition);
-        LOG.testing(vaultGameMap);
+        LOG.logTest(vaultGameMap);
 
         assertEquals(VAULT_NAME, vaultGameMap.getName());
         assertEquals(VAULT_WIDTH, vaultGameMap.getWidth());
@@ -101,7 +101,7 @@ class GameMapGeneratorTest {
     void testGenerateMazeMap() throws Exception {
         GameMapDefinition mazeMapDefinition = getMazeMapDefinition();
         GameMap mazeGameMap = generator.generateMapFrom(mazeMapDefinition);
-        LOG.testing(mazeGameMap);
+        LOG.logTest(mazeGameMap);
 
         assertEquals(MAZE_NAME, mazeGameMap.getName());
         assertEquals(MAZE_WIDTH, mazeGameMap.getWidth());
@@ -124,7 +124,7 @@ class GameMapGeneratorTest {
     void testGenerateCellularAutomataMap() throws Exception {
         GameMapDefinition cellularAutomataMapDefinition = getCellularAutomataMapDefinition();
         GameMap cellularAutomataGameMap = generator.generateMapFrom(cellularAutomataMapDefinition);
-        LOG.testing(cellularAutomataGameMap);
+        LOG.logTest(cellularAutomataGameMap);
 
         assertEquals(CELLULAR_AUTOMATA_NAME, cellularAutomataGameMap.getName());
         assertEquals(CELLULAR_AUTOMATA_WIDTH, cellularAutomataGameMap.getWidth());

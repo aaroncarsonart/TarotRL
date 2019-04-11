@@ -29,7 +29,6 @@ public class GameMap implements Serializable {
     private int width;   // NOTE: width/columns are equivalent terminology
 
     private Map<Character, TileDefinition> tileSprites;
-    private char outOfBoundsTile = '#';
 
     /**
      * Any tiles that need re-rendering, as the game state has changed.
@@ -52,14 +51,6 @@ public class GameMap implements Serializable {
 
     public void setTileSprites(Map<Character, TileDefinition> tileSprites) {
         this.tileSprites = tileSprites;
-    }
-
-    public char getOutOfBoundsTile() {
-        return outOfBoundsTile;
-    }
-
-    public void setOutOfBoundsTile(char outOfBoundsTile) {
-        this.outOfBoundsTile = outOfBoundsTile;
     }
 
     public GameMap createDeepCopy() {
@@ -165,7 +156,7 @@ public class GameMap implements Serializable {
         if (withinBounds(pos)) {
             tileSprite = getTile(pos);
         } else {
-            tileSprite = outOfBoundsTile;
+            tileSprite = TileType.EMPTY.getSprite();
         }
         TileDefinition tileDefinition = tileSprites.get(tileSprite);
         return tileDefinition;

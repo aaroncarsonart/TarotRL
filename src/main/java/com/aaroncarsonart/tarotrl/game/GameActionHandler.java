@@ -1,6 +1,5 @@
 package com.aaroncarsonart.tarotrl.game;
 
-import com.aaroncarsonart.tarotrl.entity.Entity;
 import com.aaroncarsonart.tarotrl.entity.ItemEntity;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.inventory.GameItem;
@@ -28,6 +27,19 @@ public class GameActionHandler {
         gameState.setPreviousAction(gameState.getCurrentAction());
         gameState.setCurrentAction(nextAction);
 
+        if (Logger.ENABLE_TRACE_LEVEL) {
+
+            String format = "| %-50s |";
+
+            LOG.trace("+----------------------------------------------------+");
+            LOG.trace(format, String.format("          turn: %s", gameState.getTurnCounter()));
+            LOG.trace(format, String.format("      position: %s", gameState.getGameWorld().getCamera()));
+            LOG.trace(format, String.format("previousAction: %s", gameState.getPreviousAction()));
+            LOG.trace(format, String.format(" currentAction: %s", gameState.getCurrentAction()));
+            LOG.trace(format, String.format("       devMode: %s", gameState.isDevMode()));
+            LOG.trace(format, String.format("     shiftDown: %s", gameState.isShiftDown()));
+            LOG.trace("+----------------------------------------------------+");
+        }
         switch (nextAction) {
 
             case QUIT:
@@ -184,6 +196,9 @@ public class GameActionHandler {
     private void attemptMove(GameState gameState, WorldVoxel voxel, Direction2D originDirection) {
         if (gameState.isDevMode() || voxel.isPassable()) {
             voxel.world.setCamera(voxel.position);
+
+            LOG.debug("Move player: %s", originDirection.getDirection3D());
+
             String status = getMoveStatus(voxel.world, voxel.position);
             gameState.setStatus(status);
             gameState.incrementStepCount();
@@ -255,7 +270,6 @@ public class GameActionHandler {
         WorldVoxel voxel = world.getVoxel(position);
         TileType tileType = voxel.getTileType();
         if (world.hasEntity(position)) {
-            Entity entity = world.getEntity(position);
             String inspectMessage = Direction2D.NONE.getInspectString() + " " + voxel.getDescription();
             inspectMessage = TextUtils.capitalize(inspectMessage);
             return inspectMessage;
@@ -288,7 +302,6 @@ public class GameActionHandler {
         gameState.setInspectedPosition(target);
 
         WorldVoxel voxel = world.getVoxel(target);
-        TileType tileType = voxel.getTileType();
         String inspectStatus = inspectDirection.getInspectString() + " " + voxel.getDescription();
         inspectStatus = TextUtils.capitalize(inspectStatus);
 

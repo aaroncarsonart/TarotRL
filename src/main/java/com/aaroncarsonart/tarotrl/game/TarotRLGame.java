@@ -2,7 +2,6 @@ package com.aaroncarsonart.tarotrl.game;
 
 import com.aaroncarsonart.tarotrl.generator.GameStateGenerator;
 import com.aaroncarsonart.tarotrl.graphics.GameWorldRenderer;
-import com.aaroncarsonart.tarotrl.graphics.TileRenderer;
 import com.aaroncarsonart.tarotrl.graphics.ViewPort;
 import com.aaroncarsonart.tarotrl.input.InputHandler;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
@@ -31,14 +30,12 @@ import java.awt.Toolkit;
 public class TarotRLGame {
     private static final Logger LOG = new Logger(TarotRLGame.class);
 
-    private TileRenderer tileRenderer;
+    private GameWorldRenderer tileRenderer;
     private GameActionHandler actionHandler;
     private InputHandler inputHandler;
     private TileGrid tileGrid;
     private ViewPort mapViewPort;
     private GameState gameState;
-
-    private int updateCount = 0;
 
     private void start() {
         GameStateGenerator gameStateGenerator = new GameStateGenerator();
@@ -101,9 +98,14 @@ public class TarotRLGame {
         LOG.debug(String.format("worldMap size: %,d voxels\n", voxelCount));
     }
 
+    /** Dumb little instance variable cached here, used only for log. NO APOLOGIES. **/
+    private int updateCount = 0;
+
     private void update(PlayerAction nextAction) {
-        // LOG.debug("update " + updateCount++);
+        updateCount++;
+        LOG.trace("update() %d", updateCount);
         if (nextAction != PlayerAction.UNKNOWN) {
+            LOG.debug("process PlayerAction.%s", nextAction);
             actionHandler.processPlayerAction(nextAction, gameState);
             tileRenderer.renderTarotRLGame(tileGrid, gameState, mapViewPort);
         }

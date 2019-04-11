@@ -20,7 +20,7 @@ import java.util.Map;
  * for newer builds, use
  */
 public class InputHandler {
-    private static final Logger LOG = new Logger(InputHandler.class);
+    private static final Logger LOG = new Logger(InputHandler.class).disabled();
 
     private static final Map<String, PlayerAction> inputActionsMap = initInputActionsMap();
 

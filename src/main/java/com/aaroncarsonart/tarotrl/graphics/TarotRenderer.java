@@ -1,7 +1,6 @@
 package com.aaroncarsonart.tarotrl.graphics;
 
 import com.aaroncarsonart.tarotrl.deck.TarotCardType;
-import com.aaroncarsonart.tarotrl.game.GameState;
 import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.TileColors;
 import org.hexworks.zircon.api.Tiles;
@@ -30,13 +29,6 @@ public class TarotRenderer extends TileRenderer {
                 {TL, TR},
                 {ML, MR},
                 {BL, BR}};
-    }
-
-    public void renderGameMapThroughViewPort(TileGrid tileGrid,
-                                             GameState gameState,
-                                             ViewPort viewPort) {
-        //super.renderGameMapThroughViewPort(tileGrid, gameState, viewPort);
-        renderTarotCardTest(tileGrid, viewPort);
     }
 
     private void renderTarotCardTest(TileGrid tileGrid, ViewPort viewPort) {

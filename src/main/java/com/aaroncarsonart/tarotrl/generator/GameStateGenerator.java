@@ -5,11 +5,13 @@ import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.world.GameWorld;
 
 import java.util.Map;
 
 public class GameStateGenerator {
+    private static final Logger LOG = new Logger(GameStateGenerator.class);
 
     private JsonDefinitionLoader loader;
     private GameWorldGenerator gameWorldGenerator;
@@ -29,7 +31,8 @@ public class GameStateGenerator {
     }
 
     public GameState generateImbroglioGameState() {
-        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("/tile_definitions/imbroglio.json");
+        LOG.info("Generating Imbroglio GameState ...");
+        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/imbroglio.json");
         setTileTypeMetadata(tileDefinitionSet);
 
         GameState gameState = new GameState();
@@ -43,9 +46,9 @@ public class GameStateGenerator {
         return gameState;
     }
 
-
     public GameState generateTarotRLGameState() {
-        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("/tile_definitions/forest_green.json");
+        LOG.info("Generating TarotRL GameState ...");
+        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/forest_green.json");
         setTileTypeMetadata(tileDefinitionSet);
 
         GameState gameState = new GameState();

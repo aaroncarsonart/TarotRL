@@ -1,11 +1,9 @@
 package com.aaroncarsonart.tarotrl.graphics;
 
-import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.game.GameState;
-import com.aaroncarsonart.tarotrl.map.GameMap;
-import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.util.TextUtils;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import org.apache.commons.lang3.StringUtils;
@@ -19,114 +17,11 @@ import org.hexworks.zircon.api.grid.TileGrid;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TileRenderer {
-
-    private GameColors colors;
-    private GameMap renderedGameMap;
-    private Tile[][] mapTiles;
-    private Tile outOfBoundsTile;
-
-    public TileRenderer() {
-        colors = GameColors.FOREST_GREEN;
-    }
-
-    private void calculateOutOfBoundsTile() {
-        char outOfBoundsSprite = renderedGameMap.getOutOfBoundsTile();
-        TileDefinition definition = renderedGameMap.getTileSprites().get(outOfBoundsSprite);
-        if (definition == null) {
-            definition = renderedGameMap.getTileSprites().get('#');
-        }
-        outOfBoundsTile = Tiles.newBuilder()
-                .withBackgroundColor(definition.getBackgroundColor())
-                .withForegroundColor(definition.getForegroundColor())
-                .withCharacter(definition.getDisplaySprite())
-                .build();
-    }
-
-    /**
-     * For now, draw the active game map onto the tile grid.
-     *
-     * @param tileGrid  The TileGrid to draw to
-     * @param gameState The GameState to draw from
-     * @param viewPort  The ViewPort to use
-     */
-    public void renderGameMapThroughViewPort(TileGrid tileGrid,
-                                             GameState gameState,
-                                             ViewPort viewPort) {
-
-        // Create the full tileset for the active map, if needed.
-        GameMap activeGameMap = gameState.getActiveMap();
-        if (renderedGameMap != activeGameMap) {
-            mapTiles = createMapTiles(activeGameMap);
-            renderedGameMap = activeGameMap;
-            calculateOutOfBoundsTile();
-        }
-
-        List<Position2D> dirtyTiles = activeGameMap.getDirtyTiles();
-        if (!dirtyTiles.isEmpty()) {
-            for(Position2D pos : dirtyTiles) {
-                TileDefinition updated = renderedGameMap.getTileDefinition(pos);
-                mapTiles[pos.y()][pos.x()] = createZirconTileFrom(updated);
-            }
-        }
-
-
-        // ensure coordinate spaces of viewport fit on the TileGrid.
-        checkCoordinatesFit(tileGrid, viewPort);
-
-        // For each tile in the viewport, draw the appropriate tile
-        // on the TileGrid, applying the appropriate offset.
-        // Offset is based on the camera heuristic.
-
-        // camera coordinates
-        int cx = gameState.getPlayerPosition().x();
-        int cy = gameState.getPlayerPosition().y();
-
-        int offsetX = viewPort.width / 2;
-        int offsetY = viewPort.height / 2;
-
-        for (int vx = 0; vx < viewPort.width; vx++) {
-            for (int vy = 0; vy < viewPort.height; vy++) {
-                // map coordinates
-                int mx = cx - offsetX + vx;
-                int my = cy - offsetY + vy;
-                Position2D mapPos = new Position2D(mx, my);
-
-                // screen coordinates
-                int sx = viewPort.x + vx;
-                int sy = viewPort.y + vy;
-
-                Tile tile;
-                if (activeGameMap.withinBounds(mapPos)) {
-                    tile = mapTiles[my][mx].createCopy();
-                } else {
-                    tile = outOfBoundsTile;
-                }
-                tileGrid.setTileAt(Positions.create(sx, sy), tile);
-            }
-        }
-
-        // draw entities
-
-        // tile grid entity offsets
-        int entityOffsetX = viewPort.x - cx + offsetX;
-        int entityOffsetY = viewPort.y - cy + offsetY;
-
-        // screen player voxelPosition
-        int spx = gameState.getPlayerPosition().x() + entityOffsetX;
-        int spy = gameState.getPlayerPosition().y() + entityOffsetY;
-
-        TileDefinition playerTile = activeGameMap.getTileSprites().get(TileType.PLAYER.getSprite());
-        tileGrid.setTileAt(
-                Positions.create(spx, spy),
-                createZirconTileFrom(playerTile));
-
-        drawSimpleBorder(tileGrid, viewPort, true);
-    }
+    private static final Logger LOG = new Logger(TileRenderer.class);
 
     public void checkCoordinatesFit(TileGrid tileGrid, ViewPort viewPort) {
         int gridWidth = tileGrid.getWidth();
@@ -145,9 +40,9 @@ public class TileRenderer {
                     "width = " + gridWidth + ", " +
                     "height = " + gridWidth + ", " +
                     "} ";
+            LOG.error(errorMessage);
             throw new TarotRLException(errorMessage);
         }
-
     }
 
     public void drawSimpleBorder(TileGrid tileGrid, ViewPort viewPort, boolean decorateCorners) {
@@ -322,9 +217,9 @@ public class TileRenderer {
         }
     }
 
-    public void drawGuiTextInfo(TileGrid tileGrid,
-                                GameState gameState,
-                                ViewPort mapViewPort){
+    public void renderTarotRLTextStatus(TileGrid tileGrid,
+                                        GameState gameState,
+                                        ViewPort mapViewPort){
         // draw player info
         int vw = 18;
         int vh = 10;
@@ -443,24 +338,6 @@ public class TileRenderer {
         }
     }
 
-    public Tile[][] createMapTiles(GameMap gameMap) {
-        int width = gameMap.getWidth();
-        int height = gameMap.getHeight();
-
-        Map<Character, TileDefinition> tileMetadata = gameMap.getTileSprites();
-
-        mapTiles = new Tile[height][width];
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-
-                char mapTileCharacter = gameMap.getTile(y, x);
-                TileDefinition tile = tileMetadata.get(mapTileCharacter);
-                mapTiles[y][x] = createZirconTileFrom(tile);
-            }
-        }
-        return mapTiles;
-    }
-
     public Tile createZirconTileFrom(TileDefinition definition) {
         TileColor bgColor = definition.getBackgroundColor();
         TileColor fgColor = definition.getForegroundColor();
@@ -514,14 +391,5 @@ public class TileRenderer {
         sx = width - stepsMsg.length();
         sy = height - 1;
         writeText(tileGrid, stepsMsg, sx, sy, GameColors.GREEN, GameColors.DARKER_GRAY);
-    }
-
-    public void renderTarotRLGame(TileGrid tileGrid, GameState gameState, ViewPort viewPort) {
-        renderGameMapThroughViewPort(tileGrid, gameState, viewPort);
-    }
-
-    public void renderImbroglioGame(TileGrid tileGrid, GameState gameState, ViewPort viewPort) {
-        renderGameMapThroughViewPort(tileGrid, gameState, viewPort);
-        renderImbroglioStatus(tileGrid, gameState);
     }
 }

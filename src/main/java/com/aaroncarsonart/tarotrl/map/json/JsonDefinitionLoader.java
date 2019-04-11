@@ -4,6 +4,7 @@ import com.aaroncarsonart.tarotrl.deck.TarotDeck;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.exception.ValidatedDefinitionException;
 import com.aaroncarsonart.tarotrl.util.Globals;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.validation.DefinitionValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,7 +16,7 @@ import java.net.URL;
  * with definable, configurable behavior from JSON definition files.
  */
 public class JsonDefinitionLoader {
-
+    private static final Logger LOG = new Logger(JsonDefinitionLoader.class);
     private static final ObjectMapper mapper  = Globals.OBJECT_MAPPER;
     private static final DefinitionValidator validator = new DefinitionValidator();
     private boolean validationEnabled = true;
@@ -33,7 +34,9 @@ public class JsonDefinitionLoader {
     }
 
     public <T> T loadDefinition(String path, Class<T> type) throws ValidatedDefinitionException {
-        URL url = JsonDefinitionLoader.class.getResource(path);
+        LOG.info("loadDefinition(path=\"%s\",type=\"%s\")", path, type);
+        ClassLoader classLoader = JsonDefinitionLoader.class.getClassLoader();
+        URL url = classLoader.getResource(path);
         try {
             T obj = mapper.readValue(url, type);
             if (validationEnabled) {
@@ -41,11 +44,13 @@ public class JsonDefinitionLoader {
             }
             return obj;
         } catch (IOException e) {
-            String message = "Error loading type " + type.getName() + " from path " + path;
+            String message = "Error loading type \"" + type + "\" from path: \"" + path + "\"";
+            LOG.error(e);
             throw new TarotRLException(message, e);
         } catch (ValidatedDefinitionException e) {
             // Intercept the exception, and set the definition file path for quicker debugging.
             e.setDefinitionFilePath(path);
+            LOG.error(e);
             throw e;
         }
     }
@@ -56,11 +61,12 @@ public class JsonDefinitionLoader {
      */
     public TarotDeck loadTarotDeck() {
         try {
-        TarotDeck tarotDeck = loadDefinition("/tarot_deck.json", TarotDeck.class);
+        TarotDeck tarotDeck = loadDefinition("tarot_deck.json", TarotDeck.class);
             return tarotDeck;
           } catch (ValidatedDefinitionException e) {
             throw new TarotRLException(e);
-        }    }
+        }
+    }
 
     /**
      * Validate, normalize, and return the GameMapDefinition described by

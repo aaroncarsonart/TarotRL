@@ -19,7 +19,7 @@ public class GameWorldRenderer extends TileRenderer {
 
     public void renderTarotRLGame(TileGrid tileGrid, GameState gameState, ViewPort viewPort) {
         renderGameMapThroughViewPort(tileGrid, gameState, viewPort, true);
-        drawGuiTextInfo(tileGrid, gameState, viewPort);
+        renderTarotRLTextStatus(tileGrid, gameState, viewPort);
     }
 
     public void renderImbroglioGame(TileGrid tileGrid, GameState gameState, ViewPort viewPort) {

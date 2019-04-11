@@ -40,7 +40,7 @@ class JsonDefinitionLoaderTest {
      */
     @Test
     void testLoadDefinition_vault() throws Exception {
-        definition = loader.loadDefinition("/maps/valid_vault.json", GameMapDefinition.class);
+        definition = loader.loadDefinition("maps/valid_vault.json", GameMapDefinition.class);
 
         // pass validation (no exceptions thrown)
 
@@ -55,7 +55,7 @@ class JsonDefinitionLoaderTest {
         assertNotNull(definition.getMapTerrainData(), "unexpected value loaded from JSON");
 
         for (String row : definition.getMapTerrainData()) {
-            LOG.testing(row);
+            LOG.logTest(row);
         }
 
         definition.normalize();
@@ -75,7 +75,7 @@ class JsonDefinitionLoaderTest {
      */
     @Test
     void testLoadDefinition_maze() throws Exception {
-        definition = loader.loadDefinition("/maps/valid_maze.json", GameMapDefinition.class);
+        definition = loader.loadDefinition("maps/valid_maze.json", GameMapDefinition.class);
 
         // pass validation (no exceptions thrown)
 
@@ -103,7 +103,7 @@ class JsonDefinitionLoaderTest {
 
     @Test
     void testLoadDefinition_cellularAutomata() throws Exception {
-        definition = loader.loadDefinition("/maps/valid_cellular_automata.json", GameMapDefinition.class);
+        definition = loader.loadDefinition("maps/valid_cellular_automata.json", GameMapDefinition.class);
 
         // pass validation (no exceptions thrown)
 

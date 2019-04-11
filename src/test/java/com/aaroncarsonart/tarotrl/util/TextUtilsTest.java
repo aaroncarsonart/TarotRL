@@ -14,16 +14,16 @@ class TextUtilsTest {
         int maxLength = 5;
         List<String> wrappedText = TextUtils.getWordWrappedText(original, maxLength);
         for (String line: wrappedText) {
-            LOG.testing(line);
+            LOG.logTest(line);
         }
 
-        LOG.testing("");
+        LOG.logTest("");
 
         original = "Where you are standing, there is an open path.";
         maxLength = 44;
         wrappedText = TextUtils.getWordWrappedText(original, maxLength);
         for (String line: wrappedText) {
-            LOG.testing(line);
+            LOG.logTest(line);
         }
     }
 }

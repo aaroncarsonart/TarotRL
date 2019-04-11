@@ -21,7 +21,7 @@ import java.util.Set;
  */
 public class Maze
 {
-    private static final Logger LOG = new Logger(Maze.class);
+    private static final Logger LOG = new Logger(Maze.class).disabled();
 
     // ************************************************************************
     // Fields
@@ -1475,7 +1475,7 @@ public class Maze
     // ************************************************************************
 
     /**
-     * Used for testing.
+     * Used for logTest.
      *
      * @param args
      */

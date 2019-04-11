@@ -15,6 +15,7 @@ import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
+import com.aaroncarsonart.tarotrl.util.LogLevel;
 import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.util.RNG;
 import com.aaroncarsonart.tarotrl.world.Direction3D;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
  * Generate GameWorld instances for the player to explore.
  */
 public class GameWorldGenerator {
-    private static final Logger LOG = new Logger(GameWorldGenerator.class);
+    private static final Logger LOG = new Logger(GameWorldGenerator.class).withLogLevel(LogLevel.INFO);
 
     private JsonDefinitionLoader loader;
     private GameMapGenerator generator;
@@ -68,6 +69,7 @@ public class GameWorldGenerator {
     }
 
     private GameWorld generateCarsonFamilyHome() {
+        LOG.info("Generating Carson family home map ...");
         GameWorld world = new GameWorld();
 
         String pathLevel1 = "/maps/vault_parents_house_lv_1.json";
@@ -112,7 +114,7 @@ public class GameWorldGenerator {
     }
 
     private GameWorld generateDescendingMazeWorld() {
-        LOG.debug("generateDescendingMazeWorld()");
+        LOG.info("Generating maze maps ...");
 
         GameWorld world = new GameWorld();
         int levelCount = 10;
@@ -122,10 +124,11 @@ public class GameWorldGenerator {
 
         // generate the descending levels of the Maze
         for (int level = 1; level <= levelCount; level ++) {
-            LOG.debug("generating level " + 1);
 
             int width = 5 + level+ RNG.nextInt(13 + 2 * level);
             int height = 5 + level + RNG.nextInt(13 + 2 * level);
+
+            LOG.debug("generating level %d maze: %d x %d", level, width, height);
 
             Maze maze = Maze.generateRandomWalledMaze(width, height);
             maze.setDifficulty(difficulty);
@@ -207,7 +210,7 @@ public class GameWorldGenerator {
     }
 
     public GameWorld generateCavernWorld() {
-        LOG.debug("generateCavernWorld()");
+        LOG.info("Generating Cavern maps ...");
 
         GameWorld world = new GameWorld();
         int levelCount = 25;
@@ -220,11 +223,11 @@ public class GameWorldGenerator {
 
         // generate the descending levels of the Maze
         for (int level = 1; level <= levelCount; level ++) {
-            LOG.debug("generating level " + level);
-
 
             int width =  mapDimensionCalulator.applyAsInt(level);
             int height = mapDimensionCalulator.applyAsInt(level);
+
+            LOG.debug("generating level %d cavern map: (%d x %d)", level, width, height);
 
             Maze maze = GameMapGenerator.generateCellularAutomataRoom(width, height, 3);
             GameMap map = GameMapGenerator.generateMapFrom(maze);

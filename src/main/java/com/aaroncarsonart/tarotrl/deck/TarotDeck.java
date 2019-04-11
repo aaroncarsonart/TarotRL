@@ -1,9 +1,8 @@
 package com.aaroncarsonart.tarotrl.deck;
 
-import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.util.Globals;
+import com.aaroncarsonart.tarotrl.util.JsonUtils;
 
-import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -132,11 +131,7 @@ public class TarotDeck {
 
     @Override
     public String toString() {
-        try {
-            return Globals.OBJECT_MAPPER.writeValueAsString(this);
-        } catch (IOException e) {
-            throw new TarotRLException(e);
-        }
+        return JsonUtils.writeValueAsString(this);
     }
 
     public List<TarotCard> getSetOfCards() {

@@ -378,7 +378,17 @@ public final class Position2D implements Serializable {
 
     @Override
     public String toString(){
-        return "(" + x + "," + y + ")";
+        return toSuccinctString();
     }
+
+    public String toVerboseString(){
+        return "Position2D(x=" + x + ", y=" + y + ")";
+    }
+
+    public String toSuccinctString(){
+        return "(" + x + "," + y + "," + ")";
+    }
+
+
 
 }

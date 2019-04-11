@@ -185,6 +185,14 @@ public class Position3D {
 
     @Override
     public String toString(){
+        return toSuccinctString();
+    }
+
+    public String toVerboseString(){
+        return "Position3D(x=" + x + ", y=" + y + ", z=" + z + ")";
+    }
+
+    public String toSuccinctString(){
         return "(" + x + "," + y + "," + z + ")";
     }
 

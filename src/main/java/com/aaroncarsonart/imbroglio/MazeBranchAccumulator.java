@@ -26,7 +26,7 @@ import java.util.Set;
  * @version Mar 15, 2015
  */
 public class MazeBranchAccumulator {
-    private static final Logger LOG = new Logger(MazeBranchAccumulator.class);
+    private static final Logger LOG = new Logger(MazeBranchAccumulator.class).disabled();
 
     // *************************************************************************
     // Fields

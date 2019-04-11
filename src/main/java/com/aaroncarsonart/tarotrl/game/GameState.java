@@ -5,22 +5,17 @@ import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.inventory.GameItem;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.world.GameWorld;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-/**
- * Represents one frame of a game's given state.
- */
 
 public class GameState implements Serializable {
-    private Map<String, GameMap> gameMaps = new HashMap<>();
+    private static final Logger LOG = new Logger(GameState.class);
 
     private Position2D playerPosition;
     private Position3D inspectedPosition;
@@ -55,7 +50,6 @@ public class GameState implements Serializable {
     // ------------------------------------------------------
     // Getters and Setters
     // ------------------------------------------------------
-
 
     public Position2D getPlayerPosition() {
         return playerPosition;
@@ -96,6 +90,7 @@ public class GameState implements Serializable {
     public void setStatus(String status) {
         this.status = status;
         if (StringUtils.isNotBlank(status)) {
+            LOG.info(status);
             this.statusLog.add(status);
         }
     }
@@ -175,7 +170,6 @@ public class GameState implements Serializable {
     public void setPlayerItems(List<GameItem> playerItems) {
         this.playerItems = playerItems;
     }
-
 
     public void toggleAutoCollect() {
         autoCollect = !autoCollect;

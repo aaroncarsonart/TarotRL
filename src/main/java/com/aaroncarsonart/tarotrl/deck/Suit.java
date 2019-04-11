@@ -1,9 +1,6 @@
 package com.aaroncarsonart.tarotrl.deck;
 
-import com.aaroncarsonart.tarotrl.util.Globals;
-import com.aaroncarsonart.tarotrl.exception.TarotRLException;
-
-import java.io.IOException;
+import com.aaroncarsonart.tarotrl.util.JsonUtils;
 
 public class Suit extends Keywordable {
     private int rank;
@@ -36,10 +33,6 @@ public class Suit extends Keywordable {
 
     @Override
     public String toString() {
-        try {
-            return Globals.OBJECT_MAPPER.writeValueAsString(this);
-        } catch (IOException e) {
-            throw new TarotRLException(e);
-        }
+        return JsonUtils.writeValueAsString(this);
     }
 }
