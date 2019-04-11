@@ -1,5 +1,7 @@
 package com.aaroncarsonart.imbroglio;
 
+import com.aaroncarsonart.tarotrl.util.Logger;
+
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -24,6 +26,7 @@ import java.util.Set;
  * @version Mar 15, 2015
  */
 public class MazeBranchAccumulator {
+    private static final Logger LOG = new Logger(MazeBranchAccumulator.class);
 
     // *************************************************************************
     // Fields
@@ -333,7 +336,7 @@ public class MazeBranchAccumulator {
 
         Cell initial = cells[x][y];
         initial.distance = 0;
-        // System.out.println("initial type: " + initial.type);
+        LOG.trace("initial type: " + initial.type);
 
         queue.add(initial);
         visited.add(initial);
@@ -500,14 +503,14 @@ public class MazeBranchAccumulator {
         long time = System.currentTimeMillis();
         mba.countBranchDistances();
         time = System.currentTimeMillis() - time;
-        // System.out.println(mba);
-        // System.out.println("Time to run: " + time / 1000.0f + " seconds");
+        LOG.trace(mba);
+        LOG.trace("Time to run: " + time / 1000.0f + " seconds");
 
         // 3. test wall queue
         PriorityQueue<Cell> wallQueue = mba.getRemovableWallsPriorityQueue();
         for (int i = 0; i < 5 && !wallQueue.isEmpty(); i++) {
             Cell wall = wallQueue.poll();
-            // System.out.println(wall + " " + wall.distance);
+            LOG.trace(wall + " " + wall.distance);
         }
     }
 
@@ -521,14 +524,14 @@ public class MazeBranchAccumulator {
         long time = System.currentTimeMillis();
         mba.countBranchDistances(0,0,width);
         time = System.currentTimeMillis() - time;
-        // System.out.println(mba);
-        // System.out.println("Time to run: " + time / 1000.0f + " seconds");
+        LOG.trace(mba);
+        LOG.trace("Time to run: " + time / 1000.0f + " seconds");
 
         // 3. test wall queue
         PriorityQueue<Cell> wallQueue = mba.getRemovableWallsPriorityQueue();
         for (int i = 0; i < 5 && !wallQueue.isEmpty(); i++) {
             Cell wall = wallQueue.poll();
-            // System.out.println(wall + " " + wall.distance);
+            LOG.trace(wall + " " + wall.distance);
         }
     }
 
@@ -540,7 +543,7 @@ public class MazeBranchAccumulator {
         PriorityQueue<Cell> wallQueue = mba.getRemovableWallsPriorityQueue();
         for (int i = 0; i < 5 && !wallQueue.isEmpty(); i++) {
             Cell wall = wallQueue.poll();
-            // System.out.println(wall + " " + wall.distance);
+            LOG.trace(wall + " " + wall.distance);
         }
     }
 
@@ -559,13 +562,13 @@ public class MazeBranchAccumulator {
 		// ************************************
 		// 2. create and test PATH accumulator
 		// ************************************
-		// System.out.println("\nPath Accumulator:\n");
+		LOG.trace("\nPath Accumulator:\n");
 		MazeBranchAccumulator pathAccumulator = new MazeBranchAccumulator(m, Maze.PATH);
 		time = System.currentTimeMillis();
 		pathAccumulator.countBranchDistances(1,1,0);
 		time = System.currentTimeMillis() - time;
-		// System.out.println(pathAccumulator);
-		// System.out.println("Time to run: " + time / 1000.0f + " seconds");
+		LOG.trace(pathAccumulator);
+		LOG.trace("Time to run: " + time / 1000.0f + " seconds");
 		testPriorityQueue(pathAccumulator);
 		*/
 
@@ -573,13 +576,13 @@ public class MazeBranchAccumulator {
         // 3. create and test WALL accumulator
         // ************************************
 
-        // System.out.println("Wall Accumulator:\n");
+        LOG.trace("Wall Accumulator:\n");
         MazeBranchAccumulator wallAccumulator = new MazeBranchAccumulator(m, Maze.WALL);
         time = System.currentTimeMillis();
         wallAccumulator.countBranchDistances(0,0,0);
         time = System.currentTimeMillis() - time;
-        // System.out.println(wallAccumulator);
-        // System.out.println("Time to run: " + time / 1000.0f + " seconds");
+        LOG.trace(wallAccumulator);
+        LOG.trace("Time to run: " + time / 1000.0f + " seconds");
 
         PriorityQueue<Cell> wallQueue = wallAccumulator.getRemovableWallsPriorityQueue();
 
@@ -587,7 +590,7 @@ public class MazeBranchAccumulator {
         for (int i = 0; i < 5 && !wallQueue.isEmpty(); i++) {
             // 1. get a wall from the priority queue
             MazeBranchAccumulator.Cell cell = wallQueue.poll();
-            // System.out.println("Remove: " + cell + " " + cell.distance);
+            LOG.trace("Remove: " + cell + " " + cell.distance);
 
             // 2. make it a path
             //maze[cell.x][cell.y] = PATH;
@@ -600,7 +603,7 @@ public class MazeBranchAccumulator {
                 }
             }
 
-            // System.out.println(wallAccumulator);
+            LOG.trace(wallAccumulator);
         }
 
     }

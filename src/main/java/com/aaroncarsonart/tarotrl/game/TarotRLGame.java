@@ -6,7 +6,7 @@ import com.aaroncarsonart.tarotrl.graphics.TileRenderer;
 import com.aaroncarsonart.tarotrl.graphics.ViewPort;
 import com.aaroncarsonart.tarotrl.input.InputHandler;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
-import com.aaroncarsonart.tarotrl.util.Loggable;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.world.GameWorld;
 import com.aaroncarsonart.tarotrl.world.Region3D;
 import org.hexworks.zircon.api.AppConfigs;
@@ -28,7 +28,8 @@ import java.awt.Toolkit;
 /**
  * The main class for encapsulating all TarotRL game logic.
  */
-public class TarotRLGame implements Loggable {
+public class TarotRLGame {
+    private static final Logger LOG = new Logger(TarotRLGame.class);
 
     private TileRenderer tileRenderer;
     private GameActionHandler actionHandler;
@@ -36,6 +37,8 @@ public class TarotRLGame implements Loggable {
     private TileGrid tileGrid;
     private ViewPort mapViewPort;
     private GameState gameState;
+
+    private int updateCount = 0;
 
     private void start() {
         GameStateGenerator gameStateGenerator = new GameStateGenerator();
@@ -93,12 +96,13 @@ public class TarotRLGame implements Loggable {
         Region3D worldRegion = world.calculateBoundingRegion3D();
         int regionVolume = worldRegion.volume();
 
-        debug(String.format("WorldMap dimensions: %s\n", worldRegion));
-        debug(String.format("WorldMap bounding region volume:  %,d voxels\n", regionVolume));
-        debug(String.format("worldMap size: %,d voxels\n", voxelCount));
+        LOG.debug(String.format("WorldMap dimensions: %s\n", worldRegion));
+        LOG.debug(String.format("WorldMap bounding region volume:  %,d voxels\n", regionVolume));
+        LOG.debug(String.format("worldMap size: %,d voxels\n", voxelCount));
     }
 
     private void update(PlayerAction nextAction) {
+        // LOG.debug("update " + updateCount++);
         if (nextAction != PlayerAction.UNKNOWN) {
             actionHandler.processPlayerAction(nextAction, gameState);
             tileRenderer.renderTarotRLGame(tileGrid, gameState, mapViewPort);

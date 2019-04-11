@@ -15,7 +15,7 @@ import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
-import com.aaroncarsonart.tarotrl.util.Loggable;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.util.RNG;
 import com.aaroncarsonart.tarotrl.world.Direction3D;
 import com.aaroncarsonart.tarotrl.world.GameWorld;
@@ -31,8 +31,8 @@ import java.util.stream.Collectors;
 /**
  * Generate GameWorld instances for the player to explore.
  */
-public class GameWorldGenerator implements Loggable {
-    public static final boolean DEBUG = true;
+public class GameWorldGenerator {
+    private static final Logger LOG = new Logger(GameWorldGenerator.class);
 
     private JsonDefinitionLoader loader;
     private GameMapGenerator generator;
@@ -112,7 +112,7 @@ public class GameWorldGenerator implements Loggable {
     }
 
     private GameWorld generateDescendingMazeWorld() {
-        debug("generateDescendingMazeWorld()");
+        LOG.debug("generateDescendingMazeWorld()");
 
         GameWorld world = new GameWorld();
         int levelCount = 10;
@@ -122,7 +122,7 @@ public class GameWorldGenerator implements Loggable {
 
         // generate the descending levels of the Maze
         for (int level = 1; level <= levelCount; level ++) {
-            debug("generating level " + 1);
+            LOG.debug("generating level " + 1);
 
             int width = 5 + level+ RNG.nextInt(13 + 2 * level);
             int height = 5 + level + RNG.nextInt(13 + 2 * level);
@@ -207,7 +207,7 @@ public class GameWorldGenerator implements Loggable {
     }
 
     public GameWorld generateCavernWorld() {
-        debug("generateCavernWorld()");
+        LOG.debug("generateCavernWorld()");
 
         GameWorld world = new GameWorld();
         int levelCount = 25;
@@ -220,7 +220,7 @@ public class GameWorldGenerator implements Loggable {
 
         // generate the descending levels of the Maze
         for (int level = 1; level <= levelCount; level ++) {
-            debug("generating level " + level);
+            LOG.debug("generating level " + level);
 
 
             int width =  mapDimensionCalulator.applyAsInt(level);

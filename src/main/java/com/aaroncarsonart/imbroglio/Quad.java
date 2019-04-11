@@ -1,5 +1,7 @@
 package com.aaroncarsonart.imbroglio;
 
+import com.aaroncarsonart.tarotrl.util.Logger;
+
 /**
  * A Quad is an axis-aligned bounding box, represented by a center point and The
  * half distance to the left and to the right.
@@ -13,6 +15,8 @@ package com.aaroncarsonart.imbroglio;
  */
 public final class Quad
 {
+    private static final Logger LOG = new Logger(Quad.class);
+
     /** The center x coordinate origin. */
     public double	x;
     /** The center y coordinate origin. */
@@ -75,22 +79,22 @@ public final class Quad
                 // adjust based on relative origin.
                 if (this.x < quad.x) {
                     this.x = quad.x - quad.halfWidth - this.halfWidth;
-                    // System.out.println("collides!");
+                    LOG.debug("collides!");
                 }
                 else {
                     this.x = quad.x + quad.halfWidth + this.halfWidth;
-                    // System.out.println("collides!");
+                    LOG.debug("collides!");
                 }
             }
             else {
                 // adjust based on relative origin.
                 if (this.y < quad.y) {
                     this.y = quad.y - quad.halfHeight - this.halfHeight;
-                    // System.out.println("collides!");
+                    LOG.debug("collides!");
                 }
                 else {
                     this.y = quad.y + quad.halfHeight + this.halfHeight;
-                    // System.out.println("collides!");
+                    LOG.debug("collides!");
                 }
             }
             return true;

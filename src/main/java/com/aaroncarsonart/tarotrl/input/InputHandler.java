@@ -1,6 +1,7 @@
 package com.aaroncarsonart.tarotrl.input;
 
 import com.aaroncarsonart.tarotrl.game.GameState;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import org.hexworks.zircon.api.UIEventResponses;
 import org.hexworks.zircon.api.grid.TileGrid;
 import org.hexworks.zircon.api.uievent.KeyCode;
@@ -19,7 +20,8 @@ import java.util.Map;
  * for newer builds, use
  */
 public class InputHandler {
-    private static final boolean DEBUG = true;
+    private static final Logger LOG = new Logger(InputHandler.class);
+
     private static final Map<String, PlayerAction> inputActionsMap = initInputActionsMap();
 
     private PlayerActionEmitter playerActionEmitter = new PlayerActionEmitter();
@@ -60,7 +62,7 @@ public class InputHandler {
 
     @SuppressWarnings("unused")
     private UIEventResponse handleKeyTyped(KeyboardEvent event, GameState state) {
-        if (DEBUG) System.out.println("handleKeyTyped(): " + event);
+        LOG.debug("handleKeyTyped(): " + event);
 
         PlayerAction nextAction = inputActionsMap.getOrDefault(event.getKey(), PlayerAction.UNKNOWN);
         playerActionEmitter.broadcastPlayerAction(nextAction);
@@ -68,7 +70,7 @@ public class InputHandler {
     }
 
     private UIEventResponse handleKeyPressed(KeyboardEvent event, GameState state) {
-        if (DEBUG) System.out.println("handleKeyPressed(): " + event);
+        LOG.debug("handleKeyPressed(): " + event);
 
         toggleBooleanFlags(event);
         state.setShiftDown(shiftDown);
@@ -80,7 +82,7 @@ public class InputHandler {
     }
 
     private UIEventResponse handleKeyReleased(KeyboardEvent event, GameState state) {
-        if (DEBUG) System.out.println("handleKeyReleased(): " + event);
+        LOG.debug("handleKeyReleased(): " + event);
 
         toggleBooleanFlags(event);
         state.setShiftDown(shiftDown);

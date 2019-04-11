@@ -3,11 +3,13 @@ package com.aaroncarsonart.tarotrl.deck;
 
 import com.aaroncarsonart.tarotrl.util.Globals;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
+import com.aaroncarsonart.tarotrl.util.Logger;
 
 import java.io.IOException;
 import java.net.URL;
 
 public class TarotRL {
+    private static final Logger LOG = new Logger(TarotRL.class);
 
     private TarotDeck TarotDeck;
 
@@ -17,7 +19,7 @@ public class TarotRL {
         tarotDeck.riffleShuffle();
 
         for (TarotCard tarotCard : tarotDeck.getCards()) {
-            System.out.println(tarotCard);
+            LOG.info(tarotCard);
         }
     }
 

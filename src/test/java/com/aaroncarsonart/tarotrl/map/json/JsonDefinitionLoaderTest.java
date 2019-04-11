@@ -2,6 +2,7 @@ package com.aaroncarsonart.tarotrl.map.json;
 
 import com.aaroncarsonart.tarotrl.exception.ValidatedDefinitionException;
 import com.aaroncarsonart.tarotrl.map.MapType;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test the behavior of loading JSON definition files from the resources folder.
  */
 class JsonDefinitionLoaderTest {
+    private static final Logger LOG = new Logger(JsonDefinitionLoaderTest.class);
+
 
     private JsonDefinitionLoader loader;
     private GameMapDefinition definition;
@@ -52,7 +55,7 @@ class JsonDefinitionLoaderTest {
         assertNotNull(definition.getMapTerrainData(), "unexpected value loaded from JSON");
 
         for (String row : definition.getMapTerrainData()) {
-            System.out.println(row);
+            LOG.testing(row);
         }
 
         definition.normalize();

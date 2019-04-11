@@ -5,6 +5,7 @@ import com.aaroncarsonart.tarotrl.generator.GameMapGenerator;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.MapType;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GameMapGeneratorTest {
+    private static final Logger LOG = new Logger(GameMapGeneratorTest.class);
 
     // The answer to life, the universe, and everything ... and also *
     private static final long RANDOM_SEED = 42L;
@@ -77,7 +79,7 @@ class GameMapGeneratorTest {
     void testGenerateVaultMap() throws Exception {
         GameMapDefinition vaultMapDefinition = getVaultMapDefinition();
         GameMap vaultGameMap = generator.generateMapFrom(vaultMapDefinition);
-        System.out.println(vaultGameMap);
+        LOG.testing(vaultGameMap);
 
         assertEquals(VAULT_NAME, vaultGameMap.getName());
         assertEquals(VAULT_WIDTH, vaultGameMap.getWidth());
@@ -99,7 +101,7 @@ class GameMapGeneratorTest {
     void testGenerateMazeMap() throws Exception {
         GameMapDefinition mazeMapDefinition = getMazeMapDefinition();
         GameMap mazeGameMap = generator.generateMapFrom(mazeMapDefinition);
-        System.out.println(mazeGameMap);
+        LOG.testing(mazeGameMap);
 
         assertEquals(MAZE_NAME, mazeGameMap.getName());
         assertEquals(MAZE_WIDTH, mazeGameMap.getWidth());
@@ -122,7 +124,7 @@ class GameMapGeneratorTest {
     void testGenerateCellularAutomataMap() throws Exception {
         GameMapDefinition cellularAutomataMapDefinition = getCellularAutomataMapDefinition();
         GameMap cellularAutomataGameMap = generator.generateMapFrom(cellularAutomataMapDefinition);
-        System.out.println(cellularAutomataGameMap);
+        LOG.testing(cellularAutomataGameMap);
 
         assertEquals(CELLULAR_AUTOMATA_NAME, cellularAutomataGameMap.getName());
         assertEquals(CELLULAR_AUTOMATA_WIDTH, cellularAutomataGameMap.getWidth());
@@ -140,12 +142,4 @@ class GameMapGeneratorTest {
         definition.setIterations(CELLULAR_AUTOMATA_ITERATIONS);
         return definition;
     }
-
-//    @Test
-//    void doWhatever() {
-//        Maze m = Maze.generateRandomShapedRoom(20, 20, 0.50, false);
-//        System.out.println(m);
-//        m = Maze.generateRandomShapedRoom(20, 20, 0.50, true);
-//        System.out.println(m);
-//    }
 }

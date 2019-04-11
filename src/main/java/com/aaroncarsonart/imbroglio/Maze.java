@@ -1,6 +1,7 @@
 package com.aaroncarsonart.imbroglio;
 
 import com.aaroncarsonart.tarotrl.util.Globals;
+import com.aaroncarsonart.tarotrl.util.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,6 +21,8 @@ import java.util.Set;
  */
 public class Maze
 {
+    private static final Logger LOG = new Logger(Maze.class);
+
     // ************************************************************************
     // Fields
     // ************************************************************************
@@ -509,19 +512,19 @@ public class Maze
 
                     // case 1: been here already.
                     if (visited.contains(neighbor)) {
-                        //System.out.println("already visited");
+                        LOG.trace("already visited");
                         continue;
                     }
 
                     // case 2: it is a wall
                     else if (getCell(neighbor.x(), neighbor.y()) != Maze.PATH) {
-                        //System.out.println("found wall");
+                        LOG.trace("found wall");
                         continue;
                     }
 
                     // case 4: it is an open path
                     else {
-                        //System.out.println("found path from " + current + " to " + neighbor);
+                        LOG.trace("found path from " + current + " to " + neighbor);
 
                         // mark this origin as added
                         visited.add(neighbor);
@@ -571,19 +574,19 @@ public class Maze
 
                     // case 1: been here already.
                     if (visited.contains(neighbor)) {
-                        //System.out.println("already visited");
+                        LOG.trace("already visited");
                         continue;
                     }
 
                     // case 2: it is a wall
                     else if (getCell(neighbor.x(), neighbor.y()) != Maze.PATH) {
-                        //System.out.println("found wall");
+                        LOG.trace("found wall");
                         continue;
                     }
 
                     // case 4: it is an open path
                     else {
-                        //System.out.println("found path from " + current + " to " + neighbor);
+                        LOG.trace("found path from " + current + " to " + neighbor);
 
                         // mark this origin as added
                         visited.add(neighbor);
@@ -871,7 +874,7 @@ public class Maze
         for (int i = 0; i < addedPaths; i++) {
             // 1. get a wall from the priority queue
             MazeBranchAccumulator.Cell cell = walls.poll();
-            // System.out.println("Remove: " + cell + " " + cell.distance);
+            LOG.trace("Remove: " + cell + " " + cell.distance);
 
             // 2. make it a path
             cells[cell.x][cell.y] = PATH;
@@ -1366,7 +1369,7 @@ public class Maze
         m = Maze.createWalledDungeon(width, height, 20);
         // m = Maze.generateRandomWalledMaze(width, height);
         // m.setDifficulty(Difficulty.EASY);
-        System.out.println(m.toString());
+        LOG.trace(m.toString());
 
     }
 
@@ -1486,7 +1489,7 @@ public class Maze
             }
             catch (NumberFormatException ex) {
                 System.out.print("Invalid input; ");
-                System.out.println("please pass 2 ints for width and height.");
+                LOG.trace("please pass 2 ints for width and height.");
             }
         }
 
@@ -1515,11 +1518,11 @@ public class Maze
 			 * System.currentTimeMillis();
 			 * System.out.printf("\n%2.2f%% Cavern\n", p); m =
 			 * generateRandomShapedRoom(50,50, p, cavern);
-			 * System.out.println(m.toString());
+			 * LOG.trace(m.toString());
 			 *
 			 * System.out.printf("\n%2.2f%% Tunnels\n", p); m =
 			 * generateRandomShapedRoom(50,50, p, tunnels);
-			 * System.out.println(m.toString());
+			 * LOG.trace(m.toString());
 			 * System.out.printf("elapsed: %.5f s.\n",
 			 * (System.currentTimeMillis() - t) / 1000.0); }
 			 */
@@ -1580,8 +1583,7 @@ public class Maze
 
         Maze m = Maze.generateCellularAutomataRoom(50, 50);
         m.connectDisconnectedComponents();
-        System.out.println(m);
-
+        LOG.trace(m);
     }
 
 }

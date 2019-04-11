@@ -7,6 +7,7 @@ import com.aaroncarsonart.tarotrl.inventory.GameItem;
 import com.aaroncarsonart.tarotrl.inventory.Treasure;
 import com.aaroncarsonart.tarotrl.map.Direction2D;
 import com.aaroncarsonart.tarotrl.map.TileType;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.util.TextUtils;
 import com.aaroncarsonart.tarotrl.world.Direction3D;
 import com.aaroncarsonart.tarotrl.world.GameWorld;
@@ -17,6 +18,7 @@ import com.aaroncarsonart.tarotrl.world.WorldVoxel;
  * Handle All proper GameActions, which update the GameState in some way.
  */
 public class GameActionHandler {
+    private static final Logger LOG = new Logger(GameActionHandler.class);
 
     /**
      * ConsoleGame method of class. Handle the nextInt PlayerAction, and update the game state.
@@ -30,7 +32,7 @@ public class GameActionHandler {
 
             case QUIT:
                 gameState.setGameOver(true);
-                System.out.println("GameOver: " + gameState.isGameOver());
+                LOG.info("Quitting game.");
                 break;
 
             case HELP:
@@ -77,7 +79,7 @@ public class GameActionHandler {
                 doToggleAutoCollect(gameState);
 
             default:
-                System.out.println("Handle PlayerAction." + nextAction.name());
+                LOG.warning("Case not handled: PlayerAction." + nextAction.name());
         }
         gameState.incrementTurnCounter();
     }
@@ -92,15 +94,6 @@ public class GameActionHandler {
             gameState.setStatus("Auto-collect mode disabled. Items must be collected using " +
                     "CONFIRM to be added to your inventory.");
         }
-    }
-
-
-    /**
-     * Do execute the "QUIT" game action.
-     */
-    private void doQuitGame() {
-        System.out.println("Quitting game. Goodbye, thanks for playing!!! :-)");
-        System.exit(0);
     }
 
     /**
