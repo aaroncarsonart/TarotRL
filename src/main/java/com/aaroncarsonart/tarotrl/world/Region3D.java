@@ -27,4 +27,13 @@ public class Region3D {
         this.position = new Position3D(px, py, pz);
         this.dimensions = new Position3D(dx, dy, dz);
     }
+
+    public int volume() {
+        return dimensions.x * dimensions.y * dimensions.z;
+    }
+
+    @Override
+    public String toString() {
+        return "Region3D:{ position" + position + ", dimensions" + dimensions + " }";
+    }
 }

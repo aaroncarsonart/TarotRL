@@ -4,8 +4,11 @@ import com.aaroncarsonart.tarotrl.generator.GameStateGenerator;
 import com.aaroncarsonart.tarotrl.graphics.GameWorldRenderer;
 import com.aaroncarsonart.tarotrl.graphics.TileRenderer;
 import com.aaroncarsonart.tarotrl.graphics.ViewPort;
-import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.input.InputHandler;
+import com.aaroncarsonart.tarotrl.input.PlayerAction;
+import com.aaroncarsonart.tarotrl.util.Loggable;
+import com.aaroncarsonart.tarotrl.world.GameWorld;
+import com.aaroncarsonart.tarotrl.world.Region3D;
 import org.hexworks.zircon.api.AppConfigs;
 import org.hexworks.zircon.api.CP437TilesetResources;
 import org.hexworks.zircon.api.Layers;
@@ -25,7 +28,7 @@ import java.awt.Toolkit;
 /**
  * The main class for encapsulating all TarotRL game logic.
  */
-public class TarotRLGame {
+public class TarotRLGame implements Loggable {
 
     private TileRenderer tileRenderer;
     private GameActionHandler actionHandler;
@@ -83,11 +86,20 @@ public class TarotRLGame {
         tileRenderer.renderTarotRLGame(tileGrid, gameState, mapViewPort);
     }
 
-    int updates = 0;
+    private void printGameWorldInfo() {
+        GameWorld world = gameState.getGameWorld();
+        int voxelCount = gameState.getGameWorld().getWorldMap().size();
+
+        Region3D worldRegion = world.calculateBoundingRegion3D();
+        int regionVolume = worldRegion.volume();
+
+        debug(String.format("WorldMap dimensions: %s\n", worldRegion));
+        debug(String.format("WorldMap bounding region volume:  %,d voxels\n", regionVolume));
+        debug(String.format("worldMap size: %,d voxels\n", voxelCount));
+    }
 
     private void update(PlayerAction nextAction) {
         if (nextAction != PlayerAction.UNKNOWN) {
-            System.out.println("update " + updates++);
             actionHandler.processPlayerAction(nextAction, gameState);
             tileRenderer.renderTarotRLGame(tileGrid, gameState, mapViewPort);
         }

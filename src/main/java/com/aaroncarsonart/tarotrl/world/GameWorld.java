@@ -130,4 +130,26 @@ public class GameWorld {
             entity.update();
         }
     }
+
+
+    public Region3D calculateBoundingRegion3D() {
+        Position3D min = Position3D.ORIGIN;
+        Position3D max = Position3D.ORIGIN;
+
+        for(WorldVoxel voxel : worldMap.values()) {
+            Position3D current = voxel.position;
+            if (current.x < min.x) min = min.withX(current.x);
+            if (current.y < min.y) min = min.withY(current.y);
+            if (current.z < min.z) min = min.withZ(current.z);
+            if (current.x > max.x) max = max.withX(current.x);
+            if (current.y > max.y) max = max.withY(current.y);
+            if (current.z > max.z) max = max.withZ(current.z);
+        }
+
+        Position3D position = min;
+        Position3D dimensions = max.subtract(min);
+        Region3D region = new Region3D(position, dimensions);
+        return region;
+    }
+
 }

@@ -138,6 +138,18 @@ public class Position3D {
 
      */
 
+    public Position3D withX(int nx) {
+        return new Position3D(nx, y, z);
+    }
+
+    public Position3D withY(int ny) {
+        return new Position3D(x, ny, z);
+    }
+
+    public Position3D withZ(int nz) {
+        return new Position3D(x, y, nz);
+    }
+
     public Position3D withRelativeX(int x) {
         int nx = this.x + x;
         return new Position3D(nx, y, z);

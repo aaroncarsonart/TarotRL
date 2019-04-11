@@ -1,0 +1,13 @@
+My long term goals with this project:
+=====================================
+1. Complete Imbroglio classic.
+2. Create AsciiTarotDeck.
+    - An ASCII tile-based UI where you can use Tarot Cards.
+    - Move and interact with cards.
+    - Draw cards from the deck, and place them on the screen.
+    - Flip cards to show the face or the back.
+    - Be able to copy/paste text representation of a spread.
+       - Nice to have: copy/paste RTF text with color and font
+
+3. Complete TarotRL.
+
