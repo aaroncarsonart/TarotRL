@@ -213,7 +213,7 @@ public class GameWorldGenerator {
         LOG.info("Generating Cavern maps ...");
 
         GameWorld world = new GameWorld();
-        int levelCount = 25;
+        int levelCount = 5;
         int scaleFactor = 23 - levelCount / 2;
 
         ToIntFunction<Integer> mapDimensionCalulator = level ->

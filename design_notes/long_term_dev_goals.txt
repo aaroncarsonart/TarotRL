@@ -10,4 +10,10 @@ My long term goals with this project:
        - Nice to have: copy/paste RTF text with color and font
 
 3. Complete TarotRL.
+   - FEATURE-0001: add more granular movement key handling.
+       - Change movement handling to mirror how JGameEngine does it:
+             com.aaron.jgameengine.game.engine.Command
+       - Store a list of pressed movement keys.
+       - Respond appropriately in doMove(): fire multiple times until all movement keys are released.
+       - Set a movement mode toggle to move one space at a time. (step mode)
 

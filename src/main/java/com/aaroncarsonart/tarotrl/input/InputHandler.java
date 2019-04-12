@@ -11,6 +11,7 @@ import org.hexworks.zircon.api.uievent.UIEventResponse;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * Handle user input from Zircon API.  Convert into PlayerActions
@@ -20,7 +21,7 @@ import java.util.Map;
  * for newer builds, use
  */
 public class InputHandler {
-    private static final Logger LOG = new Logger(InputHandler.class).disabled();
+    private static final Logger LOG = new Logger(InputHandler.class);
 
     private static final Map<String, PlayerAction> inputActionsMap = initInputActionsMap();
 
@@ -28,6 +29,7 @@ public class InputHandler {
 
     private boolean devMode = false;
     private boolean shiftDown = false;
+    private Stack<PlayerAction> pressedMovementKeys = new Stack<>();
 
     private static Map<String, PlayerAction> initInputActionsMap() {
         Map<String, PlayerAction> inputActionsMap = new LinkedHashMap<>();

@@ -1,0 +1,113 @@
+What current classes drive the behavior of TarotRL?
+
+
+
+GameState
+ - Hold player, map, and other persistent data
+
+InputHandler
+ - receives user input
+ - outputs PlayerActions
+ - drives rate of updates on GameState
+
+GameActionHandler
+ - Updates the GameState based on player input.
+
+TileGrid
+ - The "Screen" for the game.  Where graphics are drawn onto.
+
+GameWorldRenderer
+ - Renders the GameState onto the TileGrid.
+
+...
+
+Therefore, I am following the component system in a somewhat
+straight-forward manner:
+
+
+InputHandler -> InputComponent
+GameActionHandler -> PhysicsComponent
+GameWorldRenderer -> GraphicsComponent
+
+
+(GameActionHandler is more of a MapNavigationComponent.)
+GameWorldRenderer could have it's logic split up so handle only things
+for a given component.  This way, the map rendering logic can live completely separately from the player inventory ui rendering logic, etc.
+
+
+Consider a resulting class breakdown:
+
+GameState {
+    GameWorld world
+    GameEntity player
+    List<GameEntity> entities
+    update() {
+        player.update();
+        for(entity : entities) {
+            entity.update();
+        }
+    }
+}
+
+GameEntity {
+    InputComponent input;
+    NavigationComponent navigation;
+    GraphicsComponent graphics;
+    update() {
+        input.update();
+        navigation.update();
+        graphics.render();
+    }
+}
+
+Game {
+    GameState state;
+    gameloop() {
+        state.update();
+    }
+}
+
+
+
+A generic game Entity can the same actions as a player.
+However, what they mean and how they do them can be different.
+
+A player can:
+MOVE_* ------> INSPECT
+WAIT     |---> DOOR
+REST
+OK --------> INSPECT
+CANCEL |---> COLLECT_ITEM
+       |---> STAIRS
+
+(among others)
+
+NPCs have no need for INSPECT, for example, which displays
+human readable text to the player's screen.  Also, OK and
+CANCEL would not be applicable. An NPC's AI would not be
+inferring context-sensitive information from the screen
+into one input, like a player would, and would rather just
+dispatch each command as needed.
+
+
+
+
+Both entities are drawn the same, for example.
+But the inputs would be different
+
+
+
+
+PlayerInput {
+    boolean shiftDown;
+    boolean ctrlDown;
+    boolean altDown;
+    boolean metaDown;
+
+    Stack<PlayerAction> moves;
+    boolean singleStepMode;
+    boolean autoCollectMode;
+
+    PlayerAction previous;
+    PlayerAction current;
+}

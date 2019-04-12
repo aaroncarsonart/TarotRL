@@ -8,8 +8,8 @@ public class Logger {
     public static final boolean ENABLE_WARNING_LEVEL = true;
     public static final boolean ENABLE_INFO_LEVEL    = true;
     public static final boolean ENABLE_DEBUG_LEVEL   = true;
-    public static final boolean ENABLE_TRACE_LEVEL   = true;
-    public static final boolean ENABLE_LOG_TEST_LEVEL = true;
+    public static final boolean ENABLE_TRACE_LEVEL   = false;
+    public static final boolean ENABLE_LOG_TEST_LEVEL = false;
 
     private static final String LOG_PREFIX_FORMAT = "%s %-7s %s - ";
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HH.mm.ss.SSS");
