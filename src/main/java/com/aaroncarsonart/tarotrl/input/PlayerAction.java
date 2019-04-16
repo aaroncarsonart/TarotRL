@@ -27,7 +27,9 @@ public enum PlayerAction {
     DOOR("Open or close a door."),
     AUTO_PICKUP_ITEMS("Automatically add items to inventory when walked over"),
 
-    INSPECT("Inspect the focused origin, reporting any relevant info.")
+    INSPECT("Inspect the focused origin, reporting any relevant info."),
+    INVENTORY("Enter the inventory screen."),
+    SNAPSHOT_HISTORY("Enter snapshot history game mode."),
     ;
 
     /**

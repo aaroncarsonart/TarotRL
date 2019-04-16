@@ -1,7 +1,9 @@
 package com.aaroncarsonart.tarotrl.game;
 
 import com.aaroncarsonart.imbroglio.Position2D;
+import com.aaroncarsonart.tarotrl.game.controller.InventoryGameControllerData;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
+import com.aaroncarsonart.tarotrl.input.UserInput;
 import com.aaroncarsonart.tarotrl.inventory.GameItem;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
@@ -40,6 +42,13 @@ public class GameState implements Serializable {
     private boolean devMode;
     private boolean shiftDown;
     private boolean autoCollect;
+
+    private boolean updateGameControllerAgain;
+
+    private transient GameMode gameMode;
+    private transient UserInput userInput = new UserInput();
+
+    private InventoryGameControllerData mapGameControllerData = new InventoryGameControllerData();
 
     /**
      * Default no-arg constructor
@@ -185,5 +194,33 @@ public class GameState implements Serializable {
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
+    }
+
+    public GameMode getActiveGameMode() {
+        return gameMode;
+    }
+
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    public UserInput getUserInput() {
+        return userInput;
+    }
+
+    public InventoryGameControllerData getMapGameControllerData() {
+        return mapGameControllerData;
+    }
+
+    public void setMapGameControllerData(InventoryGameControllerData mapGameControllerData) {
+        this.mapGameControllerData = mapGameControllerData;
+    }
+
+    public void setRepeatControllerUpdate(boolean repeatControllerUpdate) {
+        this.updateGameControllerAgain = repeatControllerUpdate;
+    }
+
+    public boolean repeatControllerUpdate() {
+        return updateGameControllerAgain;
     }
 }

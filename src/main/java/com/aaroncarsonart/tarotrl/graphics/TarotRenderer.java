@@ -13,7 +13,7 @@ import org.hexworks.zircon.api.grid.TileGrid;
 /**
  * Encapsulate all logic for the drawing of tarot cards to the TileGrid.
  */
-public class TarotRenderer extends TileRenderer {
+public class TarotRenderer extends GameTileRenderer {
 
     private static final char TL = '╔';
     private static final char TR = '╗';

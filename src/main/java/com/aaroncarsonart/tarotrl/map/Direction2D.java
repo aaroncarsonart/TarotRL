@@ -4,10 +4,10 @@ import com.aaroncarsonart.imbroglio.Direction;
 import com.aaroncarsonart.tarotrl.world.Direction3D;
 
 public enum Direction2D {
-    UP   ("\u2191", -1,  0),
-    DOWN ("\u2193",  1,  0),
-    LEFT ("\u2190",  0, -1),
-    RIGHT("\u2192",  0,  1),
+    NORTH("\u2191", -1,  0),
+    SOUTH("\u2193",  1,  0),
+    WEST("\u2190",  0, -1),
+    EAST("\u2192",  0,  1),
     NONE (" "     ,  0,  0);
 
     private String unicode;
@@ -40,16 +40,16 @@ public enum Direction2D {
     }
 
     /**
-     * Gets the opposite of the input direction (for example: UP returns DOWN).
+     * Gets the opposite of the input direction (for example: NORTH returns SOUTH).
      * @param direction The direction to get the opposite of.
      * @return The opposite direction.
      */
     public static Direction2D getOpposite(Direction2D direction) {
         switch (direction) {
-            case LEFT:  return RIGHT;
-            case RIGHT: return LEFT;
-            case UP:    return DOWN;
-            case DOWN:  return UP;
+            case WEST:  return EAST;
+            case EAST: return WEST;
+            case NORTH:    return SOUTH;
+            case SOUTH:  return NORTH;
             case NONE:  return NONE;
         }
         return null;
@@ -57,21 +57,28 @@ public enum Direction2D {
 
     public String getInspectString() {
         switch (this) {
-            case LEFT:  return "to the left";
-            case RIGHT: return "to the right";
-            case UP:    return "above";
-            case DOWN:  return "below";
+            case WEST:  return "to the left";
+            case EAST: return "to the right";
+            case NORTH:    return "above";
+            case SOUTH:  return "below";
             default:    return "where you are standing,";
         }
+    }
 
+    public String getOrientationString() {
+        Direction3D direction = getDirection3D();
+        if (direction != null) {
+            return direction.name().toLowerCase();
+        }
+        return null;
     }
 
     public Direction getImbroglioDirection() {
         switch (this) {
-            case LEFT:  return Direction.LEFT;
-            case RIGHT: return Direction.RIGHT;
-            case UP:    return Direction.UP;
-            case DOWN:  return Direction.DOWN;
+            case WEST:  return Direction.LEFT;
+            case EAST: return Direction.RIGHT;
+            case NORTH:    return Direction.UP;
+            case SOUTH:  return Direction.DOWN;
             case NONE:  return Direction.NONE;
         }
         return null;
@@ -79,10 +86,10 @@ public enum Direction2D {
 
     public Direction3D getDirection3D() {
         switch (this) {
-            case LEFT:  return Direction3D.WEST;
-            case RIGHT: return Direction3D.EAST;
-            case UP:    return Direction3D.NORTH;
-            case DOWN:  return Direction3D.SOUTH;
+            case WEST:  return Direction3D.WEST;
+            case EAST: return Direction3D.EAST;
+            case NORTH:    return Direction3D.NORTH;
+            case SOUTH:  return Direction3D.SOUTH;
         }
         return null;
     }

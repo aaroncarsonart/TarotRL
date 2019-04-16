@@ -150,7 +150,7 @@ public final class Quad
      * Quads overlap, then the default
      *
      * @param quad The quad to get the orientation from.
-     * @return Direction2D.UP, DOWN, LEFT, or RIGHT, based on if this Quad is
+     * @return Direction2D.NORTH, SOUTH, WEST, or EAST, based on if this Quad is
      *         above, velow, or to the left or right respectively.
      */
     public Orientation getOrientationFrom(Quad quad) {
@@ -175,20 +175,20 @@ public final class Quad
         boolean xIntersects = xDistance == 0;
         boolean yIntersects = yDistance == 0;
 
-        // cases: UP - xIntersects and yDisplacement is positive
-        // cases: DOWN - xIntersects and yDisplacement is negative or zero
+        // cases: NORTH - xIntersects and yDisplacement is positive
+        // cases: SOUTH - xIntersects and yDisplacement is negative or zero
         if (xIntersects) {
             if (yDisplacement > 0) return Orientation.ABOVE;
             else return Orientation.BELOW;
         }
-        // cases: LEFT - yIntersects and xDisplacement is positive
-        // cases: RIGHT - yIntersects and xDisplacement is negative or zero
+        // cases: WEST - yIntersects and xDisplacement is positive
+        // cases: EAST - yIntersects and xDisplacement is negative or zero
         if (yIntersects) {
             if (xDisplacement > 0) return Orientation.TO_THE_LEFT;
             else return Orientation.TO_THE_LEFT;
         }
 
-        // if intersects, just use DOWN (should never happen)
+        // if intersects, just use SOUTH (should never happen)
         return Orientation.BELOW;
     }
 

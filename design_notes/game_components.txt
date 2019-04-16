@@ -111,3 +111,206 @@ PlayerInput {
     PlayerAction previous;
     PlayerAction current;
 }
+
+So this way you have:
+raw input -> player input -> entity action --> map navigation ----> move up
+                                           --> entity combat    --> open door
+                                           --> inspect          --> use stairs
+                                           --> inventory
+                                                      |--------> collect item
+                                                             --> consume food
+
+So that the player obeys all the same rules as other MapEntities.
+
+
+Example:
+--------
+An NPC GameEntity is in Room A, and has some AI with a goal
+to move to a position located within Room C, accessable
+through some stairs in Room B.
+
+
+  Room A        Room B       |
+##########    ##########     |     #####
+#........# ####........####  |     #.<.#
+#.N......# #~~~......>..~.#  |  ####...####
+#........# #...~~~~~...~..#  |  #.........#
+######+### ###......~~~...#  |  #......X..#
+     # #     #....#####...#  |  #.........#
+     # #######....#   #...#  |  ###########
+     #............#   #####  |
+     ##############          |
+
+The NPC will represent this as a Goal with a series of
+GameActions to complete the task:
+
+    MOVE_RIGHT
+    MOVE_RIGHT
+    MOVE_DOWN
+    ...
+    OPEN_DOOR
+    ...
+    ENTER_STAIRS
+    MOVE_DOWN...
+    MOVE_RIGHT
+
+Should something obstruct the NPC's path, it may need
+to recalculate etc.  But the idea is that these actions
+are simple executable actions for MapEntities to relate
+with a GameMap.
+
+Each of the above actions will return SUCCESS if they
+were successfully completed, or FAILURE if failed.
+
+The logic driving what MapNavigationActions a GameEntity
+takes is based on that GameEntity's InputHandler.
+
+GameActions and PlayerActions are related.  The difference
+is, PlayerActions are directly tied to user input.
+
+Then, NavigationComponents can handle map movement,
+CombatComponents can handle CombatActions (ATTACK, RANGED_ATTACK)
+InventoryComponents can handle ItemActions (ADD, USE, INSPECT, DROP)
+SocialComponents can handle entity SocialActions (SPEAK, BUY, SELL, TRADE)
+As well as Relationships for decision making (FRIENDLY, NEUTRAL, HOSTILE)
+and etc.
+
+The "Player" will control at least one GameEntity as their Hero.
+So PlayerActions must be refactored to dispatch to the proper Hero GameEntity,
+rather than controlling an ubiquitous '@' symbol attached to a camera.
+
+
+
+Are all game entities ...
+
+Social?    No.  (Items)
+Combative? No.  (Items)
+Have an item inventory?  No.
+Move on the map?         Yes.
+
+
+"The snake hisses"
+
+
+
+...
+
+
+When should the GameState be updated?
+
+When the player makes a meaningful form of input that causesin-game time to pass.
+So, if a player calls any Component methods, then that should
+that should trigger GameState::update() to be called.
+
+
+What kinds of entities are there?
+
+PhysicalEntity
+   --> Entity takes up physical space.  Voxels may only contain
+       one PhysicalEntity.
+
+NonPhysicalEntity
+   --> NonPhysicalEntities take up no physical space, and so many
+       can occupy a given location.
+
+ItemEntity
+   --> represents an Item.
+
+InventoryEntity
+   --> represents an Inventory the player can interact with.
+
+CreatureEntity
+   --> represents PCs, NPCs, wildlife, ghosts, demons, and monsters.
+       Basically, any autonomous entity that moves about and takes
+       actions which modifies the GameState.
+
+       If a Creature is a Swarm type entity, then multiple instances
+       of the same entity an occupy a given map position. For example:
+       a swarm of bees.
+
+Terrain
+   --> Represents one voxel of a GameWorld.  Logically this is not
+       an actual Entity class, but rather represented
+
+Effect
+   --> Effects are things that occupy a voxel but aren't anything else.
+       For example, terrain can be on fire, be wet, or contain snow.
+       Alternatively, it also represents an attack's area of effect.
+
+Event
+   --> Events potentialy modify the state of Entities that enter
+       their voxel.  For example, a TeleportEvent will autonomously
+       teleport any entity that enters its vacinity to a new position.
+
+Each voxel of the map can hold the given kinds of information:
+- Terrain
+- Entity
+   - A linked list of entities.  Each voxel can hold one physical entity
+     and many
+- Event
+   - A special kind of
+
+
+Logically, the voxel information exists like so:
+
++----------------------------------+
+|              Effect              |
+|                ^                 |
+|                |                 |
+|              Events              |
+|                ^                 |
+|                |                 |
+|         BlockingEntities         |
+|                ^                 |
+|                |                 |
+|        NonBlockingEntities       |
+|                ^                 |
+|                |                 |
+|             Terrain              |
++----------------------------------+
+
+Although in effect, which Entity is linked to which doesn't matter, as each
+can be a simple linked list that allows iteration across its neighbors, and
+knows how to insert, append, or remove itself from a given Entity chain.
+
+The benefit here is a world with millions of voxels will only store 1/5th
+of the information for the majority of positions, with only the positions
+with things that matter maintaining state.
+
+This way, only one map of position to voxels is needed, and all info can be
+accessed via the map's voxels.
+
+in determining how to render a voxel, walking the Entity chain is all that
+is needed.  The above precedence shows how to decide what needs to be
+rendered, with what priority.
+
+
+Commands
+--------
+Represent all changes to the GameState with commands, so you can reverse
+the flow of game play to the player's previous action (or some specified
+game action history) for a scrubbable "replay" effect.
+
+Game time is measured in ticks.  Each tick represents say 1/100th of an in-game
+second.  Every change to the GameState is registered with a given Command.
+A given command has this minimum viable criteria:
+
+Command {
+    long time;
+    // Fields representing the instructions
+    // and data needed to execute the command.
+    apply();
+    undo();
+}
+
+The time shows when to apply or undo the command.
+
+
+InputControllers
+----------------
+
+InputControllers will listen to UI input, and respond to the particular
+KeyboardEvents and MouseEvents by calling methods to modify the GameState.
+What inputs do what is based on the GameMode.  So there should exist one
+InputController per game mode, which will be delegated to based on its
+associated GameMode before any input handling is processed.

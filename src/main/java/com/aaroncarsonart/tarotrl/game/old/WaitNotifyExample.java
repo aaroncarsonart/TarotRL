@@ -1,4 +1,4 @@
-package com.aaroncarsonart.tarotrl.game;
+package com.aaroncarsonart.tarotrl.game.old;
 
 import com.aaroncarsonart.tarotrl.graphics.GameColors;
 import org.hexworks.zircon.api.AppConfigs;

@@ -29,7 +29,7 @@ public enum Direction {
     }
 
     /**
-     * Gets the opposite of the input direction (for example: UP returns DOWN).
+     * Gets the opposite of the input direction (for example: NORTH returns SOUTH).
      * @param direction The direction to get the opposite of.
      * @return The opposite direction.
      */

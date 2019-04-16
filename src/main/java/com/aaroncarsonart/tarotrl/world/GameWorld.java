@@ -1,6 +1,6 @@
 package com.aaroncarsonart.tarotrl.world;
 
-import com.aaroncarsonart.tarotrl.entity.Entity;
+import com.aaroncarsonart.tarotrl.entity.MapEntity;
 import com.aaroncarsonart.tarotrl.entity.EntityType;
 
 import java.awt.Dimension;
@@ -27,7 +27,7 @@ public class GameWorld {
     private Map<Position3D, WorldVoxel> worldMap;
     private Position3D camera;
 
-    private Map<Position3D, Entity> entities;
+    private Map<Position3D, MapEntity> entities;
 
     public GameWorld() {
         // estimate screen size in tiles as initial hashmap capacity
@@ -103,7 +103,20 @@ public class GameWorld {
         }
     }
 
-    public void addEntity(Entity entity) {
+    /**
+     * Move the MapEntity to occupy the new position.
+     *
+     * @param entity The MapEntity to update.
+     * @param current The new position for the entity to be stored at.
+     */
+    public void moveEntity(MapEntity entity, Position3D current) {
+        Position3D previous = entity.getPosition();
+        entities.remove(previous);
+        entities.put(current, entity);
+        entity.setPosition(current);
+    }
+
+    public void addEntity(MapEntity entity) {
         this.entities.put(entity.getPosition(), entity);
     }
 
@@ -116,17 +129,17 @@ public class GameWorld {
                getEntity(position).getType() == EntityType.ITEM;
     }
 
-    public Entity getEntity(Position3D position) {
+    public MapEntity getEntity(Position3D position) {
         return this.entities.get(position);
     }
 
-    public Entity removeEntity(Position3D position) {
+    public MapEntity removeEntity(Position3D position) {
         return this.entities.remove(position);
     }
 
 
     public void update() {
-        for(Entity entity: entities.values()) {
+        for(MapEntity entity: entities.values()) {
             entity.update();
         }
     }

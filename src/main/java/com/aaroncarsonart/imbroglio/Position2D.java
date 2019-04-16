@@ -293,7 +293,7 @@ public final class Position2D implements Serializable {
 
     /**
      * Get a origin from the specified direction
-     * @param direction A Direction2D enum, either UP, DOWN, LEFT, or RIGHT.
+     * @param direction A Direction2D enum, either NORTH, SOUTH, WEST, or EAST.
      *                  Returns null if an invalid direction was passed.
      * @return A new Position2D, oriented from the original Position2D by the input Direction2D.
      */

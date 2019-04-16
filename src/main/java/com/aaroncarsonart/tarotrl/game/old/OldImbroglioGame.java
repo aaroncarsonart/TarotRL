@@ -1,9 +1,12 @@
-package com.aaroncarsonart.tarotrl.game;
+package com.aaroncarsonart.tarotrl.game.old;
 
+import com.aaroncarsonart.tarotrl.game.GameMode;
+import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.generator.GameStateGenerator;
 import com.aaroncarsonart.tarotrl.graphics.GameWorldRenderer;
+import com.aaroncarsonart.tarotrl.graphics.SnapshotHistory;
 import com.aaroncarsonart.tarotrl.graphics.ViewPort;
-import com.aaroncarsonart.tarotrl.input.InputHandler;
+import com.aaroncarsonart.tarotrl.input.InputEventController;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.util.Logger;
 import org.hexworks.zircon.api.AppConfigs;
@@ -25,12 +28,12 @@ import java.awt.Toolkit;
 /**
  * Play the game Imbroglio, with the classic colors and rules.
  */
-public class ImbroglioGame {
-    private static final Logger LOG = new Logger(ImbroglioGame.class);
+public class OldImbroglioGame {
+    private static final Logger LOG = new Logger(OldImbroglioGame.class);
 
     private GameWorldRenderer tileRenderer;
-    private GameActionHandler actionHandler;
-    private InputHandler inputHandler;
+    private PlayerActionController actionHandler;
+    private InputEventController playerInputController;
     private TileGrid tileGrid;
     private ViewPort mapViewPort;
     private GameState gameState;
@@ -55,7 +58,7 @@ public class ImbroglioGame {
         Size vDimensions = Sizes.create(windowWidth - (xOffset * 2), windowHeight - (topOffSet + bottomOffSet));
         mapViewPort = new ViewPort(vOffset, vDimensions);
 
-        actionHandler = new GameActionHandler();
+        actionHandler = new PlayerActionController();
         tileRenderer = new GameWorldRenderer();
 
         // Begin Displaying TileGrid
@@ -73,10 +76,11 @@ public class ImbroglioGame {
 
         tileGrid.pushLayer(layer1);
 
-        inputHandler = new InputHandler();
-        inputHandler.listenForInput(tileGrid, gameState);
-        inputHandler.addPlayerActionListener(this::update);
+        playerInputController = new InputEventController();
+        playerInputController.listenForInputs(tileGrid, gameState);
+        playerInputController.addPlayerActionListener(this::update);
 
+        gameState.setGameMode(GameMode.MAP_NAVIGATION);
         tileRenderer.renderImbroglioGame(tileGrid, gameState, mapViewPort);
     }
 
@@ -97,7 +101,7 @@ public class ImbroglioGame {
     }
 
     public static void main(String[] args) throws Exception {
-       ImbroglioGame game = new ImbroglioGame();
+       OldImbroglioGame game = new OldImbroglioGame();
        game.start();
     }
 }

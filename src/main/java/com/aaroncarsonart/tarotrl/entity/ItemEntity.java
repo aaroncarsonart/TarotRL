@@ -6,7 +6,7 @@ import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import org.apache.commons.lang3.StringUtils;
 
-public class ItemEntity extends Entity {
+public class ItemEntity extends MapEntity {
 
     private GameItem item;
 

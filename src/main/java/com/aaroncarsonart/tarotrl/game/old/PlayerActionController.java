@@ -1,6 +1,7 @@
-package com.aaroncarsonart.tarotrl.game;
+package com.aaroncarsonart.tarotrl.game.old;
 
 import com.aaroncarsonart.tarotrl.entity.ItemEntity;
+import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.inventory.GameItem;
 import com.aaroncarsonart.tarotrl.inventory.Treasure;
@@ -14,10 +15,12 @@ import com.aaroncarsonart.tarotrl.world.Position3D;
 import com.aaroncarsonart.tarotrl.world.WorldVoxel;
 
 /**
- * Handle All proper GameActions, which update the GameState in some way.
+ * Convert updates to the UserInput into actions which update
+ * the GameState in some meaningful way, by way of delegation to
+ * other controllers.
  */
-public class GameActionHandler {
-    private static final Logger LOG = new Logger(GameActionHandler.class);
+public class PlayerActionController {
+    private static final Logger LOG = new Logger(PlayerActionController.class);
 
     /**
      * ConsoleGame method of class. Handle the nextInt PlayerAction, and update the game state.
@@ -52,19 +55,19 @@ public class GameActionHandler {
                 break;
 
             case MOVE_UP:
-                doMove(gameState, Direction2D.UP);
+                doMove(gameState, Direction2D.NORTH);
                 break;
 
             case MOVE_DOWN:
-                doMove(gameState, Direction2D.DOWN);
+                doMove(gameState, Direction2D.SOUTH);
                 break;
 
             case MOVE_LEFT:
-                doMove(gameState, Direction2D.LEFT);
+                doMove(gameState, Direction2D.WEST);
                 break;
 
             case MOVE_RIGHT:
-                doMove(gameState, Direction2D.RIGHT);
+                doMove(gameState, Direction2D.EAST);
                 break;
 
             case WAIT:
@@ -346,7 +349,7 @@ public class GameActionHandler {
                 return;
         }
 
-        // If the previous action inspected a door, and the
+        // If the previousIndex action inspected a door, and the
         // player is standing nextInt to that door, the nextInt CONFIRM
         // action will open that door.
         if (gameState.getPreviousAction() == PlayerAction.INSPECT) {

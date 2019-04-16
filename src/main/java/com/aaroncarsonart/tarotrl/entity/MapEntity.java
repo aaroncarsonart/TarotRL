@@ -1,32 +1,40 @@
 package com.aaroncarsonart.tarotrl.entity;
 
+import com.aaroncarsonart.tarotrl.game.GameState;
+import com.aaroncarsonart.tarotrl.graphics.GraphicsContext;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Entities inhabit the GameWorld.  They include items
+ * MapEntities inhabit the GameWorld.  They include items
  * and creatures and can occupy PATH WorldVoxels.
+ *
+ * All entities have a position, description, graphics component, and a status.
  */
-public class Entity {
+public class MapEntity {
 
     private TileDefinition tileDefinition;
     private Position3D position;
     protected String description;
+    private int stepCount;
+    private String status;
+
+    private GraphicsComponent graphicsComponent;
 
     /**
      * Can you occupy the same space as this entity
      */
     private boolean passable;
 
-    public Entity(TileDefinition tileDefinition, Position3D position) {
+    public MapEntity(TileDefinition tileDefinition, Position3D position) {
         this.position = position;
         this.tileDefinition = tileDefinition;
         this.passable = true;
     }
 
-    public Entity(char sprite, Position3D position) {
+    public MapEntity(char sprite, Position3D position) {
         this(TileType.valueOf(sprite).getMetadata(), position);
     }
 
@@ -74,5 +82,33 @@ public class Entity {
 
     public EntityType getType() {
         return EntityType.GENERIC;
+    }
+
+    public boolean isIgnorePassable() {
+        return false;
+    }
+
+    public int getStepCount() {
+        return stepCount;
+    }
+
+    public void incrementStepCount() {
+        this.stepCount += 1;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
+    public void update(GameState gameState) {
+    }
+
+    public void render(GraphicsContext graphicsContext) {
+
     }
 }

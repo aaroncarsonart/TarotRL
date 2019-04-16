@@ -1,6 +1,6 @@
 package com.aaroncarsonart.tarotrl.world;
 
-import com.aaroncarsonart.tarotrl.entity.Entity;
+import com.aaroncarsonart.tarotrl.entity.MapEntity;
 import com.aaroncarsonart.tarotrl.map.TileType;
 
 import java.util.Arrays;
@@ -8,15 +8,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * A WorldVoxel is a single unit of space of a GameWorld.
- * WorldVoxels exist within a 3 dimensional array within
- * a WorldBlock, which themselves exists within a
- * three-dimensional linked grid of WorldBlocks.
+ * A WorldVoxel is a single unit of three-dimensional space
+ * of a GameWorld, uniquely identifiable by its coordinates.
+ *
+ * WorldVoxels hold map terrain data.
  */
 public class WorldVoxel {
 
-    public final GameWorld world;
     public final Position3D position;
+    public final GameWorld world;
     private TileType tileType;
 
     public WorldVoxel(GameWorld world, Position3D position, TileType tileType) {
@@ -72,7 +72,7 @@ public class WorldVoxel {
     public String getDescription() {
         String tileDescription = tileType.getDescription() + ".";
         if (hasEntity()) {
-            Entity entity = world.getEntity(position);
+            MapEntity entity = world.getEntity(position);
             String entityDescription = entity.getDescription() + ".";
 
             // for some tiles, only show the entity description.

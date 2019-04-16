@@ -8,6 +8,8 @@ import org.hexworks.zircon.api.color.TileColor;
  */
 public class GameColors {
 
+    public static final TileColor TRANSPARENT = TileColors.create(0, 0, 0, 0);
+
     public static final TileColor BLACK = TileColors.create(0, 0, 0);
     public static final TileColor WHITE = TileColors.create(255, 255, 255);
 
