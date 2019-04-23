@@ -1,14 +1,12 @@
 package com.aaroncarsonart.tarotrl.map;
 
 import com.aaroncarsonart.imbroglio.Position2D;
-import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import com.aaroncarsonart.tarotrl.world.Region3D;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -28,8 +26,6 @@ public class GameMap implements Serializable {
     private int height;  // NOTE: height/rows are equivalent terminology
     private int width;   // NOTE: width/columns are equivalent terminology
 
-    private Map<Character, TileDefinition> tileSprites;
-
     /**
      * Any tiles that need re-rendering, as the game state has changed.
      */
@@ -45,13 +41,6 @@ public class GameMap implements Serializable {
     private GameMap() {
     }
 
-    public Map<Character, TileDefinition> getTileSprites() {
-        return tileSprites;
-    }
-
-    public void setTileSprites(Map<Character, TileDefinition> tileSprites) {
-        this.tileSprites = tileSprites;
-    }
 
     public GameMap createDeepCopy() {
         GameMap copy = new GameMap();
@@ -97,8 +86,9 @@ public class GameMap implements Serializable {
      */
     public boolean isPassable(int py, int px) {
         char sprite = tileGrid[py][px];
-        TileDefinition tile = tileSprites.get(sprite);
-        return tile.isPassable();
+        // TODO delete this logic altogether, doesn't belong here.
+        return sprite != '#';
+
     }
 
     public boolean isPassable(Position2D pos) {
@@ -149,17 +139,6 @@ public class GameMap implements Serializable {
     public void setTile(Position2D pos, TileType newTileType) {
         tileGrid[pos.y()][pos.x()] = newTileType.getSprite();
         dirtyTiles.add(pos);
-    }
-
-    public TileDefinition getTileDefinition(Position2D pos) {
-        char tileSprite;
-        if (withinBounds(pos)) {
-            tileSprite = getTile(pos);
-        } else {
-            tileSprite = TileType.EMPTY.getSprite();
-        }
-        TileDefinition tileDefinition = tileSprites.get(tileSprite);
-        return tileDefinition;
     }
 
     public Region3D getMapRegionWith(Position3D origin) {

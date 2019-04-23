@@ -81,7 +81,6 @@ class GameMapGeneratorTest {
         GameMap vaultGameMap = generator.generateMapFrom(vaultMapDefinition);
         LOG.logTest(vaultGameMap);
 
-        assertEquals(VAULT_NAME, vaultGameMap.getName());
         assertEquals(VAULT_WIDTH, vaultGameMap.getWidth());
         assertEquals(VAULT_HEIGHT, vaultGameMap.getHeight());
         assertArrayEquals(VAULT_DATA_2D_CHAR_ARRAY, vaultGameMap.getTileGridCopy());
@@ -103,7 +102,6 @@ class GameMapGeneratorTest {
         GameMap mazeGameMap = generator.generateMapFrom(mazeMapDefinition);
         LOG.logTest(mazeGameMap);
 
-        assertEquals(MAZE_NAME, mazeGameMap.getName());
         assertEquals(MAZE_WIDTH, mazeGameMap.getWidth());
         assertEquals(MAZE_HEIGHT, mazeGameMap.getHeight());
         assertArrayEquals(MAZE_DATA_2D_CHAR_ARRAY, mazeGameMap.getTileGridCopy());
@@ -126,7 +124,6 @@ class GameMapGeneratorTest {
         GameMap cellularAutomataGameMap = generator.generateMapFrom(cellularAutomataMapDefinition);
         LOG.logTest(cellularAutomataGameMap);
 
-        assertEquals(CELLULAR_AUTOMATA_NAME, cellularAutomataGameMap.getName());
         assertEquals(CELLULAR_AUTOMATA_WIDTH, cellularAutomataGameMap.getWidth());
         assertEquals(CELLULAR_AUTOMATA_HEIGHT, cellularAutomataGameMap.getHeight());
         assertArrayEquals(CELLULAR_AUTOMATA_2D_CHAR_ARRAY, cellularAutomataGameMap.getTileGridCopy());

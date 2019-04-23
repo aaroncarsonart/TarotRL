@@ -21,7 +21,7 @@ public class GameStateGenerator {
         gameWorldGenerator = new GameWorldGenerator();
     }
 
-    private void setTileTypeMetadata(TileDefinitionSet tileDefinitionSet) {
+    public static void setTileTypeMetadata(TileDefinitionSet tileDefinitionSet) {
         Map<Character, TileDefinition> definitions = tileDefinitionSet.getTileDefinitions();
         for (TileType tileType : TileType.values()) {
             Character sprite = tileType.getSprite();
@@ -48,8 +48,8 @@ public class GameStateGenerator {
 
     public GameState generateTarotRLGameState() {
         LOG.info("Generating TarotRL GameState ...");
-        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/forest_green.json");
-        setTileTypeMetadata(tileDefinitionSet);
+//        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/forest_green.json");
+//        setTileTypeMetadata(tileDefinitionSet);
 
         GameState gameState = new GameState();
 

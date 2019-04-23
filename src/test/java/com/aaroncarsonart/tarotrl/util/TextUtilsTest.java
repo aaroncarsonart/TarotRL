@@ -26,4 +26,12 @@ class TextUtilsTest {
             LOG.logTest(line);
         }
     }
+
+    @Test
+    void testHexFormatting() {
+        int intValue = 0;
+//        String hexValue = Integer.toHexString(intValue);
+        String hexValue = String.format("#%06X", intValue);
+        System.out.println("intValue: " + intValue + " hexValue: " + hexValue);
+    }
 }

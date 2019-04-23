@@ -13,6 +13,8 @@ import com.aaroncarsonart.tarotrl.graphics.MapTileRenderer;
 import com.aaroncarsonart.tarotrl.graphics.SnapshotHistory;
 import com.aaroncarsonart.tarotrl.input.InventoryInputHandler;
 import com.aaroncarsonart.tarotrl.input.MapInputHandler;
+import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
+import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
 import org.hexworks.zircon.api.CP437TilesetResources;
 import org.hexworks.zircon.api.Sizes;
 import org.hexworks.zircon.api.data.Size;
@@ -21,6 +23,9 @@ import org.hexworks.zircon.api.resource.TilesetResource;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+/**
+ * The TarotRL App!
+ */
 public class TarotRLApp {
     private static final String TAROT_RL_GAME_TITLE = "TarotRL";
 
@@ -58,10 +63,17 @@ public class TarotRLApp {
         return Sizes.create(windowWidth, windowHeight);
     }
 
+    /**
+     * Create all needed for the TarotRL game, up to right before calling {@link Game#start()}.
+     * @return The fully configured Game instance that is ready to be played.
+     */
     private static Game createTarotRLGame() {
+        JsonDefinitionLoader loader = new JsonDefinitionLoader();
+        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/mountain_red.json");
+        GameStateGenerator.setTileTypeMetadata(tileDefinitionSet);
         GameStateGenerator gameStateGenerator = new GameStateGenerator();
         GameState gameState = gameStateGenerator.generateTarotRLGameState();
-        gameState.setGameMode(GameMode.MAP_NAVIGATION);
+        gameState.setGameMode(GameMode.INVENTORY);
 
         TilesetResource tilesetResource = CP437TilesetResources.mdCurses16x16();
         Size windowDimensions = getWindowDimensions(tilesetResource);
@@ -86,6 +98,10 @@ public class TarotRLApp {
         return game;
     }
 
+    /**
+     * Run the game.
+     * @param args Not used.
+     */
     public static void main(String[] args) {
         Game tarotRL = createTarotRLGame();
         tarotRL.start();

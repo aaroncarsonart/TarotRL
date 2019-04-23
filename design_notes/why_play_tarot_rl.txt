@@ -1,0 +1,88 @@
+Who wants to play this game?
+----------------------------
+
+The strange intersection of two niche markets:
+- People with an interest, or familiarity, with the Tarot.
+- People who like Roguelikes, and text-based ASCII games.
+
+
+
+What kind of experience will players receive from participating?
+----------------------------------------------------------------
+- Personal growth
+- Exploration of how ideas and symbols interrelate
+- Learning about the symbolism of the Tarot concepts
+- Deepening understanding by linking elements with components of gameplay
+
+
+
+What behaviors are players encouraged to engage in?
+---------------------------------------------------
+- Exploring unknown territory (and ideas).
+- Planning to ensure they can sustain themselves on the journey.
+- Introspection
+
+
+
+What gameplay elements do I desire to include?
+----------------------------------------------
+- Explore random, procedurally generated levels.
+- Develop and maintain a home.
+- Cultivate crops.
+- Manage an Inventory of items.
+- Collect resources like wood, stone.
+- Develop relationships with NPCs you encounter.
+- Use Tarot cards, in which spreads will effect later
+  events in the game or not, based on your faith in
+  the cards.
+- Discover/find the Tarot cards first?
+  Or, have them already?
+- Possible win condition: complete the "The Fool's Journey"
+  (Traverse a series of maps based on each of the Major Arcana)
+- Have personal health resources:
+  - Energy: capacity to take action, and health.  For fun and
+            simplicity, make it all one stat, to see what happens
+            when your ability to take a step or swing a tool is
+            also related to your ability to survive combat.
+            In game explanation: at the beginning, the game
+            asserts that "All is energy, all is vibration.  And
+            what is this energy?  It is nothing else but love.
+            What is the meaning of love?  This is beyond what
+            can be explained, or taught.  But it can be understood
+            by learning all that love is not."  And thus, the
+            player is only one thing, and is encouraged to under-
+            stand themselves as a self-concept as love itself,
+            which is also the force that grows and extends the
+            lands, allows for all characters to be, and so on.
+    Time: passage of in-game time effects some game components.
+          With time, some components will evolve or change.
+- The Elements Of Harmony:
+  The Mane 6 will be hidden within the game.  Somehow related to certain
+  colors or keywords, little breadcrumbs to their existence and what they
+  represent will be hidden throughout the game, which represent 5 super
+  secret hidden levels, where each Element is then earned.
+  (Which will relate to one of each of the quaternity, and the 5th being
+  the Ego/self concept).  Then, the sixth produces the illusion of
+  separate selves ... and does something importantly, awesomely crazy
+  to represent harnessing the dangerously deadly and unpredictable Magic
+  of Friendship directly.  Magical thinking always comes with a cost, so
+  wield it carefully, and be wary of what can go wrong!
+
+
+Idea:
+-----
+Exploring new ideas and concepts, that were never before seen or understood
+before, as the intersection of existing ideas.
+
+Such as, "green" + "run" + "danger".
+[color] + [action] + [safety].
+
+How would gameplay be related to this?  And what is the goal in relation to
+a given idea?
+
+To "understand" a given idea, draw some Tarot cards.  From each card, pick
+some keywords, ideas, feelings, and notions related to those cards.
+
+From this set of ideas, a world is generated to explore.  This world contains
+resources to harvest, items to discover, or entities to interact with
+(converse and trade with friendlies, avoid or combat with hostiles).

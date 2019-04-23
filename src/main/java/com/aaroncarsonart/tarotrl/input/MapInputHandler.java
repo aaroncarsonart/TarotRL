@@ -70,12 +70,12 @@ public class MapInputHandler implements InputHandler {
         PlayerAction nextAction = getPlayerActionFromKeyCode(event.getCode());
 
         if (nextAction != PlayerAction.UNKNOWN) {
-            input.setCurrentAction(nextAction);
-            input.doNotifyAll();
+            input.setAction(nextAction);
+            input.doUpdateController();
         } else {
             nextAction = inputActionsMap.getOrDefault(event.getKey(), PlayerAction.UNKNOWN);
-            input.setCurrentAction(nextAction);
-            input.doNotifyAll();
+            input.setAction(nextAction);
+            input.doUpdateController();
 
         }
 
@@ -94,7 +94,7 @@ public class MapInputHandler implements InputHandler {
         }
 
 //        playerActionEmitter.broadcastPlayerAction(PlayerAction.UNKNOWN);
-//        input.doNotifyAll();
+//        input.doUpdateController();
 
         return UIEventResponses.processed();
     }

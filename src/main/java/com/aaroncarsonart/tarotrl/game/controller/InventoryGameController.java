@@ -1,44 +1,29 @@
 package com.aaroncarsonart.tarotrl.game.controller;
 
-import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.game.GameState;
-import com.aaroncarsonart.tarotrl.input.GameAction;
 import com.aaroncarsonart.tarotrl.input.UserInput;
+import com.aaroncarsonart.tarotrl.menu.InventoryMenuData;
+import com.aaroncarsonart.tarotrl.menu.Menu;
+import com.aaroncarsonart.tarotrl.menu.MenuAction;
 import com.aaroncarsonart.tarotrl.util.Logger;
 
 /**
- * This drives all game state behavior for the INVENTORY GameMode.
+ * Manage game state for: {@link com.aaroncarsonart.tarotrl.game.GameMode#INVENTORY}.
  */
 public class InventoryGameController implements GameController {
     private static final Logger LOG = new Logger(InventoryGameController.class);
 
     @Override
     public boolean update(GameState state, UserInput input) {
-        Enum action = input.getCurrentAction();
+        Enum action = input.getAction();
         LOG.info(action);
-        if (action instanceof GameAction) {
-            GameAction gameAction = (GameAction) action;
-            switch (gameAction) {
-//                case OK:
-                case MOVE_UP:    return doMove(state,  0, -1);
-                case MOVE_DOWN:  return doMove(state,  0,  1);
-                case MOVE_LEFT:  return doMove(state,  1,  0);
-                case MOVE_RIGHT: return doMove(state, -1,  0);
-            }
+        if (action instanceof MenuAction) {
+            MenuAction menuAction = (MenuAction) action;
+            InventoryMenuData menuData = state.getInventoryMenuData();
+            Menu menu = menuData.getRootMenu();
+            menu.update(menuAction);
+            return true;
         }
-
         return false;
     }
-
-    private boolean doMove(GameState gameState, int vx, int vy) {
-        InventoryGameControllerData data = gameState.getMapGameControllerData();
-        Position2D current = data.getPosition();
-        int nx = current.x() + vx;
-        int ny = current.y() + vy;
-        Position2D next = new Position2D(nx, ny);
-        data.setPosition(next);
-        LOG.info("do move from %s to %s", current, next);
-        return true;
-    }
-
 }

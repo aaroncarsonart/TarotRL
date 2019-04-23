@@ -17,7 +17,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public interface TileRenderer {
-        Logger LOG = new Logger(TileRenderer.class);
+    Logger LOG = new Logger(TileRenderer.class);
+
+    // https://www.fileformat.info/info/unicode/block/geometric_shapes/list.htm
+    // ◢◣◤◥■▬	▮▰▲▶▼◀◀►◆◈◉
 
     void render(GameState gameState, TileGrid tileGrid);
 

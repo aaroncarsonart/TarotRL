@@ -24,7 +24,7 @@ public class UserInput {
     /**
      * The current game action to be executed.
      */
-    private Enum currentAction = PlayerAction.UNKNOWN;
+    private Enum action = PlayerAction.UNKNOWN;
     /**
      * The game action that was previously executed.
      */
@@ -32,24 +32,24 @@ public class UserInput {
 
     private Object lock = new Object();
 
-    public void setCurrentAction(Enum action) {
-        this.currentAction = action;
+    public void setAction(Enum action) {
+        this.action = action;
     }
 
-    public Enum getCurrentAction() {
-        return currentAction;
+    public Enum getAction() {
+        return action;
     }
 
     public void retireCurrentAction() {
-        previousAction = currentAction;
-        currentAction = PlayerAction.UNKNOWN;
+        previousAction = action;
+        action = PlayerAction.UNKNOWN;
     }
 
     public Object getLock() {
         return lock;
     }
 
-    public void doNotifyAll() {
+    public void doUpdateController() {
         synchronized (lock) {
             lock.notifyAll();
         }

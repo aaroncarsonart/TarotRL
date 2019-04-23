@@ -1,5 +1,5 @@
 
-For example, a house's room layout may be understood by the
+For example, a house's room menuLayout may be understood by the
 following graph design, representing my the first floor of
 my parent's house:
 

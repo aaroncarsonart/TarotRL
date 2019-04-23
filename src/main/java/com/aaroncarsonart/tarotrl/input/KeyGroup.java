@@ -1,11 +1,11 @@
 package com.aaroncarsonart.tarotrl.input;
 
+import com.aaroncarsonart.tarotrl.util.Logger;
 import org.hexworks.zircon.api.uievent.KeyboardEvent;
 
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Stack;
-import java.util.function.Consumer;
 
 /**
  * A KeyGroup is a logical grouping of {@link Key Keys} where many can be pressed
@@ -13,6 +13,8 @@ import java.util.function.Consumer;
  * of movement keys, for example.
  */
 public class KeyGroup<T extends Enum<T>> {
+    private static final Logger LOG = new Logger(KeyGroup.class);
+
 
     private Stack<Key> pressedKeys;
     private Map<Key, T> keyActionMapping;
@@ -40,10 +42,10 @@ public class KeyGroup<T extends Enum<T>> {
     }
 
 
-    public boolean keyPressed(KeyboardEvent event, Consumer<T> actionCallback) {
-        keyPressed(event);
-        return applyGroupedKeyAction(actionCallback);
-    }
+//    public boolean keyPressed(KeyboardEvent event, Consumer<T> actionCallback) {
+//        keyPressed(event);
+//        return applyGroupedKeyAction(actionCallback);
+//    }
 
     public boolean keyPressed(KeyboardEvent event) {
         for (Key key : keyActionMapping.keySet()) {
@@ -55,7 +57,7 @@ public class KeyGroup<T extends Enum<T>> {
     }
 
     private boolean keyPressed(KeyboardEvent event, Key key) {
-        if (key.hasEvent(event) && !key.isPressed() && !key.isConsumed()) {
+        if (key.hasEvent(event) && !key.isPressed()) {
             key.press();
             pressedKeys.push(key);
             return true;
@@ -63,10 +65,10 @@ public class KeyGroup<T extends Enum<T>> {
         return false;
     }
 
-    public boolean keyReleased(KeyboardEvent event, Consumer<T> actionCallback) {
-        keyReleased(event);
-        return applyGroupedKeyAction(actionCallback);
-    }
+//    public boolean keyReleased(KeyboardEvent event, Consumer<T> actionCallback) {
+//        keyReleased(event);
+//        return applyGroupedKeyAction(actionCallback);
+//    }
 
     public boolean keyReleased(KeyboardEvent event) {
         for (Key key : keyActionMapping.keySet()) {
@@ -86,14 +88,19 @@ public class KeyGroup<T extends Enum<T>> {
         return false;
     }
 
-    private boolean applyGroupedKeyAction(Consumer<T> actionCallback){
-        if (!pressedKeys.isEmpty()) {
-            Key move = pressedKeys.peek();
-            T action = keyActionMapping.get(move);
-            actionCallback.accept(action);
-            return true;
-        }
-        return false;
+//    private boolean applyGroupedKeyAction(Consumer<T> actionCallback){
+//        if (!pressedKeys.isEmpty()) {
+//            Key move = pressedKeys.peek();
+//            T action = keyActionMapping.get(move);
+//            actionCallback.accept(action);
+//            return true;
+//        }
+//        return false;
+//    }
+
+    public void logState(String formatlabel) {
+        LOG.info(formatlabel + ": %s", pressedKeys);
     }
+
 
 }

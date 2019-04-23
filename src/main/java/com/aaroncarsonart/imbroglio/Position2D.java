@@ -376,6 +376,10 @@ public final class Position2D implements Serializable {
         return list;
     }
 
+    public static Position2D origin() {
+        return new Position2D(0, 0);
+    }
+
     @Override
     public String toString(){
         return toSuccinctString();

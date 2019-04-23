@@ -93,6 +93,7 @@ public class JsonDefinitionLoader {
             throw new TarotRLException(e);
         }
     }
+
     public TileDefinitionSet loadTileDefinitionSet(String path) {
         try {
             TileDefinitionSet result = loadDefinition(path, TileDefinitionSet.class);

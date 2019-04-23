@@ -1,0 +1,24 @@
+Some items enable new menu options or game functionality by having them.
+
+This can be done either with `onAddToInventory(Callback)` and `onRemoveFromInventory(Callback)`
+setting a flag in the GameState, or with the GameState maintaining a special collection of
+`Map<GameFlag, Supplier<Boolean>> flags`` where one an entry could be
+`inventory.stream().anyMatch(Predicate<Item>)` or something similar to check for the condition.
+
+- If you pick up an Amulet of Monster Knowledge, the "Bestiary" tab
+  will be available, and you can see info on all the monsters you
+  have slain. (Stats, number encountered, etc.)
+
+- If you have a book (or a piece of paper) and a writing implement,
+  you can write notes in said book or on said paper.
+
+- Owning any Tarot Cards unlocks the TAROT_CARD game mode.
+
+Some items must be used to enable an effect with a specified duration.
+- Torches, Lanterns, and Light spells will illuminate darkened spaces
+  around the entity in a given pattern.
+
+  (When line of sight is implemented, sight is reduced to the entity's
+  night vision settings (usually a range of one tile) around the entity,
+  and any areas that are lit and within sight.
+

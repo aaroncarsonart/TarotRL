@@ -1,5 +1,6 @@
 package com.aaroncarsonart.tarotrl.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 
 import java.util.Arrays;
@@ -27,5 +28,14 @@ public class TextUtils {
         return IntStream.range(0, length)
                 .mapToObj(j -> String.valueOf(c))
                 .collect(Collectors.joining());
+    }
+
+    public static String align(String text, int length, TextAlignment alignment) {
+        switch (alignment) {
+            default:
+            case LEFT: return StringUtils.rightPad(text, length);
+            case RIGHT: return  StringUtils.leftPad(text, length);
+            case CENTER: return  StringUtils.center(text, length);
+        }
     }
 }

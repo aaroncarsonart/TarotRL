@@ -1,5 +1,6 @@
 package com.aaroncarsonart.tarotrl.graphics;
 
+import com.aaroncarsonart.tarotrl.map.Region2D;
 import org.hexworks.zircon.api.data.Position;
 import org.hexworks.zircon.api.data.Size;
 
@@ -22,5 +23,12 @@ public class ViewPort {
         this.y = offset.getY();
         this.width = size.getWidth();
         this.height = size.getHeight();
+    }
+
+    public ViewPort(Region2D region) {
+        this.x = region.position.x();
+        this.y = region.position.y();
+        this.width = region.dimensions.x();
+        this.height = region.dimensions.y();
     }
 }

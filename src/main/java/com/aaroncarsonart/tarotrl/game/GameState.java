@@ -1,7 +1,7 @@
 package com.aaroncarsonart.tarotrl.game;
 
 import com.aaroncarsonart.imbroglio.Position2D;
-import com.aaroncarsonart.tarotrl.game.controller.InventoryGameControllerData;
+import com.aaroncarsonart.tarotrl.menu.InventoryMenuData;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.input.UserInput;
 import com.aaroncarsonart.tarotrl.inventory.GameItem;
@@ -48,12 +48,14 @@ public class GameState implements Serializable {
     private transient GameMode gameMode;
     private transient UserInput userInput = new UserInput();
 
-    private InventoryGameControllerData mapGameControllerData = new InventoryGameControllerData();
+    private InventoryMenuData inventoryMenuData;
 
     /**
      * Default no-arg constructor
      */
     public GameState() {
+        inventoryMenuData = new InventoryMenuData();
+        inventoryMenuData.setCancelAction(() -> setGameMode(GameMode.MAP_NAVIGATION));
     }
 
     // ------------------------------------------------------
@@ -208,12 +210,12 @@ public class GameState implements Serializable {
         return userInput;
     }
 
-    public InventoryGameControllerData getMapGameControllerData() {
-        return mapGameControllerData;
+    public InventoryMenuData getInventoryMenuData() {
+        return inventoryMenuData;
     }
 
-    public void setMapGameControllerData(InventoryGameControllerData mapGameControllerData) {
-        this.mapGameControllerData = mapGameControllerData;
+    public void setInventoryMenuData(InventoryMenuData inventoryMenuData) {
+        this.inventoryMenuData = inventoryMenuData;
     }
 
     public void setRepeatControllerUpdate(boolean repeatControllerUpdate) {

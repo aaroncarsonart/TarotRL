@@ -1,0 +1,21 @@
+ 000         00 
+ ddddTTTTTTTRdd 
+ TdddTTTTTTTRdd 
+ TRdddTTTTTTRdF 
+ TTRdddTTRRRRdF 
+ TTTRdddddddddF 
+0dTTTRddddddddF 
+0ddTTRRRRRRRRdF 
+ TddTTTTTTTdRdF 
+ TTddddddTTdddF 
+ TTTddddddddddd0
+ TTTRdddddddddd0
+0dddddddddddddF 
+0dddddddddddddF 
+ FFFFFFFFFFdddF 
+ TTTTTTTTTFdddF 
+ TTTTTTTTTFdddF 
+ TTTTTTTTTFdddF 
+ TTTTTTTTTFdddF 
+ TTTTTTTTTFdddF 
+           000F 

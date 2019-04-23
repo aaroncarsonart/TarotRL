@@ -27,7 +27,7 @@ public class MapGameController implements GameController {
     public boolean update(GameState state, UserInput input) {
         state.setDevMode(input.hasModifer(MapActionModifier.DEV_MODE));
 
-        Enum action = input.getCurrentAction();
+        Enum action = input.getAction();
         if (action instanceof PlayerAction) {
             PlayerAction playerAction = (PlayerAction) action;
             processPlayerAction(playerAction, state);

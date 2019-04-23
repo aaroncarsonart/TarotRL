@@ -147,18 +147,18 @@ public class SnapshotHistory implements InputHandler, GameController, TileRender
         LOG.trace("handleKeyTyped");
         if (event.getKey().equals(KEY_PREVIOUS_SNAPSHOT)) {
             action = SnapshotAction.PREVIOUS;
-            //userInput.setCurrentAction(SnapshotAction.PREVIOUS);
-            userInput.doNotifyAll();
+            //userInput.setAction(SnapshotAction.PREVIOUS);
+            userInput.doUpdateController();
             return UIEventResponses.processed();
         } else if (event.getKey().equals(KEY_NEXT_SNAPSHOT)) {
             action = SnapshotAction.NEXT;
-            //userInput.setCurrentAction(SnapshotAction.NEXT);
-            userInput.doNotifyAll();
+            //userInput.setAction(SnapshotAction.NEXT);
+            userInput.doUpdateController();
             return UIEventResponses.processed();
         } else {
             action = SnapshotAction.EXIT;
-            //userInput.setCurrentAction(SnapshotAction.EXIT);
-            userInput.doNotifyAll();
+            //userInput.setAction(SnapshotAction.EXIT);
+            userInput.doUpdateController();
             return UIEventResponses.processed();
         }
     }

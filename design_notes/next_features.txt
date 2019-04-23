@@ -308,7 +308,7 @@ be linked, and then these graphs drive the generation of
 related 2D tile grids that a roguelike game can display for
 the player to explore.
 
-For example, a house's room layout may be understood by the
+For example, a house's room menuLayout may be understood by the
 following graph design, representing my the first floor of
 my parent's house:
 
