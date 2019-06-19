@@ -4,6 +4,8 @@ A very in-progress procedurally generated Roguelike, developed in Java using [Zi
 
 ![Screenshot](screenshots/TarotRL-Screenshot-01.png)
 
+## Goals
+
 The bulk of the intent of this programming exercise is two fold:
 
 1. Engineering a robust, easily understood and maintainable
@@ -16,6 +18,8 @@ The bulk of the intent of this programming exercise is two fold:
    when I need a random number, word, or thing and using this
    as the seed was the initial idea driving what features I'd
    implement into the game.
+
+## Implementation 
 
 How successful was I in these endeavors?  Concerning #1, fairly.  For the 3 weeks of dev work I've
 invested in this project during April, the basic features of a game engine were reasonably fleshed
@@ -37,9 +41,9 @@ Overall, I am satisfied with the result for the time and effort invested.
 ## Gameplay
 
 Development and evolution of gameplay and features is very much in flux.  Currently you can explore a
-set of descending cave levels.  Navigate with the arrow keys, collect some simple assorted items `*` and `$` on the floor by moving over them.  Descend the stairs `<` and `>` with `Enter`.  Also, the beginnings of a menu system will toggle on the screen with `i`.
+set of descending cave levels.  Navigate with the arrow keys, collect some simple assorted items `*` and `$` on the floor by moving over them.  Descend the stairs `<` and `>` with `Enter`.  Also, the beginnings of a menu system will toggle on the screen with `i`. (Back is `Esc`).
 
-Other map types not included in the current build have interactable doors.  There are more nuanced input options for features at varying levels of implementation.  For now, the curious can inspect them in the input system.
+Other map types not included in the current build have interactable doors.  There are more nuanced input options for features at varying levels of implementation.  For now, the curious can inspect these in the [input](src/main/java/com/aaroncarsonart/tarotrl/input) package.
 
 ## Build
 
