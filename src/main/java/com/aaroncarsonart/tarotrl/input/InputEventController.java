@@ -53,9 +53,9 @@ public class InputEventController {
     }
 
     public void listenForInputs(TileGrid grid, GameState state) {
-        grid.onKeyboardEvent(KeyboardEventType.KEY_TYPED, (event, phase) -> handleKeyTyped(event, state));
-        grid.onKeyboardEvent(KeyboardEventType.KEY_PRESSED, (event, phase) -> handleKeyPressed(event, state));
-        grid.onKeyboardEvent(KeyboardEventType.KEY_RELEASED, (event, phase) -> handleKeyReleased(event, state));
+        grid.processKeyboardEvents(KeyboardEventType.KEY_TYPED, (event, phase) -> handleKeyTyped(event, state));
+        grid.processKeyboardEvents(KeyboardEventType.KEY_PRESSED, (event, phase) -> handleKeyPressed(event, state));
+        grid.processKeyboardEvents(KeyboardEventType.KEY_RELEASED, (event, phase) -> handleKeyReleased(event, state));
     }
 
     public void addPlayerActionListener(PlayerActionListener listener) {

@@ -46,10 +46,10 @@ public class InputController {
         KeyboardEventType keyPressed = KeyboardEventType.KEY_PRESSED;
         KeyboardEventType keyReleased = KeyboardEventType.KEY_RELEASED;
 
-        eventSource.onKeyboardEvent(keyTyped, (event, phase) -> handleKeyboardEvent(keyTyped, event, state));
-        eventSource.onKeyboardEvent(keyPressed, (event, phase) -> handleKeyboardEvent(keyPressed, event, state));
-        eventSource.onKeyboardEvent(keyReleased, (event, phase) -> handleKeyboardEvent(keyReleased, event, state));
-        eventSource.onMouseEvent(MouseEventType.MOUSE_CLICKED, (event, phase) -> handleMouseEvent(MouseEventType.MOUSE_CLICKED, event, state));
+        eventSource.processKeyboardEvents(keyTyped, (event, phase) -> handleKeyboardEvent(keyTyped, event, state));
+        eventSource.processKeyboardEvents(keyPressed, (event, phase) -> handleKeyboardEvent(keyPressed, event, state));
+        eventSource.processKeyboardEvents(keyReleased, (event, phase) -> handleKeyboardEvent(keyReleased, event, state));
+        eventSource.processMouseEvents(MouseEventType.MOUSE_CLICKED, (event, phase) -> handleMouseEvent(MouseEventType.MOUSE_CLICKED, event, state));
     }
 
 //    private UIEventResponse handleKeyTyped(KeyboardEvent event, GameState state) {
