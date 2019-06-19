@@ -2,7 +2,7 @@ package com.aaroncarsonart.tarotrl.entity;
 
 /**
  * Used to dispatch updates to entities that can navigate
- * a GameWorld.
+ * a GameMap3D.
  */
 public class MapNavigationCommand {
 

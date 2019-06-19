@@ -8,7 +8,7 @@ import com.aaroncarsonart.tarotrl.world.Position3D;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * MapEntities inhabit the GameWorld.  They include items
+ * MapEntities inhabit the GameMap3D.  They include items
  * and creatures and can occupy PATH WorldVoxels.
  *
  * All entities have a position, description, graphics component, and a status.
@@ -20,8 +20,6 @@ public class MapEntity {
     protected String description;
     private int stepCount;
     private String status;
-
-    private GraphicsComponent graphicsComponent;
 
     /**
      * Can you occupy the same space as this entity

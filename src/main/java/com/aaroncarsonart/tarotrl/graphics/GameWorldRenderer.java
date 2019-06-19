@@ -2,11 +2,11 @@ package com.aaroncarsonart.tarotrl.graphics;
 
 import com.aaroncarsonart.tarotrl.entity.MapEntity;
 import com.aaroncarsonart.tarotrl.game.GameState;
+import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
-import com.aaroncarsonart.tarotrl.world.GameWorld;
+import com.aaroncarsonart.tarotrl.world.MapVoxel;
 import com.aaroncarsonart.tarotrl.world.Position3D;
-import com.aaroncarsonart.tarotrl.world.WorldVoxel;
 import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.data.Tile;
 import org.hexworks.zircon.api.grid.TileGrid;
@@ -32,7 +32,7 @@ public class GameWorldRenderer extends GameTileRenderer {
                                              GameState gameState,
                                              ViewPort viewPort,
                                              boolean drawViewportBorder) {
-        GameWorld world = gameState.getGameWorld();
+        GameMap world = gameState.getGameMap();
 
         // ensure coordinate spaces of viewport fit on the TileGrid.
         checkCoordinatesFit(tileGrid, viewPort);
@@ -60,7 +60,7 @@ public class GameWorldRenderer extends GameTileRenderer {
                 int sx = viewPort.x + vx;
                 int sy = viewPort.y + vy;
 
-                WorldVoxel voxel = world.getVoxel(mapPos);
+                MapVoxel voxel = world.getVoxel(mapPos);
                 TileType tileType = voxel.getTileType();
                 if (tileType == TileType.EMPTY) {
                     tileType = gameState.getUndefinedTileType();

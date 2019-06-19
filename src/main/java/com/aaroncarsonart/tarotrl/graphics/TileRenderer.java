@@ -24,6 +24,17 @@ public interface TileRenderer {
 
     void render(GameState gameState, TileGrid tileGrid);
 
+    /**
+     * Clear any previously set tile within the TileGrid.
+     * @param tileGrid The TileGrid to clear.
+     */
+    default void clearTileData(TileGrid tileGrid) {
+        for (Position position : tileGrid.createSnapshot().fetchPositions()) {
+            tileGrid.setTileAt(position, Tiles.empty());
+        }
+    }
+
+
     default void writeText(TileGrid tileGrid, String text, int x, int y) {
         writeText(tileGrid, text, x, y, tileGrid.getForegroundColor(), tileGrid.getBackgroundColor());
     }

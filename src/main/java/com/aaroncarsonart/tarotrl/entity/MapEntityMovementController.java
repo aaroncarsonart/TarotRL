@@ -4,9 +4,9 @@ import com.aaroncarsonart.tarotrl.map.Direction2D;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.world.Direction3D;
-import com.aaroncarsonart.tarotrl.world.GameWorld;
+import com.aaroncarsonart.tarotrl.world.GameMap3D;
+import com.aaroncarsonart.tarotrl.world.MapVoxel;
 import com.aaroncarsonart.tarotrl.world.Position3D;
-import com.aaroncarsonart.tarotrl.world.WorldVoxel;
 
 /**
  * Handle all interactions between Entities and movement on maps,
@@ -18,7 +18,7 @@ public class MapEntityMovementController {
     // TODO: Update PlayerActionController to use this code, somehow.
     // TODO: Probably by adding a Player GameEntity to GameState, etc.
 
-    public boolean update(GameWorld world, MapEntity entity, MapNavigationAction action, Direction2D direction) {
+    public boolean update(GameMap3D world, MapEntity entity, MapNavigationAction action, Direction2D direction) {
         switch (action) {
             case MOVE:   return attemptMove(world, entity, direction);
             case STAIRS: return attemptStairs(world, entity);
@@ -29,7 +29,7 @@ public class MapEntityMovementController {
         return false;
     }
 
-    public boolean attemptMove(GameWorld world, MapEntity entity, Direction2D direction) {
+    public boolean attemptMove(GameMap3D world, MapEntity entity, Direction2D direction) {
         if (direction == Direction2D.NONE) {
             LOG.warning("Attempted to move %s entity to Direction.NONE", entity, direction);
             return false;
@@ -47,10 +47,10 @@ public class MapEntityMovementController {
         }
     }
 
-    public boolean attemptStairs(GameWorld world, MapEntity entity) {
+    public boolean attemptStairs(GameMap3D world, MapEntity entity) {
         LOG.trace("MapEntity %s - attempt stairs", entity);
         Position3D target = entity.getPosition();
-        WorldVoxel voxel = world.getVoxel(target);
+        MapVoxel voxel = world.getVoxel(target);
         TileType tileType = voxel.getTileType();
 
         boolean result = false;
@@ -81,10 +81,10 @@ public class MapEntityMovementController {
         return result;
     }
 
-    private boolean attemptDoor(GameWorld world, MapEntity entity, Direction2D direction) {
+    private boolean attemptDoor(GameMap3D world, MapEntity entity, Direction2D direction) {
         LOG.trace("MapEntity %s - attempt door %s", entity, direction);
         Position3D target = entity.getPosition().moveTowards(direction);
-        WorldVoxel voxel = world.getVoxel(target);
+        MapVoxel voxel = world.getVoxel(target);
         TileType tileType = voxel.getTileType();
         // toggle the door open/closed, if the target origin is a door.
         if (tileType == TileType.CLOSED_DOOR) {
@@ -102,11 +102,11 @@ public class MapEntityMovementController {
         }
     }
 
-    private boolean attemptTunnel(GameWorld world, MapEntity entity, Direction2D direction) {
+    private boolean attemptTunnel(GameMap3D world, MapEntity entity, Direction2D direction) {
         LOG.trace("MapEntity %s - attempt tunnel %s", entity, direction);
 
         Position3D target = entity.getPosition().moveTowards(direction);
-        WorldVoxel voxel = world.getVoxel(target);
+        MapVoxel voxel = world.getVoxel(target);
         TileType tileType = voxel.getTileType();
         if (tileType == TileType.WALL) {
             voxel.setTileType(TileType.PATH);

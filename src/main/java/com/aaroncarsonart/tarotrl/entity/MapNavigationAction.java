@@ -1,7 +1,7 @@
 package com.aaroncarsonart.tarotrl.entity;
 
 /**
- * Specifically for only moving about a GameWorld.
+ * Specifically for only moving about a GameMap3D.
  * Paired with an MapEntity and a Direction.
  */
 public enum MapNavigationAction {

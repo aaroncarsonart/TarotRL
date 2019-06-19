@@ -6,13 +6,13 @@ import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.inventory.GameItem;
 import com.aaroncarsonart.tarotrl.inventory.Treasure;
 import com.aaroncarsonart.tarotrl.map.Direction2D;
+import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.util.TextUtils;
 import com.aaroncarsonart.tarotrl.world.Direction3D;
-import com.aaroncarsonart.tarotrl.world.GameWorld;
+import com.aaroncarsonart.tarotrl.world.MapVoxel;
 import com.aaroncarsonart.tarotrl.world.Position3D;
-import com.aaroncarsonart.tarotrl.world.WorldVoxel;
 
 /**
  * Convert updates to the UserInput into actions which update
@@ -36,7 +36,7 @@ public class PlayerActionController {
 
             LOG.trace("+----------------------------------------------------+");
             LOG.trace(format, String.format("          turn: %s", gameState.getTurnCounter()));
-            LOG.trace(format, String.format("      position: %s", gameState.getGameWorld().getCamera()));
+            LOG.trace(format, String.format("      position: %s", gameState.getGameMap().getCamera()));
             LOG.trace(format, String.format("previousAction: %s", gameState.getPreviousAction()));
             LOG.trace(format, String.format(" currentAction: %s", gameState.getCurrentAction()));
             LOG.trace(format, String.format("       devMode: %s", gameState.isDevMode()));
@@ -132,12 +132,12 @@ public class PlayerActionController {
      * @param direction The direction to attempt to move.
      */
     private void doMove(GameState gameState, Direction2D direction) {
-        GameWorld world = gameState.getGameWorld();
+        GameMap world = gameState.getGameMap();
 
         // check if requested origin is available to be moved into.
         Position3D camera = world.getCamera();
         Position3D targetPosition = camera.moveTowards(direction);
-        WorldVoxel targetVoxel = world.getVoxel(targetPosition);
+        MapVoxel targetVoxel = world.getVoxel(targetPosition);
         TileType tileType = targetVoxel.getTileType();
 
         // SHIFT mode: context-sensitive CONFIRM.
@@ -178,7 +178,7 @@ public class PlayerActionController {
     }
 
     private void attemptCollectItem(GameState gameState, Position3D position) {
-        GameWorld world = gameState.getGameWorld();
+        GameMap world = gameState.getGameMap();
         if (world.hasItem(position)) {
             ItemEntity itemEntity = (ItemEntity) world.removeEntity(position);
             GameItem item = itemEntity.getItem();
@@ -196,13 +196,13 @@ public class PlayerActionController {
         }
     }
 
-    private void attemptMove(GameState gameState, WorldVoxel voxel, Direction2D originDirection) {
+    private void attemptMove(GameState gameState, MapVoxel voxel, Direction2D originDirection) {
         if (gameState.isDevMode() || voxel.isPassable()) {
-            voxel.world.setCamera(voxel.position);
+            voxel.map.setCamera(voxel.position);
 
             LOG.debug("Move player: %s", originDirection.getDirection3D());
 
-            String status = getMoveStatus(voxel.world, voxel.position);
+            String status = getMoveStatus(voxel.map, voxel.position);
             gameState.setStatus(status);
             gameState.incrementStepCount();
 
@@ -219,7 +219,7 @@ public class PlayerActionController {
     }
 
 
-    private void toggleDoor(GameState gameState, WorldVoxel voxel) {
+    private void toggleDoor(GameState gameState, MapVoxel voxel) {
         TileType tileType = voxel.getTileType();
         // toggle the door open/closed, if the target origin is a door.
         if (tileType == TileType.CLOSED_DOOR) {
@@ -233,12 +233,12 @@ public class PlayerActionController {
         }
     }
 
-    private void attemptStairs(GameState gameState, WorldVoxel voxel) {
+    private void attemptStairs(GameState gameState, MapVoxel voxel) {
         TileType tileType = voxel.getTileType();
         if (tileType == TileType.UPSTAIRS) {
-            WorldVoxel upstairs = voxel.getNeighbor(Direction3D.ABOVE);
+            MapVoxel upstairs = voxel.getNeighbor(Direction3D.ABOVE);
             if (gameState.isDevMode() || upstairs.isPassable()) {
-                voxel.world.setCamera(upstairs.position);
+                voxel.map.setCamera(upstairs.position);
                 gameState.incrementStepCount();
                 gameState.setStatus("You ascended the stairs.");
                 gameState.setCurrentAction(PlayerAction.ASCEND);
@@ -248,9 +248,9 @@ public class PlayerActionController {
                         "but the stairway was obstructed by immovable debris.");
             }
         } else if (tileType == TileType.DOWNSTAIRS) {
-            WorldVoxel downstairs = voxel.getNeighbor(Direction3D.BELOW);
+            MapVoxel downstairs = voxel.getNeighbor(Direction3D.BELOW);
             if (gameState.isDevMode() || downstairs.isPassable()) {
-                voxel.world.setCamera(downstairs.position);
+                voxel.map.setCamera(downstairs.position);
                 gameState.incrementStepCount();
                 gameState.setStatus("You descended the stairs.");
                 gameState.setCurrentAction(PlayerAction.DESCEND);
@@ -265,12 +265,12 @@ public class PlayerActionController {
     /**
      * Create a special status message for tiles that are worth mentioning
      * to the player in the StatusLog, simply for walking over them.
-     * @param world The current GameWorld.
+     * @param world The current GameMap3D.
      * @param position The origin being moved over.
      * @return The special status message, otherwise null.
      */
-    public String getMoveStatus(GameWorld world, Position3D position) {
-        WorldVoxel voxel = world.getVoxel(position);
+    public String getMoveStatus(GameMap world, Position3D position) {
+        MapVoxel voxel = world.getVoxel(position);
         TileType tileType = voxel.getTileType();
         if (world.hasEntity(position)) {
             String inspectMessage = Direction2D.NONE.getInspectString() + " " + voxel.getDescription();
@@ -299,12 +299,12 @@ public class PlayerActionController {
     }
 
     private void doInspect(GameState gameState, Direction2D inspectDirection) {
-        GameWorld world = gameState.getGameWorld();
+        GameMap world = gameState.getGameMap();
         Position3D playerPosition = world.getCamera();
         Position3D target = playerPosition.moveTowards(inspectDirection);
         gameState.setInspectedPosition(target);
 
-        WorldVoxel voxel = world.getVoxel(target);
+        MapVoxel voxel = world.getVoxel(target);
         String inspectStatus = inspectDirection.getInspectString() + " " + voxel.getDescription();
         inspectStatus = TextUtils.capitalize(inspectStatus);
 
@@ -317,7 +317,7 @@ public class PlayerActionController {
      * @param gameState The current GameState.
      */
     private void doConfirm(GameState gameState) {
-        GameWorld world = gameState.getGameWorld();
+        GameMap world = gameState.getGameMap();
         Position3D current = world.getCamera();
 
         if (world.hasItem(current)) {
@@ -325,7 +325,7 @@ public class PlayerActionController {
             return;
         }
 
-        WorldVoxel voxel = world.getVoxel(current);
+        MapVoxel voxel = world.getVoxel(current);
         TileType tileType = voxel.getTileType();
 
         // handle stairs
@@ -354,7 +354,7 @@ public class PlayerActionController {
         // action will open that door.
         if (gameState.getPreviousAction() == PlayerAction.INSPECT) {
             Position3D inspectedPosition = gameState.getInspectedPosition();
-            WorldVoxel inspectedVoxel = world.getVoxel(inspectedPosition);
+            MapVoxel inspectedVoxel = world.getVoxel(inspectedPosition);
             TileType inspectedTileType = inspectedVoxel.getTileType();
             if (inspectedTileType == TileType.CLOSED_DOOR) {
                 inspectedVoxel.setTileType(TileType.OPEN_DOOR);

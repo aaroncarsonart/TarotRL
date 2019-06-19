@@ -8,8 +8,6 @@ import com.aaroncarsonart.tarotrl.graphics.ViewPort;
 import com.aaroncarsonart.tarotrl.input.InputEventController;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.util.Logger;
-import com.aaroncarsonart.tarotrl.world.GameWorld;
-import com.aaroncarsonart.tarotrl.world.Region3D;
 import org.hexworks.zircon.api.AppConfigs;
 import org.hexworks.zircon.api.CP437TilesetResources;
 import org.hexworks.zircon.api.Layers;
@@ -121,18 +119,6 @@ public class OldTarotRLGame {
             return UIEventResponses.processed();
         });
 
-    }
-
-    private void printGameWorldInfo() {
-        GameWorld world = gameState.getGameWorld();
-        int voxelCount = gameState.getGameWorld().getWorldMap().size();
-
-        Region3D worldRegion = world.calculateBoundingRegion3D();
-        int regionVolume = worldRegion.volume();
-
-        LOG.debug(String.format("WorldMap dimensions: %s\n", worldRegion));
-        LOG.debug(String.format("WorldMap bounding region volume:  %,d voxels\n", regionVolume));
-        LOG.debug(String.format("worldMap size: %,d voxels\n", voxelCount));
     }
 
     /** Dumb little instance variable cached here, used only for log. NO APOLOGIES. **/

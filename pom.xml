@@ -10,9 +10,7 @@
 
     <properties>
         <version.jackson>2.9.7</version.jackson>
-        <version.zirconOld>2018.12.25-XMAS</version.zirconOld>
-        <version.zirconNew>2019.0.14-PREVIEW</version.zirconNew>
-        <version.zircon>${version.zirconNew}</version.zircon>
+        <version.zircon>2019.0.14-PREVIEW</version.zircon>
     </properties>
 
     <build>

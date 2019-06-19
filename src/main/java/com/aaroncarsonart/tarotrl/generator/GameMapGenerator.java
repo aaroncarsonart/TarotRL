@@ -2,7 +2,7 @@ package com.aaroncarsonart.tarotrl.generator;
 
 import com.aaroncarsonart.imbroglio.Maze;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
-import com.aaroncarsonart.tarotrl.map.GameMap;
+import com.aaroncarsonart.tarotrl.map.GameMap2D;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
 import com.aaroncarsonart.tarotrl.util.Logger;
@@ -16,11 +16,11 @@ public class GameMapGenerator {
     /**
      * This is the main outward facing interface of this class.
      *
-     * @param definition The GameMapDefinition to generateMapFrom the GameMap from.
-     * @return The generated GameMap that is defined by the GameMapDefinition.
+     * @param definition The GameMapDefinition to generateMapFrom the GameMap2D from.
+     * @return The generated GameMap2D that is defined by the GameMapDefinition.
      */
-    public GameMap generateMapFrom(GameMapDefinition definition) {
-        LOG.debug("generate GameMap from definition: \"%s\"", definition.getMapName());
+    public GameMap2D generateMapFrom(GameMapDefinition definition) {
+        LOG.debug("generate GameMap2D from definition: \"%s\"", definition.getMapName());
 
         String mapName = definition.getMapName();
         int width = definition.getWidth();
@@ -61,7 +61,7 @@ public class GameMapGenerator {
                 LOG.error(errorMessage);
                 throw new TarotRLException(errorMessage);
         }
-        GameMap gameMap = new GameMap(mapName, terrainGrid, height, width);
+        GameMap2D gameMap = new GameMap2D(mapName, terrainGrid, height, width);
         return gameMap;
     }
 
@@ -105,9 +105,9 @@ public class GameMapGenerator {
         return characterGrid;
     }
 
-    public static GameMap generateMapFrom(Maze maze) {
+    public static GameMap2D generateMapFrom(Maze maze) {
         char[][] grid = createGridFrom(maze);
-        return new GameMap("Maze", grid, maze.getHeight(), maze.getWidth());
+        return new GameMap2D("Maze", grid, maze.getHeight(), maze.getWidth());
     }
 
 

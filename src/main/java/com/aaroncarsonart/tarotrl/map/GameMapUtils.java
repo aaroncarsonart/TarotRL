@@ -164,12 +164,12 @@ public class GameMapUtils {
 
 
     /**
-     * Attempt to read a proper GameMap object from a text file, following some presumed conventions.
+     * Attempt to read a proper GameMap2D object from a text file, following some presumed conventions.
      *
      * @param mapResourceRelativeFilePath The path to read the file from, within the resources directory.
      * @return
      */
-    public static GameMap readFileAsGameMap(String mapResourceRelativeFilePath) {
+    public static GameMap2D readFileAsGameMap(String mapResourceRelativeFilePath) {
         URL mapFileUrl = GameMapUtils.class.getResource(mapResourceRelativeFilePath);
         try {
             Scanner scanner = new Scanner(mapFileUrl.openStream());
@@ -214,7 +214,7 @@ public class GameMapUtils {
                 }
             }
 
-            GameMap gameMap = new GameMap(
+            GameMap2D gameMap = new GameMap2D(
                     gameMapName,
                     mapTileData,
                     mapHeight,
@@ -242,11 +242,11 @@ public class GameMapUtils {
         if (hasMapNameHeader && hasDottedLine) {
             return true;
         } else {
-            throw new RuntimeException("GameMap file missing map name.");
+            throw new RuntimeException("GameMap2D file missing map name.");
         }
     }
 
-    public static GameMap createGameMapFromMaze(String name, Maze maze) {
+    public static GameMap2D createGameMapFromMaze(String name, Maze maze) {
         int width = maze.getWidth();
         int height = maze.getHeight();
         char[][] tileGrid = new char[height][width];
@@ -264,7 +264,7 @@ public class GameMapUtils {
                 tileGrid[y][x] = tileSprite;
             }
         }
-        GameMap gameMap = new GameMap(name, tileGrid, height, width);
+        GameMap2D gameMap = new GameMap2D(name, tileGrid, height, width);
         return gameMap;
     }
 }

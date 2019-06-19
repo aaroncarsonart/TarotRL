@@ -15,9 +15,9 @@ import java.util.List;
  * Details are abstracted away from in-game use implementation
  * so that fields required to adequately describe map generation,
  * define entity population and behavior, etc can be added as
- * needed here without polluting the actual GameMap class files.
+ * needed here without polluting the actual GameMap2D class files.
  *
- * This class represents one GameMap.
+ * This class represents one GameMap2D.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GameMapDefinition extends ValidatedDefinition {

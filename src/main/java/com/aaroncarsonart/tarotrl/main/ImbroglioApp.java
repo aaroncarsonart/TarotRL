@@ -4,7 +4,7 @@ import com.aaroncarsonart.tarotrl.game.Game;
 import com.aaroncarsonart.tarotrl.game.GameMode;
 import com.aaroncarsonart.tarotrl.game.GameModeComponents;
 import com.aaroncarsonart.tarotrl.game.GameState;
-import com.aaroncarsonart.tarotrl.game.controller.MapGameController;
+import com.aaroncarsonart.tarotrl.game.controller.MapController;
 import com.aaroncarsonart.tarotrl.generator.GameStateGenerator;
 import com.aaroncarsonart.tarotrl.graphics.GraphicsContext;
 import com.aaroncarsonart.tarotrl.graphics.ImbroglioTileRenderer;
@@ -22,7 +22,7 @@ public class ImbroglioApp {
 
     private static GameModeComponents createMapModeComponents() {
         MapInputHandler inputHandler = new MapInputHandler();
-        MapGameController gameController = new MapGameController();
+        MapController gameController = new MapController();
         ImbroglioTileRenderer tileRenderer = new ImbroglioTileRenderer();
 
         GameModeComponents components = new GameModeComponents(

@@ -13,7 +13,6 @@ import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.util.TextAlignment;
 import com.aaroncarsonart.tarotrl.util.TextUtils;
 import org.hexworks.zircon.api.Positions;
-import org.hexworks.zircon.api.Tiles;
 import org.hexworks.zircon.api.color.TileColor;
 import org.hexworks.zircon.api.data.Position;
 import org.hexworks.zircon.api.grid.TileGrid;
@@ -38,9 +37,7 @@ public class InventoryTileRenderer implements TileRenderer {
 
     @Override
     public void render(GameState gameState, TileGrid tileGrid) {
-        for (Position position : tileGrid.createSnapshot().fetchPositions()) {
-            tileGrid.setTileAt(position, Tiles.empty());
-        }
+        clearTileData(tileGrid);
         InventoryMenuData menuData = gameState.getInventoryMenuData();
         Menu menu = menuData.getRootMenu();
         Position position = Positions.defaultPosition();

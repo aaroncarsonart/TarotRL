@@ -26,7 +26,7 @@ public enum Direction3D {
     }
 
     /**
-     * Representing the horizontal plane, which the world map is explored by.
+     * Representing the horizontal plane, which the map map is explored by.
      */
     public static final Set<Direction3D> XY_PLANE = EnumSet.of(WEST, EAST, NORTH, SOUTH);
     private static final Logger LOG = new Logger(Direction3D.class);

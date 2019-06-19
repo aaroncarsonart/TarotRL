@@ -1,14 +1,13 @@
 package com.aaroncarsonart.tarotrl.game;
 
 import com.aaroncarsonart.imbroglio.Position2D;
-import com.aaroncarsonart.tarotrl.menu.InventoryMenuData;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.input.UserInput;
 import com.aaroncarsonart.tarotrl.inventory.GameItem;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
+import com.aaroncarsonart.tarotrl.menu.InventoryMenuData;
 import com.aaroncarsonart.tarotrl.util.Logger;
-import com.aaroncarsonart.tarotrl.world.GameWorld;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,8 +22,7 @@ public class GameState implements Serializable {
     private Position3D inspectedPosition;
 
     private int turnCounter;
-    private GameMap activeMap;
-    private GameWorld gameWorld;
+    private GameMap gameMap;
 
     private int stepCount;
     private int treasure;
@@ -78,14 +76,6 @@ public class GameState implements Serializable {
         this.inspectedPosition = inspectedPosition;
     }
 
-    public GameMap getActiveMap() {
-        return activeMap;
-    }
-
-    public void setActiveMap(GameMap activeMap) {
-        this.activeMap = activeMap;
-    }
-
     public void incrementTurnCounter() {
         turnCounter++;
     }
@@ -126,12 +116,12 @@ public class GameState implements Serializable {
         this.currentAction = currentAction;
     }
 
-    public void setGameWorld(GameWorld gameWorld) {
-        this.gameWorld = gameWorld;
+    public void setGameMap(GameMap gameMap) {
+        this.gameMap = gameMap;
     }
 
-    public GameWorld getGameWorld() {
-        return gameWorld;
+    public GameMap getGameMap() {
+        return gameMap;
     }
 
     public int getStepCount() {

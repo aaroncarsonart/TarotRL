@@ -1,8 +1,8 @@
 package com.aaroncarsonart.tarotrl.map.generator;
 
+import com.aaroncarsonart.tarotrl.map.GameMap2D;
 import com.aaroncarsonart.tarotrl.util.Globals;
 import com.aaroncarsonart.tarotrl.generator.GameMapGenerator;
-import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.MapType;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
 import com.aaroncarsonart.tarotrl.util.Logger;
@@ -78,7 +78,7 @@ class GameMapGeneratorTest {
     @Test
     void testGenerateVaultMap() throws Exception {
         GameMapDefinition vaultMapDefinition = getVaultMapDefinition();
-        GameMap vaultGameMap = generator.generateMapFrom(vaultMapDefinition);
+        GameMap2D vaultGameMap = generator.generateMapFrom(vaultMapDefinition);
         LOG.logTest(vaultGameMap);
 
         assertEquals(VAULT_WIDTH, vaultGameMap.getWidth());
@@ -99,7 +99,7 @@ class GameMapGeneratorTest {
     @Test
     void testGenerateMazeMap() throws Exception {
         GameMapDefinition mazeMapDefinition = getMazeMapDefinition();
-        GameMap mazeGameMap = generator.generateMapFrom(mazeMapDefinition);
+        GameMap2D mazeGameMap = generator.generateMapFrom(mazeMapDefinition);
         LOG.logTest(mazeGameMap);
 
         assertEquals(MAZE_WIDTH, mazeGameMap.getWidth());
@@ -121,7 +121,7 @@ class GameMapGeneratorTest {
     @Test
     void testGenerateCellularAutomataMap() throws Exception {
         GameMapDefinition cellularAutomataMapDefinition = getCellularAutomataMapDefinition();
-        GameMap cellularAutomataGameMap = generator.generateMapFrom(cellularAutomataMapDefinition);
+        GameMap2D cellularAutomataGameMap = generator.generateMapFrom(cellularAutomataMapDefinition);
         LOG.logTest(cellularAutomataGameMap);
 
         assertEquals(CELLULAR_AUTOMATA_WIDTH, cellularAutomataGameMap.getWidth());

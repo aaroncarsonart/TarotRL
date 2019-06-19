@@ -10,7 +10,7 @@ import com.aaroncarsonart.tarotrl.entity.ItemEntity;
 import com.aaroncarsonart.tarotrl.graphics.GameColors;
 import com.aaroncarsonart.tarotrl.inventory.GameItem;
 import com.aaroncarsonart.tarotrl.inventory.Treasure;
-import com.aaroncarsonart.tarotrl.map.GameMap;
+import com.aaroncarsonart.tarotrl.map.GameMap2D;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
@@ -19,10 +19,10 @@ import com.aaroncarsonart.tarotrl.util.LogLevel;
 import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.util.RNG;
 import com.aaroncarsonart.tarotrl.world.Direction3D;
-import com.aaroncarsonart.tarotrl.world.GameWorld;
+import com.aaroncarsonart.tarotrl.world.GameMap3D;
+import com.aaroncarsonart.tarotrl.world.MapVoxel;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import com.aaroncarsonart.tarotrl.world.Region3D;
-import com.aaroncarsonart.tarotrl.world.WorldVoxel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 /**
- * Generate GameWorld instances for the player to explore.
+ * Generate GameMap3D instances for the player to explore.
  */
 public class GameWorldGenerator {
     private static final Logger LOG = new Logger(GameWorldGenerator.class).withLogLevel(LogLevel.INFO);
@@ -43,34 +43,34 @@ public class GameWorldGenerator {
         generator = new GameMapGenerator();
     }
 
-    private boolean mapRegionFitsGameWorld(GameWorld world, GameMap map, Position3D mapOrigin) {
+    private boolean mapRegionFitsGameWorld(GameMap3D world, GameMap2D map, Position3D mapOrigin) {
         Region3D mapRegion = map.getMapRegionWith(mapOrigin);
-        return world.voxelRegionMatches(mapRegion, WorldVoxel::isUndefined);
+        return world.voxelRegionMatches(mapRegion, MapVoxel::isUndefined);
     }
 
-    private void putMap(GameWorld world, GameMap map, Position3D origin) {
+    private void putMap(GameMap3D world, GameMap2D map, Position3D origin) {
         Position3D dimensions = new Position3D(map.getWidth(), map.getHeight(), 1);
         Position3D max = origin.add(dimensions);
         Position3D.forEach(origin, max, position3D -> {
-            WorldVoxel voxel = world.getVoxel(position3D);
+            MapVoxel voxel = world.getVoxel(position3D);
             char sprite = map.getTile(position3D.subtract(origin).to2D());
             TileType tileType = TileType.valueOf(sprite);
             voxel.setTileType(tileType);
         });
     }
 
-    public GameWorld generateMazeWorld() {
+    public GameMap3D generateMazeWorld() {
         return generateDescendingMazeWorld();
     }
 
 
-    public GameWorld generateImbroglioWorld() {
+    public GameMap3D generateImbroglioWorld() {
         return generateDescendingMazeWorld();
     }
 
-    private GameWorld generateCarsonFamilyHome() {
+    private GameMap3D generateCarsonFamilyHome() {
         LOG.info("Generating Carson family home map ...");
-        GameWorld world = new GameWorld();
+        GameMap3D world = new GameMap3D();
 
         String pathLevel1 = "/maps/vault_parents_house_lv_1.json";
         String pathLevel2 = "/maps/vault_parents_house_lv_2.json";
@@ -80,9 +80,9 @@ public class GameWorldGenerator {
         GameMapDefinition level2Definition = loader.loadGameMapDefinition(pathLevel2);
         GameMapDefinition basementDefinition = loader.loadGameMapDefinition(pathBasement);
 
-        GameMap mapLevel1 = generator.generateMapFrom(level1Definition);
-        GameMap mapLevel2 = generator.generateMapFrom(level2Definition);
-        GameMap mapBasement = generator.generateMapFrom(basementDefinition);
+        GameMap2D mapLevel1 = generator.generateMapFrom(level1Definition);
+        GameMap2D mapLevel2 = generator.generateMapFrom(level2Definition);
+        GameMap2D mapBasement = generator.generateMapFrom(basementDefinition);
 
         Position3D start = mapLevel1.findFirstOccurrence(TileType.UPSTAIRS.getSprite()).to3D()
                 .withRelativeY(-1);
@@ -113,10 +113,10 @@ public class GameWorldGenerator {
         return world;
     }
 
-    private GameWorld generateDescendingMazeWorld() {
+    private GameMap3D generateDescendingMazeWorld() {
         LOG.info("Generating maze maps ...");
 
-        GameWorld world = new GameWorld();
+        GameMap3D world = new GameMap3D();
         int levelCount = 10;
 
         Difficulty difficulty = Difficulty.NORMAL;
@@ -133,7 +133,7 @@ public class GameWorldGenerator {
             Maze maze = Maze.generateRandomWalledMaze(width, height);
             maze.setDifficulty(difficulty);
 
-            GameMap map = GameMapGenerator.generateMapFrom(maze);
+            GameMap2D map = GameMapGenerator.generateMapFrom(maze);
             map.setName("Level " + level);
 
             ArrayList<Position2D> mapPaths = map.getPositionsMatching(t -> t.equals(TileType.PATH));
@@ -178,7 +178,7 @@ public class GameWorldGenerator {
         // add special items
         ArrayList<Position3D> worldPaths = world.getWorldMap().values().stream()
                 .filter(v -> v.getTileType() == TileType.PATH)
-                .filter(v -> v.world.getEntity(v.position) == null)
+                .filter(v -> v.map.getEntity(v.position) == null)
                 .map(v -> v.position)
                 .collect(Collectors.toCollection(ArrayList::new));
 
@@ -209,11 +209,11 @@ public class GameWorldGenerator {
         return world;
     }
 
-    public GameWorld generateCavernWorld() {
+    public GameMap3D generateCavernWorld() {
         LOG.info("Generating Cavern maps ...");
 
-        GameWorld world = new GameWorld();
-        int levelCount = 1;
+        GameMap3D world = new GameMap3D();
+        int levelCount = 10;
         int scaleFactor = 23 - levelCount / 2;
 
         ToIntFunction<Integer> mapDimensionCalulator = level ->
@@ -230,7 +230,7 @@ public class GameWorldGenerator {
             LOG.debug("generating level %d cavern map: (%d x %d)", level, width, height);
 
             Maze maze = GameMapGenerator.generateCellularAutomataRoom(width, height, 3);
-            GameMap map = GameMapGenerator.generateMapFrom(maze);
+            GameMap2D map = GameMapGenerator.generateMapFrom(maze);
             map.setName("Level " + level);
 
             ArrayList<Position2D> mapPaths = map.getPositionsMatching(t -> t.equals(TileType.PATH));
@@ -275,7 +275,7 @@ public class GameWorldGenerator {
         // add special items
         ArrayList<Position3D> worldPaths = world.getWorldMap().values().stream()
                 .filter(v -> v.getTileType() == TileType.PATH)
-                .filter(v -> v.world.getEntity(v.position) == null)
+                .filter(v -> v.map.getEntity(v.position) == null)
                 .map(v -> v.position)
                 .collect(Collectors.toCollection(ArrayList::new));
 

@@ -2,13 +2,13 @@ package com.aaroncarsonart.tarotrl.graphics;
 
 import com.aaroncarsonart.tarotrl.entity.MapEntity;
 import com.aaroncarsonart.tarotrl.game.GameState;
+import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.util.TextUtils;
-import com.aaroncarsonart.tarotrl.world.GameWorld;
+import com.aaroncarsonart.tarotrl.world.MapVoxel;
 import com.aaroncarsonart.tarotrl.world.Position3D;
-import com.aaroncarsonart.tarotrl.world.WorldVoxel;
 import org.apache.commons.lang3.StringUtils;
 import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.Sizes;
@@ -57,7 +57,7 @@ public class ImbroglioTileRenderer implements TileRenderer {
                                              GameState gameState,
                                              ViewPort viewPort,
                                              boolean drawViewportBorder) {
-        GameWorld world = gameState.getGameWorld();
+        GameMap world = gameState.getGameMap();
 
         // ensure coordinate spaces of viewport fit on the TileGrid.
         checkCoordinatesFit(tileGrid, viewPort);
@@ -85,7 +85,7 @@ public class ImbroglioTileRenderer implements TileRenderer {
                 int sx = viewPort.x + vx;
                 int sy = viewPort.y + vy;
 
-                WorldVoxel voxel = world.getVoxel(mapPos);
+                MapVoxel voxel = world.getVoxel(mapPos);
                 TileType tileType = voxel.getTileType();
                 if (tileType == TileType.EMPTY) {
                     tileType = gameState.getUndefinedTileType();
@@ -186,7 +186,7 @@ public class ImbroglioTileRenderer implements TileRenderer {
         writeText(tileGrid, statusMsg, sx, sy, GameColors.LIGHT_GRAY, GameColors.DARKER_GRAY);
 
         // top right
-        int level = 1 - gameState.getGameWorld().getCamera().z;
+        int level = 1 - gameState.getGameMap().getCamera().z;
         String levelMsg = "Level " + level;
 
         sx = width - levelMsg.length();

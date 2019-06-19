@@ -5,7 +5,7 @@ import com.aaroncarsonart.tarotrl.game.GameMode;
 import com.aaroncarsonart.tarotrl.game.GameModeComponents;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.game.controller.InventoryGameController;
-import com.aaroncarsonart.tarotrl.game.controller.MapGameController;
+import com.aaroncarsonart.tarotrl.game.controller.MapController;
 import com.aaroncarsonart.tarotrl.generator.GameStateGenerator;
 import com.aaroncarsonart.tarotrl.graphics.GraphicsContext;
 import com.aaroncarsonart.tarotrl.graphics.InventoryTileRenderer;
@@ -31,7 +31,7 @@ public class TarotRLApp {
 
     private static GameModeComponents createMapModeComponents() {
         MapInputHandler mapInputHandler = new MapInputHandler();
-        MapGameController mapController = new MapGameController();
+        MapController mapController = new MapController();
         MapTileRenderer mapTileRenderer = new MapTileRenderer();
 
         GameModeComponents mapComponents = new GameModeComponents(
@@ -69,11 +69,12 @@ public class TarotRLApp {
      */
     private static Game createTarotRLGame() {
         JsonDefinitionLoader loader = new JsonDefinitionLoader();
-        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/mountain_red.json");
+//        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/mountain_red.json");
+        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/forest_green.json");
         GameStateGenerator.setTileTypeMetadata(tileDefinitionSet);
         GameStateGenerator gameStateGenerator = new GameStateGenerator();
         GameState gameState = gameStateGenerator.generateTarotRLGameState();
-        gameState.setGameMode(GameMode.INVENTORY);
+        gameState.setGameMode(GameMode.MAP_NAVIGATION);
 
         TilesetResource tilesetResource = CP437TilesetResources.mdCurses16x16();
         Size windowDimensions = getWindowDimensions(tilesetResource);

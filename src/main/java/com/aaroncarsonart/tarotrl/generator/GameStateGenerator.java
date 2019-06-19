@@ -6,7 +6,7 @@ import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
 import com.aaroncarsonart.tarotrl.util.Logger;
-import com.aaroncarsonart.tarotrl.world.GameWorld;
+import com.aaroncarsonart.tarotrl.world.GameMap3D;
 
 import java.util.Map;
 
@@ -37,8 +37,8 @@ public class GameStateGenerator {
 
         GameState gameState = new GameState();
 
-        GameWorld world = gameWorldGenerator.generateImbroglioWorld();
-        gameState.setGameWorld(world);
+        GameMap3D world = gameWorldGenerator.generateImbroglioWorld();
+        gameState.setGameMap(world);
         gameState.toggleAutoCollect();
         gameState.setUndefinedTileType(TileType.EMPTY);
         gameState.gainTreasure(50);
@@ -53,10 +53,19 @@ public class GameStateGenerator {
 
         GameState gameState = new GameState();
 
-        GameWorld world = gameWorldGenerator.generateCavernWorld();
-        gameState.setGameWorld(world);
+        GameMap3D gameMap = gameWorldGenerator.generateCavernWorld();
+        gameState.setGameMap(gameMap);
+
+//        Maze maze = Maze.generateRandomWalledMaze(30, 20);
+//        maze.setDifficulty(Difficulty.NORMAL);
+////        GameMap gameMap = GameMapGenerator.generateMapFrom(maze);
+////        Position3D camera = gameMap.findFirstOccurrence3D(TileType.PATH);
+//        gameMap.setCamera(camera);
+//        gameState.setGameMap(gameMap);
+
         gameState.toggleAutoCollect();
         gameState.setUndefinedTileType(TileType.WALL);
+
 
         String initialStatus = "Welcome to TarotRL!!!";
         gameState.setStatus(initialStatus);
