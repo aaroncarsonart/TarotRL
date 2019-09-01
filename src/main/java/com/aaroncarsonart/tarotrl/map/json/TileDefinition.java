@@ -53,6 +53,23 @@ public class TileDefinition {
     public TileDefinition() {
     }
 
+    public TileDefinition(char sprite,
+                          TileType tileType,
+                          TileColor foregroundColor,
+                          TileColor backgroundColor,
+                          boolean passable,
+                          boolean openable,
+                          PortalTrigger portalTrigger) {
+        this.sprite = sprite;
+        this.displaySprite = sprite;
+        this.tileType = tileType;
+        this.foregroundColor = foregroundColor;
+        this.backgroundColor = backgroundColor;
+        this.passable = passable;
+        this.openable = openable;
+        this.portalTrigger = portalTrigger;
+    }
+
     public static TileDefinition custom(char sprite, TileType tileType, TileColor foregroundColor, TileColor backgroundColor) {
         TileDefinition definition = new TileDefinition();
         definition.sprite = sprite;

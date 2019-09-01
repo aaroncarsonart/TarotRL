@@ -5,6 +5,7 @@ import com.aaroncarsonart.tarotrl.entity.EntityType;
 import com.aaroncarsonart.tarotrl.entity.MapEntity;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
+import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -209,4 +210,13 @@ public class GameMap3D implements GameMap {
         return region;
     }
 
+    private TileDefinitionSet tileDefinitionSet;
+
+    public TileDefinitionSet getTileDefinitionSet() {
+        return tileDefinitionSet;
+    }
+
+    public void setTileDefinitionSet(TileDefinitionSet tileDefinitionSet) {
+        this.tileDefinitionSet = tileDefinitionSet;
+    }
 }

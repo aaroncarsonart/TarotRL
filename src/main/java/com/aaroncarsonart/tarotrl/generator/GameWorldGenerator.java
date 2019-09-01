@@ -214,7 +214,7 @@ public class GameWorldGenerator {
 
         GameMap3D world = new GameMap3D();
         int levelCount = 10;
-        int scaleFactor = 23 - levelCount / 2;
+        int scaleFactor = 11 - levelCount / 2;
 
         ToIntFunction<Integer> mapDimensionCalulator = level ->
                 2 * (5 + level + RNG.nextInt(scaleFactor + 11 * level));

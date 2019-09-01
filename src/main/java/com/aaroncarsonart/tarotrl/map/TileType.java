@@ -17,8 +17,9 @@ public enum TileType {
     OPEN_DOOR(  '-', "there is an open door"),
     WINDOW(     '=', "there is a window"),
 
-    FURNITURE('O', "there is a piece of furniture"),
-    PORTAL(   '0', "there is an open path"),
+    FURNITURE(     'O', "there is a piece of furniture"),
+    PORTAL(        '0', "there is an open path"),
+    VISIBLE_PORTAL('%', "there is a portal"),
 
     ENTITY(  'C', "there is a living entity"),
     ITEM(    '^', "there lies a collectable item"),

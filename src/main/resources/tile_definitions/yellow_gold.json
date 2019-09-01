@@ -1,5 +1,5 @@
 {
-    "name": "FOREST_GREEN",
+    "name": "YELLOW_GOLD",
     "tileDefinitions": [
         {
             "sprite": "@",
@@ -76,14 +76,6 @@
             "backgroundColor": "#000000"
         },
         {
-            "sprite": "0",
-            "displaySprite": " ",
-            "tileType": "INSPECT_PORTAL",
-            "portalTrigger": "ON_INSPECT_TILE",
-            "passable": true,
-            "foregroundColor": "#000000",
-            "backgroundColor": "#000000"
-        },        {
             "sprite": " ",
             "tileType": "EMPTY",
             "passable": false,

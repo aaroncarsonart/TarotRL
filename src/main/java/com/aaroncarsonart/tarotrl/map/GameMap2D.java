@@ -1,8 +1,10 @@
 package com.aaroncarsonart.tarotrl.map;
 
 import com.aaroncarsonart.imbroglio.Position2D;
+import com.aaroncarsonart.tarotrl.deck.Element;
 import com.aaroncarsonart.tarotrl.entity.EntityType;
 import com.aaroncarsonart.tarotrl.entity.MapEntity;
+import com.aaroncarsonart.tarotrl.graphics.GameColorSet;
 import com.aaroncarsonart.tarotrl.world.MapVoxel;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import com.aaroncarsonart.tarotrl.world.Region3D;
@@ -33,7 +35,8 @@ public class GameMap2D implements GameMap, Serializable {
 
     private Position2D camera = Position2D.origin();
     private Map<Position2D, MapEntity> entities = new HashMap<>();
-
+    private GameColorSet gameColorSet;
+    private Element element;
 
     /**
      * Any tiles that need re-rendering, as the game state has changed.
@@ -298,5 +301,21 @@ public class GameMap2D implements GameMap, Serializable {
 
     public String toString() {
         return createTileDataString();
+    }
+
+    public GameColorSet getGameColorSet() {
+        return gameColorSet;
+    }
+
+    public void setGameColorSet(GameColorSet gameColorSet) {
+        this.gameColorSet = gameColorSet;
+    }
+
+    public Element getElement() {
+        return element;
+    }
+
+    public void setElement(Element element) {
+        this.element = element;
     }
 }

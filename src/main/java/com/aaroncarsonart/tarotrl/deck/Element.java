@@ -12,8 +12,7 @@ public enum Element {
     WATER(TarotCardType.CUPS),
     FIRE(TarotCardType.WANDS),
     EARTH(TarotCardType.PENTACLES),
-    SPIRIT(TarotCardType.MAJOR_ARCANA),
-    ;
+    SPIRIT(TarotCardType.MAJOR_ARCANA);
 
     private TarotCardType cardType;
     private TileDefinitionSet tileDefinitions;
@@ -28,10 +27,10 @@ public enum Element {
             element.name().toLowerCase();
             TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/imbroglio.json");
             element.tileDefinitions = tileDefinitionSet;
-
-
         }
-
     }
 
+    public TarotCardType getCardType() {
+        return cardType;
+    }
 }

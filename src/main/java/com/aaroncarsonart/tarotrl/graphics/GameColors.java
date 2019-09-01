@@ -63,6 +63,12 @@ public class GameColors {
     public static final TileColor MAGENTA_3   = TileColors.fromString("#2A002A");
     public static final TileColor MAGENTA_4   = TileColors.fromString("#110011");
 
+    public static final TileColor GREY     = TileColors.fromString("#FFFFFF");
+    public static final TileColor GREY_1   = TileColors.fromString("#C8C8C8");
+    public static final TileColor GREY_2   = TileColors.fromString("#323232");
+    public static final TileColor GREY_3   = TileColors.fromString("#2A2A2A");
+    public static final TileColor GREY_4   = TileColors.fromString("#111111");
+
     public TileColor bgWall;
     public TileColor fgWall;
     public TileColor bgOpen;

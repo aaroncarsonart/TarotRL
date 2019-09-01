@@ -13,7 +13,6 @@ import com.aaroncarsonart.tarotrl.graphics.MapTileRenderer;
 import com.aaroncarsonart.tarotrl.graphics.SnapshotHistory;
 import com.aaroncarsonart.tarotrl.input.InventoryInputHandler;
 import com.aaroncarsonart.tarotrl.input.MapInputHandler;
-import com.aaroncarsonart.tarotrl.map.TileDefinitionSets;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
 import org.hexworks.zircon.api.CP437TilesetResources;
@@ -27,8 +26,8 @@ import java.awt.Toolkit;
 /**
  * The TarotRL App!
  */
-public class TarotRLApp {
-    private static final String TAROT_RL_GAME_TITLE = "TarotRL";
+public class BreathOfFireRL {
+    private static final String TAROT_RL_GAME_TITLE = "Breath of Fire: the Roguelike";
 
     private static GameModeComponents createMapModeComponents() {
         MapInputHandler mapInputHandler = new MapInputHandler();
@@ -70,9 +69,7 @@ public class TarotRLApp {
      */
     private static Game createTarotRLGame() {
         JsonDefinitionLoader loader = new JsonDefinitionLoader();
-//        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/mountain_red.json");
-//        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/forest_green.json");
-        TileDefinitionSet tileDefinitionSet = TileDefinitionSets.getBlueTileDefinitionSet();
+        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/forest_green.json");
         GameStateGenerator.setTileTypeMetadata(tileDefinitionSet);
         GameStateGenerator gameStateGenerator = new GameStateGenerator();
         GameState gameState = gameStateGenerator.generateTarotRLGameState();
