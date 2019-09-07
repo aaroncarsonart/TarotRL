@@ -121,7 +121,7 @@ public class MapController implements GameController {
         gameState.incrementTurnCounter();
     }
 
-    private void doToggleAutoCollect( GameState gameState) {
+    private void doToggleAutoCollect(GameState gameState) {
         gameState.toggleAutoCollect();
         boolean autoCollect = gameState.isAutoCollectMode();
         if (autoCollect) {
@@ -193,6 +193,8 @@ public class MapController implements GameController {
             toggleDoor(gameState, targetVoxel);
         }
 
+        // TODO: bump to attack monsters
+
         // MOVE mode: try to move into the nextInt position on the map.
         else {
             attemptMove(gameState, targetVoxel, direction);
@@ -253,6 +255,13 @@ public class MapController implements GameController {
         } else {
             gameState.setStatus("There is no adjacent door in that direction.");
         }
+    }
+
+    /**
+     * Portals '%' warp from one GameMap to another GameMap.
+     */
+    private void attemptPortal(GameState gameState, MapVoxel voxel) {
+        //TODO implement
     }
 
     private void attemptStairs(GameState gameState, MapVoxel voxel) {
@@ -349,6 +358,14 @@ public class MapController implements GameController {
 
         MapVoxel voxel = world.getVoxel(current);
         TileType tileType = voxel.getTileType();
+
+        // handle portal
+        if (tileType.isPortal()) {
+            attemptPortal(gameState, voxel);
+            if (gameState.getCurrentAction() != PlayerAction.CONFIRM) {
+                return;
+            }
+        }
 
         // handle stairs
         if (tileType.isStairs()) {

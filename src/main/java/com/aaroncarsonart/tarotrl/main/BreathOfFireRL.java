@@ -13,6 +13,7 @@ import com.aaroncarsonart.tarotrl.graphics.MapTileRenderer;
 import com.aaroncarsonart.tarotrl.graphics.SnapshotHistory;
 import com.aaroncarsonart.tarotrl.input.InventoryInputHandler;
 import com.aaroncarsonart.tarotrl.input.MapInputHandler;
+import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
 import org.hexworks.zircon.api.CP437TilesetResources;
@@ -70,7 +71,7 @@ public class BreathOfFireRL {
     private static Game createTarotRLGame() {
         JsonDefinitionLoader loader = new JsonDefinitionLoader();
         TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/forest_green.json");
-        GameStateGenerator.setTileTypeMetadata(tileDefinitionSet);
+        TileType.setTileTypeMetadata(tileDefinitionSet);
         GameStateGenerator gameStateGenerator = new GameStateGenerator();
         GameState gameState = gameStateGenerator.generateTarotRLGameState();
         gameState.setGameMode(GameMode.MAP_NAVIGATION);

@@ -14,6 +14,7 @@ import com.aaroncarsonart.tarotrl.graphics.SnapshotHistory;
 import com.aaroncarsonart.tarotrl.input.InventoryInputHandler;
 import com.aaroncarsonart.tarotrl.input.MapInputHandler;
 import com.aaroncarsonart.tarotrl.map.TileDefinitionSets;
+import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
 import org.hexworks.zircon.api.CP437TilesetResources;
@@ -73,7 +74,7 @@ public class TarotRLApp {
 //        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/mountain_red.json");
 //        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/forest_green.json");
         TileDefinitionSet tileDefinitionSet = TileDefinitionSets.getBlueTileDefinitionSet();
-        GameStateGenerator.setTileTypeMetadata(tileDefinitionSet);
+        TileType.setTileTypeMetadata(tileDefinitionSet);
         GameStateGenerator gameStateGenerator = new GameStateGenerator();
         GameState gameState = gameStateGenerator.generateTarotRLGameState();
         gameState.setGameMode(GameMode.MAP_NAVIGATION);

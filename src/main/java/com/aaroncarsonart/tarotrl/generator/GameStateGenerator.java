@@ -7,7 +7,6 @@ import com.aaroncarsonart.tarotrl.graphics.GameColorSet;
 import com.aaroncarsonart.tarotrl.map.GameMap2D;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
-import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
 import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.util.RNG;
@@ -17,7 +16,6 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class GameStateGenerator {
     private static final Logger LOG = new Logger(GameStateGenerator.class);
@@ -30,19 +28,10 @@ public class GameStateGenerator {
         gameWorldGenerator = new GameWorldGenerator();
     }
 
-    public static void setTileTypeMetadata(TileDefinitionSet tileDefinitionSet) {
-        Map<Character, TileDefinition> definitions = tileDefinitionSet.getTileDefinitions();
-        for (TileType tileType : TileType.values()) {
-            Character sprite = tileType.getSprite();
-            TileDefinition definition = definitions.get(sprite);
-            tileType.setMetadata(definition);
-        }
-    }
-
     public GameState generateImbroglioGameState() {
         LOG.info("Generating Imbroglio GameState ...");
         TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/imbroglio.json");
-        setTileTypeMetadata(tileDefinitionSet);
+        TileType.setTileTypeMetadata(tileDefinitionSet);
 
         GameState gameState = new GameState();
 

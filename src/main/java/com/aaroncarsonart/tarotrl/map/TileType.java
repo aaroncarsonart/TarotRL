@@ -1,6 +1,9 @@
 package com.aaroncarsonart.tarotrl.map;
 
+import com.aaroncarsonart.tarotrl.graphics.GameColors;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
+import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
+import org.hexworks.zircon.api.color.TileColor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,10 +21,9 @@ public enum TileType {
     WINDOW(     '=', "there is a window"),
 
     FURNITURE(     'O', "there is a piece of furniture"),
-    PORTAL(        '0', "there is an open path"),
-    VISIBLE_PORTAL('%', "there is a portal"),
+    PORTAL(        '%', "there is a portal"),
 
-    ENTITY(  'C', "there is a living entity"),
+    ENTITY(  'C', "this space is occupied by an entity"),
     ITEM(    '^', "there lies a collectable item"),
     TREASURE('$', "there lies a pile of treasure"),
 
@@ -74,5 +76,37 @@ public enum TileType {
 
     public boolean isStairs() {
         return this == UPSTAIRS || this == DOWNSTAIRS;
+    }
+
+    public boolean isPortal() {
+        return this == PORTAL;
+    }
+
+    public static void setTileTypeMetadata(TileDefinitionSet tileDefinitionSet) {
+        Map<Character, TileDefinition> definitions = tileDefinitionSet.getTileDefinitions();
+        for (TileType tileType : TileType.values()) {
+            Character sprite = tileType.getSprite();
+            TileDefinition definition = definitions.get(sprite);
+            tileType.setMetadata(definition);
+        }
+    }
+
+//    public static void setTileTypeMetadata(GameColorSet GameColorSet) {
+//        Map<Character, TileDefinition> definitions = tileDefinitionSet.getTileDefinitions();
+//        for (TileType tileType : TileType.values()) {
+//            Character sprite = tileType.getSprite();
+//            TileDefinition definition = definitions.get(sprite);
+//            tileType.setMetadata(definition);
+//        }
+//    }
+
+    public TileColor getForegroundColor() {
+//        return metadata.getForegroundColor();
+        return GameColors.WHITE;
+    }
+
+    public TileColor getBackgroundColor() {
+//        return metadata.getBackgroundColor();
+        return GameColors.BLACK;
     }
 }

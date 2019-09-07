@@ -1,32 +1,32 @@
 {
-    "name": "YELLOW_GOLD",
+    "name": "FOREST_GREEN",
     "tileDefinitions": [
         {
             "sprite": "@",
             "tileType": "PLAYER",
             "foregroundColor": "#FFFF00",
-            "backgroundColor": "#323200"
+            "backgroundColor": "#003232"
         },
         {
             "sprite": ".",
             "tileType": "PATH",
             "passable": true,
-            "foregroundColor": "#C8C800",
-            "backgroundColor": "#323200"
+            "foregroundColor": "#00C800",
+            "backgroundColor": "#003232"
         },
         {
             "sprite": "#",
             "tileType": "WALL",
             "passable": false,
-            "foregroundColor": "#2A2A00",
-            "backgroundColor": "#111100"
+            "foregroundColor": "#002A00",
+            "backgroundColor": "#001111"
         },
         {
             "sprite": "-",
             "tileType": "OPEN_DOOR",
             "passable": true,
             "foregroundColor": "#FFFF00",
-            "backgroundColor": "#323200"
+            "backgroundColor": "#003232"
         },
         {
             "sprite": "+",
@@ -34,14 +34,14 @@
             "passable": false,
             "openable": true,
             "foregroundColor": "#FFFF00",
-            "backgroundColor": "#111100"
+            "backgroundColor": "#001111"
         },
         {
             "sprite": "=",
             "tileType": "WINDOW",
             "passable": false,
             "foregroundColor": "#00FFFF",
-            "backgroundColor": "#111100"
+            "backgroundColor": "#001111"
         },
         {
             "sprite": "<",
@@ -49,7 +49,7 @@
             "passable": true,
             "portalTrigger": "ON_INSPECT_TILE",
             "foregroundColor": "#FFFF00",
-            "backgroundColor": "#323200"
+            "backgroundColor": "#003232"
         },
         {
             "sprite": ">",
@@ -57,14 +57,14 @@
             "passable": true,
             "portalTrigger": "ON_INSPECT_TILE",
             "foregroundColor": "#FFFF00",
-            "backgroundColor": "#323200"
+            "backgroundColor": "#003232"
         },
         {
             "sprite": "O",
             "tileType": "FURNITURE",
             "passable": false,
             "foregroundColor": "#FFFFFF",
-            "backgroundColor": "#323200"
+            "backgroundColor": "#003232"
         },
         {
             "sprite": "%",
@@ -87,21 +87,21 @@
             "tileType": "ENTITY",
             "passable": false,
             "foregroundColor": "#FFFF00",
-            "backgroundColor": "#323200"
+            "backgroundColor": "#003232"
         },
         {
             "sprite": "^",
             "tileType": "ITEM",
             "passable": false,
             "foregroundColor": "#AAAAAA",
-            "backgroundColor": "#323200"
+            "backgroundColor": "#003232"
         },
         {
             "sprite": "$",
             "tileType": "TREASURE",
             "passable": false,
             "foregroundColor": "#FFFF00",
-            "backgroundColor": "#323200"
+            "backgroundColor": "#003200"
         }
     ]
 }

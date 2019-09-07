@@ -318,4 +318,6 @@ public class GameMap2D implements GameMap, Serializable {
     public void setElement(Element element) {
         this.element = element;
     }
+
+
 }

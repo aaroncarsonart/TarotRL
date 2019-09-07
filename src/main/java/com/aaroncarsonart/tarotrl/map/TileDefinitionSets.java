@@ -23,18 +23,18 @@ public class TileDefinitionSets {
         definitions.add(new TileDefinition('@', TileType.PLAYER, color, color2, false, false, null));
         definitions.add(new TileDefinition('.', TileType.PATH, color1, color2, true, false, null));
         definitions.add(new TileDefinition('#', TileType.WALL, color3, color4, false, false, null));
-        definitions.add(new TileDefinition('-', TileType.OPEN_DOOR, color1, color2, true, false, null));
-        definitions.add(new TileDefinition('+', TileType.CLOSED_DOOR, color1, color4, false, true, null));
-        definitions.add(new TileDefinition('=', TileType.WINDOW, color1, color4, false, false, null));
-        definitions.add(new TileDefinition('<', TileType.UPSTAIRS, color1, color2, true, false, PortalTrigger.ON_INSPECT_TILE));
-        definitions.add(new TileDefinition('>', TileType.DOWNSTAIRS, color1, color2, true, false, PortalTrigger.ON_INSPECT_TILE));
+        definitions.add(new TileDefinition('-', TileType.OPEN_DOOR, GameColors.YELLOW, color2, true, false, null));
+        definitions.add(new TileDefinition('+', TileType.CLOSED_DOOR, GameColors.YELLOW, color4, false, true, null));
+        definitions.add(new TileDefinition('=', TileType.WINDOW, GameColors.CYAN, color4, false, false, null));
+        definitions.add(new TileDefinition('<', TileType.UPSTAIRS, color, color2, true, false, PortalTrigger.ON_INSPECT_TILE));
+        definitions.add(new TileDefinition('>', TileType.DOWNSTAIRS, color, color2, true, false, PortalTrigger.ON_INSPECT_TILE));
         definitions.add(new TileDefinition('O', TileType.FURNITURE, color1, color2, false, false, null));
         definitions.add(new TileDefinition('0', TileType.PORTAL, GameColors.BLACK, GameColors.BLACK, true, false, PortalTrigger.ON_OCCUPY_TILE));
-        definitions.add(new TileDefinition('0', TileType.PORTAL, color, color2, true, false, PortalTrigger.ON_INSPECT_TILE));
+        definitions.add(new TileDefinition('%', TileType.PORTAL, GameColors.CYAN, color2, true, false, PortalTrigger.ON_INSPECT_TILE));
         definitions.add(new TileDefinition(' ', TileType.EMPTY, GameColors.BLACK, GameColors.BLACK, false, false, null));
-        definitions.add(new TileDefinition('C', TileType.ENTITY, color, color2, false, false, null));
-        definitions.add(new TileDefinition('^', TileType.ITEM, color, color2, false, false, null));
-        definitions.add(new TileDefinition('$', TileType.TREASURE, color, color2, false, false, null));
+        definitions.add(new TileDefinition('C', TileType.ENTITY, GameColors.RED, color2, false, false, null));
+        definitions.add(new TileDefinition('^', TileType.ITEM, GameColors.GREY, color2, false, false, null));
+        definitions.add(new TileDefinition('$', TileType.TREASURE, GameColors.YELLOW, color2, false, false, null));
 
         Map<Character, TileDefinition> definitionsMap = new HashMap<>();
         for (TileDefinition definition : definitions) {
