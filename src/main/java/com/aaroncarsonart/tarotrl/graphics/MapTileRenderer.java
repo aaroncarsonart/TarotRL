@@ -52,7 +52,7 @@ public class MapTileRenderer implements TileRenderer {
     private void renderTarotRLGame(TileGrid tileGrid, GameState gameState, ViewPort viewPort) {
         renderGameMapThroughViewPort(tileGrid, gameState, viewPort, true);
         renderTarotRLStatusLog(tileGrid, gameState, viewPort);
-//        renderTarotRLTextStatus(tileGrid, gameState, viewPort);
+        logTarotRLTextStatus(tileGrid, gameState, viewPort);
     }
 
     public void renderGameMapThroughViewPort(TileGrid tileGrid,
@@ -159,47 +159,52 @@ public class MapTileRenderer implements TileRenderer {
     }
 
 
-    private void renderTarotRLTextStatus(TileGrid tileGrid,
+    private void logTarotRLTextStatus(TileGrid tileGrid,
                                         GameState gameState,
                                         ViewPort mapViewPort){
-        // draw player info
+//        // draw player info
         int vw = 18;
-        int vh = 10;
-        ViewPort infoViewPort = new ViewPort(0, 0, vw, vh);
-//        drawSimpleBorder(tileGrid, infoViewPort, false);
-
+//        int vh = 10;
+//        ViewPort infoViewPort = new ViewPort(0, 0, vw, vh);
+////        drawSimpleBorder(tileGrid, infoViewPort, false);
+//
         Position3D camera = gameState.getGameMap().getCamera();
         int px = camera.x;
         int py = camera.y;
         int pz = camera.z;
 
         String format = "%-" + (vw - 1) + "s";
-
         String playerCoordinates = "Pos: " + px + ", "+  py + ", " + pz;
         String pcf = String.format(format, playerCoordinates);
-        writeText(tileGrid, pcf, 1, 1);
+//        writeText(tileGrid, pcf, 1, 1);
+        LOG.info(pcf);
 
         String gameTurns = "turns: " +  gameState.getTurnCounter();
-        writeText(tileGrid, gameTurns, 1, 3);
+//        writeText(tileGrid, gameTurns, 1, 3);
+        LOG.info(gameTurns);
 
-        writeText(tileGrid, "last action:", 1, 5);
+//        writeText(tileGrid, "last action:", 1, 5);
         String previousAction = String.format(format, gameState.getPreviousAction().name());
-        writeText(tileGrid, previousAction , 1, 6);
+//        writeText(tileGrid, previousAction , 1, 6);
+        LOG.info("last action: " + previousAction);
 
-        writeText(tileGrid, "current action:", 1, 8);
+//        writeText(tileGrid, "current action:", 1, 8);
         String currentAction = String.format(format, gameState.getCurrentAction().name());
-        writeText(tileGrid, currentAction , 1, 9);
+//        writeText(tileGrid, currentAction , 1, 9);
+        LOG.info("current action: " + currentAction);
 
         String devMode = String.format(format, "devMode: " + gameState.isDevMode());
-        writeText(tileGrid, devMode , 1, 11);
+//        writeText(tileGrid, devMode , 1, 11);
+        LOG.info(devMode);
 
         String shiftDown = String.format(format, "shiftDown: " + gameState.isShiftDown());
-        writeText(tileGrid, shiftDown , 1, 13);
+//        writeText(tileGrid, shiftDown , 1, 13);
+        LOG.info(shiftDown);
 
-
-        writeText(tileGrid, "GameMode:", 1, 15);
+//        writeText(tileGrid, "GameMode:", 1, 15);
         String gameMode = String.format(format, gameState.getActiveGameMode().name());
-        writeText(tileGrid, gameMode , 1, 16);
+//        writeText(tileGrid, gameMode , 1, 16);
+        LOG.info(gameMode);
     }
 
     private void writeSingleLogStatus(TileGrid tileGrid,
