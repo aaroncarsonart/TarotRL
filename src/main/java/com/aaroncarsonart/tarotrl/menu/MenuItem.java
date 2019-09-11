@@ -42,4 +42,16 @@ public class MenuItem {
     public boolean isSelected() {
         return selected;
     }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public Callback getCallback() {
+        return callback;
+    }
+
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+    }
 }

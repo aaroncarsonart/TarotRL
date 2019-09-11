@@ -3,6 +3,10 @@ package com.aaroncarsonart.tarotrl.menu;
 import com.aaroncarsonart.tarotrl.util.Callback;
 import com.aaroncarsonart.tarotrl.util.TextAlignment;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class InventoryMenuData {
 
     private Menu rootMenu;
@@ -14,6 +18,15 @@ public class InventoryMenuData {
     private Menu someMessage;
     private OptionMessage quitMessage;
     private boolean resetCursor;
+
+    public ListMenu buildListMenu(List<MenuItem> items, int start, int maxLength) {
+        ListMenu listMenu = new ListMenu();
+        for(int i = start; i < items.size() && i < (start + maxLength); i++) {
+            MenuItem item = items.get(i);
+            listMenu.addMenuItem(item);
+        }
+        return listMenu;
+    }
 
     public InventoryMenuData() {
         Callback toMainMenu = () -> rootMenu = mainMenu;
@@ -29,15 +42,15 @@ public class InventoryMenuData {
         mainMenu.setDrawBorder(true);
         rootMenu = mainMenu;
 
-        itemMenu = new ListMenu();
-        itemMenu.addMenuItem(new MenuItem("Herb"));
-        itemMenu.addMenuItem(new MenuItem("Herb"));
-        itemMenu.addMenuItem(new MenuItem("Torch"));
-        itemMenu.addMenuItem(new MenuItem("Scale"));
-        itemMenu.addMenuItem(new MenuItem("Emerald"));
+        List<MenuItem> inventoryItems = Arrays.asList("Herb","Herb","Torch","Scale","Emerald")
+                .stream()
+                .map(MenuItem::new)
+                .collect(Collectors.toList());
+        itemMenu = buildListMenu(inventoryItems, 1, 3);
         itemMenu.setMenuLayout(MenuLayout.VERTICAL);
         itemMenu.setTextAlignment(TextAlignment.LEFT);
         itemMenu.onCancel(toMainMenu);
+        itemMenu.setDrawBorder(true);
 
         monsterMenu = new ListMenu();
         monsterMenu.addMenuItem(new MenuItem("Blue Slime"));
@@ -46,6 +59,7 @@ public class InventoryMenuData {
         monsterMenu.addMenuItem(new MenuItem("Ghost"));
         monsterMenu.addMenuItem(new MenuItem("Skeleton"));
         monsterMenu.addMenuItem(new MenuItem("Werewolf"));
+        monsterMenu.addMenuItem(new MenuItem("EVEN BIGGER???"));
         monsterMenu.setMenuLayout(MenuLayout.VERTICAL);
         monsterMenu.setTextAlignment(TextAlignment.CENTER);
         monsterMenu.onCancel(toMainMenu);
@@ -75,6 +89,15 @@ public class InventoryMenuData {
 
     public void setCancelAction(Callback cancelAction) {
         this.cancelAction = cancelAction;
+    }
+
+    public void setItemMenu(List<MenuItem> playerInventory) {
+        itemMenu = buildListMenu(playerInventory, 0, playerInventory.size());
+        itemMenu.setMenuLayout(MenuLayout.VERTICAL);
+        itemMenu.setTextAlignment(TextAlignment.LEFT);
+        itemMenu.onCancel(() -> rootMenu = mainMenu);
+        itemMenu.setDrawBorder(true);
+
     }
 
 }
