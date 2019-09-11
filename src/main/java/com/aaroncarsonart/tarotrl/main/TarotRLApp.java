@@ -55,12 +55,16 @@ public class TarotRLApp {
         return inventoryComponents;
     }
 
+    private static GameModeComponents createHelpModeComponents() {
+        return null;
+    }
+
     private static Size getWindowDimensions(TilesetResource tileSet) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double screenWidth = screenSize.getWidth();
-        double screenHeight = screenSize.getHeight() - 50;
+        double screenHeight = screenSize.getHeight();
 
-        int windowWidth = ((int) screenWidth)  / tileSet.getWidth() - 40;
+        int windowWidth = ((int) screenWidth)  / tileSet.getWidth() - 50;
         int windowHeight = ((int) screenHeight) / tileSet.getHeight() - 10;
         return Sizes.create(windowWidth, windowHeight);
     }

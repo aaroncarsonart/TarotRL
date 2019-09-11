@@ -28,7 +28,7 @@ public class MapTileRenderer implements TileRenderer {
         int windowWidth = tileGrid.getWidth();
         int windowHeight = tileGrid.getHeight();
 
-        int xOffset = 20;
+        int xOffset = 1;
         int topOffSet = 1;
         int bottomOffSet = 10;
         Position vOffset = Positions.create(xOffset, topOffSet);
@@ -51,7 +51,8 @@ public class MapTileRenderer implements TileRenderer {
 
     private void renderTarotRLGame(TileGrid tileGrid, GameState gameState, ViewPort viewPort) {
         renderGameMapThroughViewPort(tileGrid, gameState, viewPort, true);
-        renderTarotRLTextStatus(tileGrid, gameState, viewPort);
+        renderTarotRLStatusLog(tileGrid, gameState, viewPort);
+//        renderTarotRLTextStatus(tileGrid, gameState, viewPort);
     }
 
     public void renderGameMapThroughViewPort(TileGrid tileGrid,
@@ -142,6 +143,22 @@ public class MapTileRenderer implements TileRenderer {
         }
     }
 
+    private void renderTarotRLStatusLog(TileGrid tileGrid,
+                           GameState gameState,
+                           ViewPort mapViewPort){
+        // draw status log
+        int lx = mapViewPort.x;
+        int ly = mapViewPort.y + mapViewPort.height + 2;
+        int lw = mapViewPort.width;
+        int lh = tileGrid.getHeight() - (ly + 1);
+
+        ViewPort logViewPort = new ViewPort(lx, ly, lw, lh);
+        drawSimpleBorder(tileGrid, logViewPort, false);
+        writeSingleLogStatus(tileGrid, gameState, logViewPort);
+
+    }
+
+
     private void renderTarotRLTextStatus(TileGrid tileGrid,
                                         GameState gameState,
                                         ViewPort mapViewPort){
@@ -183,17 +200,6 @@ public class MapTileRenderer implements TileRenderer {
         writeText(tileGrid, "GameMode:", 1, 15);
         String gameMode = String.format(format, gameState.getActiveGameMode().name());
         writeText(tileGrid, gameMode , 1, 16);
-
-
-        // draw status log
-        int lx = mapViewPort.x;
-        int ly = mapViewPort.y + mapViewPort.height + 2;
-        int lw = mapViewPort.width;
-        int lh = tileGrid.getHeight() - (ly + 1);
-
-        ViewPort logViewPort = new ViewPort(lx, ly, lw, lh);
-        drawSimpleBorder(tileGrid, logViewPort, false);
-        writeSingleLogStatus(tileGrid, gameState, logViewPort);
     }
 
     private void writeSingleLogStatus(TileGrid tileGrid,
