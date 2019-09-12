@@ -52,7 +52,7 @@ public class MapTileRenderer implements TileRenderer {
     private void renderTarotRLGame(TileGrid tileGrid, GameState gameState, ViewPort viewPort) {
         renderGameMapThroughViewPort(tileGrid, gameState, viewPort, true);
         renderTarotRLStatusLog(tileGrid, gameState, viewPort);
-        logTarotRLTextStatus(tileGrid, gameState, viewPort);
+        //logTarotRLTextStatus(tileGrid, gameState, viewPort);
     }
 
     public void renderGameMapThroughViewPort(TileGrid tileGrid,
