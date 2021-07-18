@@ -1,9 +1,11 @@
 package com.aaroncarsonart.tarotrl.game;
 
 import com.aaroncarsonart.imbroglio.Position2D;
+import com.aaroncarsonart.tarotrl.deck.TarotCard;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.input.UserInput;
-import com.aaroncarsonart.tarotrl.inventory.GameItem;
+import com.aaroncarsonart.tarotrl.inventory.Item;
+import com.aaroncarsonart.tarotrl.inventory.TarotCardItem;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.menu.InventoryMenuData;
@@ -14,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 public class GameState implements Serializable {
     private static final Logger LOG = new Logger(GameState.class);
@@ -27,10 +30,17 @@ public class GameState implements Serializable {
     private int stepCount;
     private int treasure;
 
+    private TreeMap<String, Item> encounteredItems = new TreeMap<>();
+    private TreeMap<String, TarotCardItem> collectedCards = new TreeMap<>();
+
+    // TODO implement custom TarotDeckItem class, with the following:
+    // TODO shuffling, cutting, top card, bottom card functionalities
+    private ArrayList<TarotCardItem> tarotDeck = new ArrayList<>();
+
     private PlayerAction previousAction = PlayerAction.UNKNOWN;
     private PlayerAction currentAction = PlayerAction.UNKNOWN;
 
-    private List<GameItem> playerItems = new ArrayList<>();
+    private List<Item> playerItems = new ArrayList<>();
     private TileType undefinedTileType;
 
     private List<String> statusLog = new ArrayList<>();
@@ -164,11 +174,11 @@ public class GameState implements Serializable {
         this.shiftDown = shiftDown;
     }
 
-    public List<GameItem> getPlayerItems() {
+    public List<Item> getPlayerItems() {
         return playerItems;
     }
 
-    public void setPlayerItems(List<GameItem> playerItems) {
+    public void setPlayerItems(List<Item> playerItems) {
         this.playerItems = playerItems;
     }
 
@@ -215,4 +225,29 @@ public class GameState implements Serializable {
     public boolean repeatControllerUpdate() {
         return updateGameControllerAgain;
     }
+
+    public TreeMap<String, TarotCardItem> getCollectedCards() {
+        return collectedCards;
+    }
+
+    public TreeMap<String, Item> getEncounteredItems() {
+        return encounteredItems;
+    }
+
+    public ArrayList<TarotCardItem> getTarotDeck() {
+        return tarotDeck;
+    }
+
+    public void addTarotCardToDeck(TarotCardItem tarotCardItem) {
+        TarotCard card = tarotCardItem.getTarotCard();
+        String name = card.getShorthandName();
+
+        encounteredItems.put(name, tarotCardItem);
+        collectedCards.put(name, tarotCardItem);
+
+        // TODO consider the ordering. Add to top or bottom of the deck?
+        // TODO which end of the list is the top, and which end is the bottom?
+        tarotDeck.add(tarotCardItem);
+    }
+
 }

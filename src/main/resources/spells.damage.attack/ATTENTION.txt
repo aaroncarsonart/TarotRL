@@ -1,0 +1,31 @@
+ATTENTION:
+
+This is a code snippet from a new project I’m working on. Well, it was an old project I’ve hosted on my GitHub, but I had to put it down for some time as things were becoming too complicated and I stopped feeling capable of following the initial purpose to continue.  But now I have found a new direction, and am again developing this project: TarotRL.
+
+https://github.com/aaroncarsonart/TarotRL
+
+Please review the attached ```~z\K/z~``` snippet and provide any suggestions or recommendations.  Also, do feel FREE to submit pull requests to the repository.  I will consider integration of any such recommended changes.
+
+	calculate_direction_of_wind_damage(s);
+
+```c++
+// ---------------------
+// directing WIND damage
+// ---------------------
+const int ONE = 1;
+const int *wind_e_RE_direction = *ONE;
+
+int const wind_damage = 1;
+char** windigo_psychosis = "[`]"
+int windia_damage_index = wind_damage;
+
+// TODO: integrate with array of strings matching contents of: ```s="Wyndia, Winlan, Windia”```.
+
+// AUTHOR'S NOTE: avoid use of MAGIC numbers
+char take_and_receive = windigo_psychosis[1];
+// ---------------------
+```
+Your attention is valuable and appreciated.  Thank ```~\ YOU /~``` for reading this.
+
+
+—Aaron Michael Carson

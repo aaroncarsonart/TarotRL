@@ -3,6 +3,7 @@ package com.aaroncarsonart.tarotrl.world;
 import com.aaroncarsonart.tarotrl.entity.MapEntity;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
+import org.hexworks.zircon.api.color.TileColor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +20,9 @@ public class MapVoxel {
     public final Position3D position;
     public final GameMap map;
     private TileType tileType;
+    private char Character;
+    private TileColor foregroundColor;
+    private TileColor backgroundColor;
 
     public MapVoxel(GameMap map, Position3D position, TileType tileType) {
         this.map = map;

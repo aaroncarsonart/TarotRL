@@ -8,7 +8,8 @@ import com.aaroncarsonart.tarotrl.deck.TarotCardType;
 import com.aaroncarsonart.tarotrl.deck.TarotDeck;
 import com.aaroncarsonart.tarotrl.entity.ItemEntity;
 import com.aaroncarsonart.tarotrl.graphics.GameColors;
-import com.aaroncarsonart.tarotrl.inventory.GameItem;
+import com.aaroncarsonart.tarotrl.inventory.Item;
+import com.aaroncarsonart.tarotrl.inventory.TarotCardItem;
 import com.aaroncarsonart.tarotrl.inventory.Treasure;
 import com.aaroncarsonart.tarotrl.map.GameMap2D;
 import com.aaroncarsonart.tarotrl.map.TileType;
@@ -113,6 +114,8 @@ public class GameWorldGenerator {
         return world;
     }
 
+    // TODO clean up code duplication. Possibly delete.
+    // TODO (Uses old tarot card item implementation)
     private GameMap3D generateDescendingMazeWorld() {
         LOG.info("Generating maze maps ...");
 
@@ -125,7 +128,7 @@ public class GameWorldGenerator {
         // generate the descending levels of the Maze
         for (int level = 1; level <= levelCount; level ++) {
 
-            int width = 5 + level+ RNG.nextInt(13 + 2 * level);
+            int width = 5 + level + RNG.nextInt(13 + 2 * level);
             int height = 5 + level + RNG.nextInt(13 + 2 * level);
 
             LOG.debug("generating level %d maze: %d x %d", level, width, height);
@@ -161,7 +164,7 @@ public class GameWorldGenerator {
             putMap(world, map, mapOrigin);
 
             // add treasures
-            int treasureCount = (width + height) / 4 - 3;
+            int treasureCount = (width + height) / 4;
             for (int i = 0; i < treasureCount; i++) {
                 Position3D position = mapPaths.remove(0).to3D();
                 position = mapOrigin.add(position);
@@ -200,7 +203,7 @@ public class GameWorldGenerator {
             String description = "the face of the card is shining with a brilliant " +
                     cardType.colorName + "ish sheen.";
 
-            GameItem item = new GameItem(name, description);
+            Item item = new Item(name, description);
 
             String entityDescription = "there lies a mysterious item of immense power";
             ItemEntity entity = new ItemEntity(tarotCardTile, position, item, entityDescription);
@@ -209,6 +212,8 @@ public class GameWorldGenerator {
         return world;
     }
 
+    // TODO clean up code duplication. Possibly delete.
+    // TODO (Uses old tarot card item implementation)
     public GameMap3D generateCavernWorld() {
         LOG.info("Generating Cavern maps ...");
 
@@ -297,7 +302,7 @@ public class GameWorldGenerator {
             String description = "the face of the card is shining with a brilliant " +
                     cardType.colorName + "ish sheen.";
 
-            GameItem item = new GameItem(name, description);
+            Item item = new Item(name, description);
 
             String entityDescription = "there lies a mysterious item of immense power";
             ItemEntity entity = new ItemEntity(tarotCardTile, position, item, entityDescription);
@@ -306,4 +311,100 @@ public class GameWorldGenerator {
         return world;
     }
 
+    public GameMap3D generateTarotRLCavernWorld() {
+        LOG.info("Generating Cavern maps ...");
+
+        GameMap3D world = new GameMap3D();
+        int levelCount = 6;
+
+        Position3D prevStairs = Position3D.ORIGIN;
+
+        int width = 30;
+        int height = 20;
+
+        // generate the descending levels of the Maze
+        for (int level = 1; level <= levelCount; level ++) {
+
+
+            LOG.debug("generating level %d cavern map: (%d x %d)", level, width, height);
+
+            Maze maze = GameMapGenerator.generateCellularAutomataRoom(width, height, 3);
+            GameMap2D map = GameMapGenerator.generateMapFrom(maze);
+            map.setName("Level " + level);
+
+            ArrayList<Position2D> mapPaths = map.getPositionsMatching(t -> t.equals(TileType.PATH));
+            RNG.shuffle(mapPaths);
+
+            Position3D mapOrigin;
+            Position2D upstairs = mapPaths.remove(0);
+            Position2D downstairs = mapPaths.remove(0);
+
+            if (level == 1) {
+                Position3D startingPosition = new Position3D(1, 1, 0);
+                world.setCamera(startingPosition);
+                mapOrigin = Position3D.ORIGIN;
+                map.setTile(downstairs, TileType.DOWNSTAIRS);
+            } else if (level < levelCount) {
+                mapOrigin = prevStairs.subtract(upstairs.to3D());
+                map.setTile(upstairs, TileType.UPSTAIRS);
+                map.setTile(downstairs, TileType.DOWNSTAIRS);
+            } else {
+                mapOrigin = prevStairs.subtract(upstairs.to3D());
+                map.setTile(upstairs, TileType.UPSTAIRS);
+            }
+
+            // draw map
+            putMap(world, map, mapOrigin);
+
+            // add treasures
+            int treasureCount = (width + height) / 10 - 3;
+            for (int i = 0; i < treasureCount; i++) {
+                Position3D position = mapPaths.remove(0).to3D();
+                position = mapOrigin.add(position);
+
+                Treasure treasure = new Treasure();
+                ItemEntity entity = new ItemEntity(TileType.TREASURE, position, treasure);
+                world.addEntity(entity);
+            }
+
+            // update prevStairs
+            prevStairs = mapOrigin.add(downstairs.to3D()).moveTowards(Direction3D.BELOW);
+        }
+
+        // add special items
+        ArrayList<Position3D> worldPaths = world.getWorldMap().values().stream()
+                .filter(v -> v.getTileType() == TileType.PATH)
+                .filter(v -> v.map.getEntity(v.position) == null)
+                .map(v -> v.position)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        RNG.shuffle(worldPaths);
+
+        // TODO: associate Tarot Cards with levels
+        TarotDeck tarotDeck = loader.loadTarotDeck();
+        List<TarotCard> tarotCards = tarotDeck.getSetOfCards();
+        TileDefinition tarotCardTile = TileDefinition.custom('☼',
+                TileType.ITEM,
+                GameColors.MAGENTA,
+                TileType.ITEM.getMetadata().getBackgroundColor());
+
+        for (TarotCard card : tarotCards) {
+            Position3D position = worldPaths.remove(0);
+            Item item = new TarotCardItem(card);
+
+            String entityDescription = "there lies a mysterious item of immense power";
+            ItemEntity entity = new ItemEntity(tarotCardTile, position, item, entityDescription);
+            world.addEntity(entity);
+        }
+        return world;
+    }
+
+    public static void main(String[] args) {
+        // test search algorithm.
+        Position2D test = new Position2D(1,2);
+        Position2D test2 = new Position2D(1,2);
+
+        System.out.println(test.hashCode() == test2.hashCode());
+
+    }
 }

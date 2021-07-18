@@ -5,6 +5,7 @@ import com.aaroncarsonart.tarotrl.deck.Element;
 import com.aaroncarsonart.tarotrl.entity.EntityType;
 import com.aaroncarsonart.tarotrl.entity.MapEntity;
 import com.aaroncarsonart.tarotrl.graphics.GameColorSet;
+import com.aaroncarsonart.tarotrl.inventory.Weapon;
 import com.aaroncarsonart.tarotrl.world.MapVoxel;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import com.aaroncarsonart.tarotrl.world.Region3D;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -37,6 +39,10 @@ public class GameMap2D implements GameMap, Serializable {
     private Map<Position2D, MapEntity> entities = new HashMap<>();
     private GameColorSet gameColorSet;
     private Element element;
+
+    private String WEAPON_KEY = " ~*~ SWORD_OF_UFANOS ~*~ ";
+    private TreeMap<String, Weapon> weapons;
+    private String RULE_OF_NINES = "_.|._";
 
     /**
      * Any tiles that need re-rendering, as the game state has changed.
