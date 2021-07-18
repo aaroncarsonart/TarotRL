@@ -9,9 +9,9 @@ import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
 import com.aaroncarsonart.tarotrl.util.Logger;
+import com.aaroncarsonart.tarotrl.util.Pair;
 import com.aaroncarsonart.tarotrl.util.RNG;
 import com.aaroncarsonart.tarotrl.world.GameMap3D;
-import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -130,7 +130,8 @@ public class GameStateGenerator {
 
         GameState gameState = new GameState();
 
-        GameMap3D gameMap = gameWorldGenerator.generateCavernWorld();
+//        GameMap3D gameMap = gameWorldGenerator.generateCavernWorld();
+        GameMap3D gameMap = gameWorldGenerator.generateTarotRLCavernWorld();
         gameState.setGameMap(gameMap);
 
 //        Maze maze = Maze.generateRandomWalledMaze(30, 20);

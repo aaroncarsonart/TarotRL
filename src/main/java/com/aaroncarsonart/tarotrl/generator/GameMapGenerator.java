@@ -2,7 +2,9 @@ package com.aaroncarsonart.tarotrl.generator;
 
 import com.aaroncarsonart.imbroglio.Maze;
 import com.aaroncarsonart.tarotrl.exception.TarotRLException;
+import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.GameMap2D;
+import com.aaroncarsonart.tarotrl.map.MapType;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.GameMapDefinition;
 import com.aaroncarsonart.tarotrl.util.Logger;
@@ -124,5 +126,30 @@ public class GameMapGenerator {
             maze.connectDisconnectedComponents();
         }
         return maze;
+    }
+
+    public static void main(String[] args) {
+        GameMapDefinition definition = new GameMapDefinition();
+        definition.setWidth(15);
+        definition.setHeight(15);
+        definition.setMapName("Test");
+
+        GameMapGenerator generator = new GameMapGenerator();
+        GameMap map;
+
+        definition.setMapType(MapType.CELLULAR_AUTOMATA);
+        definition.setIterations(3);
+        map = generator.generateMapFrom(definition);
+        System.out.println(map.toString());
+
+        definition.setMapType(MapType.MAZE);
+        map = generator.generateMapFrom(definition);
+        System.out.println(map.toString());
+
+        definition.setMapType(MapType.RANDOM);
+        definition.setDigPercentage(0.2);
+        definition.setUseTunnels(true);
+        map = generator.generateMapFrom(definition);
+        System.out.println(map.toString());
     }
 }

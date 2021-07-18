@@ -1,11 +1,13 @@
 package com.aaroncarsonart.tarotrl.inventory;
 
-public class GameItem {
+import org.jetbrains.annotations.NotNull;
+
+public class Item implements Comparable<Item> {
 
     private String name;
     private String description;
 
-    public GameItem(String name, String description) {
+    public Item(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -24,5 +26,10 @@ public class GameItem {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int compareTo(@NotNull Item o) {
+        return this.name.compareTo(o.name);
     }
 }

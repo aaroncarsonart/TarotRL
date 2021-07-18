@@ -2,7 +2,7 @@ package com.aaroncarsonart.tarotrl.inventory;
 
 import com.aaroncarsonart.tarotrl.util.RNG;
 
-public class Treasure extends GameItem {
+public class Treasure extends Item {
 
     private int amount;
 

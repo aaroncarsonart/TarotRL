@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Stack;
 import java.util.stream.IntStream;
 
+// TODO possibly refactor to use TarotCardItems instead of TarotCards.
+// TODO or create a new TarotCardItemDeck class to handle deck
+// TODO functionalities for TarotCardItems.
+
 public class TarotDeck {
     private String name;
     private List<String> types;

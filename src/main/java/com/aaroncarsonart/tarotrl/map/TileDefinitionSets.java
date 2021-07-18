@@ -20,7 +20,7 @@ public class TileDefinitionSets {
         TileDefinitionSet set = new TileDefinitionSet();
         List<TileDefinition> definitions = new ArrayList<>();
 
-        definitions.add(new TileDefinition('@', TileType.PLAYER, color, color2, false, false, null));
+        definitions.add(new TileDefinition('@', TileType.PLAYER, GameColors.WHITE, color2, false, false, null));
         definitions.add(new TileDefinition('.', TileType.PATH, color1, color2, true, false, null));
         definitions.add(new TileDefinition('#', TileType.WALL, color3, color4, false, false, null));
         definitions.add(new TileDefinition('-', TileType.OPEN_DOOR, GameColors.YELLOW, color2, true, false, null));

@@ -4,7 +4,7 @@
         {
             "sprite": "@",
             "tileType": "PLAYER",
-            "foregroundColor": "#FFFF00",
+            "foregroundColor": "#FFFFFF",
             "backgroundColor": "#003232"
         },
         {

@@ -6,7 +6,8 @@ import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.input.MapActionModifier;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.input.UserInput;
-import com.aaroncarsonart.tarotrl.inventory.GameItem;
+import com.aaroncarsonart.tarotrl.inventory.Item;
+import com.aaroncarsonart.tarotrl.inventory.TarotCardItem;
 import com.aaroncarsonart.tarotrl.inventory.Treasure;
 import com.aaroncarsonart.tarotrl.map.Direction2D;
 import com.aaroncarsonart.tarotrl.map.GameMap;
@@ -205,14 +206,19 @@ public class MapController implements GameController {
         GameMap world = gameState.getGameMap();
         if (world.hasItem(position)) {
             ItemEntity itemEntity = (ItemEntity) world.removeEntity(position);
-            GameItem item = itemEntity.getItem();
+            Item item = itemEntity.getItem();
 
-            if (item instanceof Treasure) {
+            if (item instanceof TarotCardItem) {
+                gameState.addTarotCardToDeck((TarotCardItem) item);
+                gameState.setStatus(TextUtils.capitalize(item.getName())
+                        + " has been OBTAINED. ADDED to your deck.");
+            } else if (item instanceof Treasure) {
                 Treasure treasure = (Treasure) item;
                 int amount = treasure.getAmount();
                 gameState.gainTreasure(amount);
                 gameState.setStatus("Gained " + amount + " coins of treasure!");
             } else {
+                gameState.getEncounteredItems().put(item.getName(), item);
                 gameState.getPlayerItems().add(item);
                 gameState.setStatus(TextUtils.capitalize(item.getName())
                         + " has been added to your inventory.");
@@ -227,7 +233,9 @@ public class MapController implements GameController {
             LOG.trace("Move player: %s", originDirection.getDirection3D());
 
             String status = getMoveStatus(voxel.map, voxel.position);
-            gameState.setStatus(status);
+            if (status != null) {
+                gameState.setStatus(status);
+            }
             gameState.incrementStepCount();
 
             if (gameState.isAutoCollectMode()) {

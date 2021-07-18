@@ -2,7 +2,7 @@ package com.aaroncarsonart.tarotrl.game.controller;
 
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.input.UserInput;
-import com.aaroncarsonart.tarotrl.inventory.GameItem;
+import com.aaroncarsonart.tarotrl.inventory.Item;
 import com.aaroncarsonart.tarotrl.menu.InventoryMenuData;
 import com.aaroncarsonart.tarotrl.menu.Menu;
 import com.aaroncarsonart.tarotrl.menu.MenuAction;
@@ -26,7 +26,7 @@ public class InventoryGameController implements GameController {
         if (action instanceof MenuAction) {
             MenuAction menuAction = (MenuAction) action;
             InventoryMenuData menuData = state.getInventoryMenuData();
-            List<GameItem> playerInventory = state.getPlayerItems();
+            List<Item> playerInventory = state.getPlayerItems();
             List<MenuItem> menuItems = playerInventory.stream()
                     .map(item -> {
                         MenuItem menuItem = new MenuItem(item.getName(), item.getDescription(), null);

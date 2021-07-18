@@ -181,9 +181,9 @@ public class GameTileRenderer implements TileRenderer {
         Position bottomRightCorner = Positions.create(viewport.x + viewport.width, viewport.y + viewport.height);
 
         tileGrid.setTileAt(topLeftCorner, swords);
-        tileGrid.setTileAt(topRightCorner, cups);
+        tileGrid.setTileAt(topRightCorner, wands);
         tileGrid.setTileAt(bottomLeftCorner, pentacles);
-        tileGrid.setTileAt(bottomRightCorner, wands);
+        tileGrid.setTileAt(bottomRightCorner, cups);
 
         List<Position> corners = Arrays.asList(
                 topLeftCorner,
