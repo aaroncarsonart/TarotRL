@@ -319,5 +319,18 @@ public class GameMap2D implements GameMap, Serializable {
         this.element = element;
     }
 
-
+    public Map<Position2D, TileType> getNeighbors(Position2D pos) {
+        TreeMap<Position2D, TileType> neighbors = new TreeMap<>();
+        Position2D one = new Position2D(1, 1);
+        for (Position2D p : Position2D.range(pos.subtract(one), pos.add(one))) {
+            if (p == pos) {
+                continue;
+            } else if (withinBounds(p)) {
+                neighbors.put(p, getTileType(pos));
+            } else {
+                neighbors.put(p, TileType.EMPTY);
+            }
+        }
+        return neighbors;
+    }
 }

@@ -1,5 +1,6 @@
 package com.aaroncarsonart.tarotrl.map;
 
+import com.aaroncarsonart.tarotrl.deck.TarotCardType;
 import com.aaroncarsonart.tarotrl.graphics.GameColors;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
@@ -23,18 +24,18 @@ public class TileDefinitionSets {
         definitions.add(new TileDefinition('@', TileType.PLAYER, GameColors.WHITE, color2, false, false, null));
         definitions.add(new TileDefinition('.', TileType.PATH, color1, color2, true, false, null));
         definitions.add(new TileDefinition('#', TileType.WALL, color3, color4, false, false, null));
-        definitions.add(new TileDefinition('-', TileType.OPEN_DOOR, GameColors.YELLOW, color2, true, false, null));
-        definitions.add(new TileDefinition('+', TileType.CLOSED_DOOR, GameColors.YELLOW, color4, false, true, null));
-        definitions.add(new TileDefinition('=', TileType.WINDOW, GameColors.CYAN, color4, false, false, null));
+        definitions.add(new TileDefinition('-', TileType.OPEN_DOOR, GameColors.YELLOW_1, color2, true, false, null));
+        definitions.add(new TileDefinition('+', TileType.CLOSED_DOOR, GameColors.YELLOW_1, color4, false, true, null));
+        definitions.add(new TileDefinition('=', TileType.WINDOW, GameColors.CYAN_1, color4, false, false, null));
         definitions.add(new TileDefinition('<', TileType.UPSTAIRS, color, color2, true, false, PortalTrigger.ON_INSPECT_TILE));
         definitions.add(new TileDefinition('>', TileType.DOWNSTAIRS, color, color2, true, false, PortalTrigger.ON_INSPECT_TILE));
         definitions.add(new TileDefinition('O', TileType.FURNITURE, color1, color2, false, false, null));
         definitions.add(new TileDefinition('0', TileType.PORTAL, GameColors.BLACK, GameColors.BLACK, true, false, PortalTrigger.ON_OCCUPY_TILE));
-        definitions.add(new TileDefinition('%', TileType.PORTAL, GameColors.CYAN, color2, true, false, PortalTrigger.ON_INSPECT_TILE));
+        definitions.add(new TileDefinition('%', TileType.PORTAL, GameColors.CYAN_1, color2, true, false, PortalTrigger.ON_INSPECT_TILE));
         definitions.add(new TileDefinition(' ', TileType.EMPTY, GameColors.BLACK, GameColors.BLACK, false, false, null));
-        definitions.add(new TileDefinition('C', TileType.ENTITY, GameColors.RED, color2, false, false, null));
+        definitions.add(new TileDefinition('C', TileType.ENTITY, GameColors.RED_1, color2, false, false, null));
         definitions.add(new TileDefinition('^', TileType.ITEM, GameColors.GREY, color2, false, false, null));
-        definitions.add(new TileDefinition('$', TileType.TREASURE, GameColors.YELLOW, color2, false, false, null));
+        definitions.add(new TileDefinition('$', TileType.TREASURE, GameColors.YELLOW_1, color2, false, false, null));
 
         Map<Character, TileDefinition> definitionsMap = new HashMap<>();
         for (TileDefinition definition : definitions) {
@@ -45,6 +46,26 @@ public class TileDefinitionSets {
 
     }
 
+    public static TileDefinitionSet getTileDefinitionSetFor(TarotCardType type) {
+        switch (type) {
+            case MAJOR_ARCANA: return getMagentaTileDefinitionSet();
+            case PENTACLES: return getYellowTileDefinitionSet();
+            case SWORDS: return getBlueTileDefinitionSet();
+            case WANDS: return getRedTileDefinitionSet();
+            case CUPS: return getGreenTileDefinitionSet();
+            default: throw new IllegalArgumentException("Unexpected TarotCardType: " + type);
+        }
+    }
+
+    public static TileDefinitionSet getMagentaTileDefinitionSet() {
+        TileColor color = GameColors.MAGENTA;    // FF
+        TileColor color1 = GameColors.MAGENTA_1; // C8
+        TileColor color2 = GameColors.MAGENTA_2; // 32
+        TileColor color3 = GameColors.MAGENTA_3; // 2A
+        TileColor color4 = GameColors.MAGENTA_4; // 11
+        return getTileDefinitionSet(color, color1, color2, color3, color4);
+    }
+
     public static TileDefinitionSet getBlueTileDefinitionSet() {
         TileColor color = GameColors.CYAN;    // FF
         TileColor color1 = GameColors.CYAN_1; // C8
@@ -53,6 +74,15 @@ public class TileDefinitionSets {
         TileColor color4 = GameColors.CYAN_4; // 11
         return getTileDefinitionSet(color, color1, color2, color3, color4);
     }
+
+//    public static TileDefinitionSet getBlueTileDefinitionSet() {
+//        TileColor color = GameColors.BLUE;    // FF
+//        TileColor color1 = GameColors.BLUE_1; // C8
+//        TileColor color2 = GameColors.BLUE_2; // 32
+//        TileColor color3 = GameColors.BLUE_3; // 2A
+//        TileColor color4 = GameColors.BLUE_4; // 11
+//        return getTileDefinitionSet(color, color1, color2, color3, color4);
+//    }
 
     public static TileDefinitionSet getRedTileDefinitionSet() {
         TileColor color = GameColors.RED;    // FF

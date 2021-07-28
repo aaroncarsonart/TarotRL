@@ -4,19 +4,20 @@ import com.aaroncarsonart.tarotrl.game.Game;
 import com.aaroncarsonart.tarotrl.game.GameMode;
 import com.aaroncarsonart.tarotrl.game.GameModeComponents;
 import com.aaroncarsonart.tarotrl.game.GameState;
+import com.aaroncarsonart.tarotrl.game.controller.CardSelectionController;
+import com.aaroncarsonart.tarotrl.game.controller.GameController;
 import com.aaroncarsonart.tarotrl.game.controller.InventoryGameController;
 import com.aaroncarsonart.tarotrl.game.controller.MapController;
 import com.aaroncarsonart.tarotrl.generator.GameStateGenerator;
+import com.aaroncarsonart.tarotrl.graphics.CardSelectionRenderer;
 import com.aaroncarsonart.tarotrl.graphics.GraphicsContext;
 import com.aaroncarsonart.tarotrl.graphics.InventoryTileRenderer;
 import com.aaroncarsonart.tarotrl.graphics.MapTileRenderer;
 import com.aaroncarsonart.tarotrl.graphics.SnapshotHistory;
+import com.aaroncarsonart.tarotrl.input.CardSelectionInputHandler;
 import com.aaroncarsonart.tarotrl.input.InventoryInputHandler;
 import com.aaroncarsonart.tarotrl.input.MapInputHandler;
-import com.aaroncarsonart.tarotrl.map.TileDefinitionSets;
-import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
-import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
 import org.hexworks.zircon.api.CP437TilesetResources;
 import org.hexworks.zircon.api.Sizes;
 import org.hexworks.zircon.api.data.Size;
@@ -30,6 +31,19 @@ import java.awt.Toolkit;
  */
 public class TarotRLApp {
     private static final String TAROT_RL_GAME_TITLE = "TarotRL";
+
+    private static GameModeComponents createCardSelectionComponents() {
+        CardSelectionInputHandler cardSelectionInputHandler = new CardSelectionInputHandler();
+        CardSelectionController cardSelectionController = new CardSelectionController();
+        CardSelectionRenderer cardSelectionRenderer = new CardSelectionRenderer();
+
+        GameModeComponents cardSelectionComponents = new GameModeComponents(
+                cardSelectionInputHandler,
+                cardSelectionController,
+                cardSelectionRenderer
+        );
+        return cardSelectionComponents;
+    }
 
     private static GameModeComponents createMapModeComponents() {
         MapInputHandler mapInputHandler = new MapInputHandler();
@@ -77,11 +91,12 @@ public class TarotRLApp {
         JsonDefinitionLoader loader = new JsonDefinitionLoader();
 //        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/mountain_red.json");
 //        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/forest_green.json");
-        TileDefinitionSet tileDefinitionSet = TileDefinitionSets.getBlueTileDefinitionSet();
-        TileType.setTileTypeMetadata(tileDefinitionSet);
+
         GameStateGenerator gameStateGenerator = new GameStateGenerator();
+//        GameState gameState = gameStateGenerator.generateTarotRLGameState();
+//        gameState.setGameMode(GameMode.MAP_NAVIGATION);
+
         GameState gameState = gameStateGenerator.generateTarotRLGameState();
-        gameState.setGameMode(GameMode.MAP_NAVIGATION);
 
         TilesetResource tilesetResource = CP437TilesetResources.mdCurses16x16();
         Size windowDimensions = getWindowDimensions(tilesetResource);
@@ -95,13 +110,22 @@ public class TarotRLApp {
         GameModeComponents inventoryComponents = createInventoryModeComponents();
         SnapshotHistory snapshotHistory = new SnapshotHistory();
         graphicsContext.addObserver(snapshotHistory);
+        GameModeComponents cardSelectionComponents = createCardSelectionComponents();
 
         Game game = new Game();
         game.setGameState(gameState);
         game.registerGameMode(GameMode.MAP_NAVIGATION, mapComponents);
         game.registerGameMode(GameMode.INVENTORY, inventoryComponents);
         game.registerGameMode(GameMode.SNAPSHOT_HISTORY, snapshotHistory.asGameModeComponents());
+        game.registerGameMode(GameMode.CARD_SELECTION, cardSelectionComponents);
         game.setGraphicsContext(graphicsContext);
+
+        gameState.setGameMode(GameMode.CARD_SELECTION);
+        GameController controller = GameMode.CARD_SELECTION.getGameController();
+        CardSelectionController cardSelectionController = (CardSelectionController) controller;
+        cardSelectionController.setCancelCallback(() -> {});
+        cardSelectionController.setSelectCallback(cardSelectionController::selectStartingTarotCard);
+        gameState.setSelectedCardIndex(0);
 
         return game;
     }

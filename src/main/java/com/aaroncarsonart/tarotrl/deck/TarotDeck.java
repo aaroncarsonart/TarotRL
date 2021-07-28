@@ -2,6 +2,7 @@ package com.aaroncarsonart.tarotrl.deck;
 
 import com.aaroncarsonart.tarotrl.util.Globals;
 import com.aaroncarsonart.tarotrl.util.JsonUtils;
+import com.aaroncarsonart.tarotrl.util.RNG;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class TarotDeck {
      */
     private List<TarotCard> cards;
     private int[] ordering;
+    private int maxDisplayNameLength;
 
     public int cardCount() {
         return cards.size();
@@ -81,16 +83,33 @@ public class TarotDeck {
         Deque<TarotCard> right = new ArrayDeque<>(cards.subList(cards.size() / 2, cards.size()));
         Stack<TarotCard> finalShuffle = new Stack<>();
 
-        int accuracy = 1 + Globals.RANDOM.nextInt(5);
         while (finalShuffle.size() != cards.size()) {
+            int accuracy = 1 + Globals.RANDOM.nextInt(5);
             Deque<TarotCard> nLeft = drawFromBottom(left, Globals.RANDOM.nextInt(accuracy));
             Deque<TarotCard> nRight = drawFromBottom(right, Globals.RANDOM.nextInt(accuracy));
 
             boolean leftFirst = Globals.RANDOM.nextBoolean();
             if (leftFirst) {
-
+                finalShuffle.addAll(nLeft);
+                finalShuffle.addAll(nRight);
+            } else {
+                finalShuffle.addAll(nRight);
+                finalShuffle.addAll(nLeft);
             }
         }
+        cards.clear();
+        cards.addAll(finalShuffle);
+    }
+
+    /**
+     * Randomize the order of the cards.
+     */
+    public void randomShuffle() {
+        RNG.shuffle(cards);
+    }
+
+    public TarotCard drawTopCard() {
+        return cards.remove(0);
     }
 
     /**
@@ -142,4 +161,14 @@ public class TarotDeck {
         return new ArrayList<>(cards);
     }
 
+    public int getMaxDisplayNameLength() {
+        if (maxDisplayNameLength == 0) {
+            for (TarotCard card: cards) {
+                String displayName = card.getDisplayName();
+                int displayNameLength = displayName.length();
+                maxDisplayNameLength = Math.max(maxDisplayNameLength, displayNameLength);
+            }
+        }
+        return maxDisplayNameLength;
+    }
 }

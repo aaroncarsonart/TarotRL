@@ -1,6 +1,7 @@
 package com.aaroncarsonart.tarotrl.game.controller;
 
 import com.aaroncarsonart.tarotrl.entity.ItemEntity;
+import com.aaroncarsonart.tarotrl.entity.MapEntity;
 import com.aaroncarsonart.tarotrl.game.GameMode;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.input.MapActionModifier;
@@ -15,8 +16,11 @@ import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.util.TextUtils;
 import com.aaroncarsonart.tarotrl.world.Direction3D;
+import com.aaroncarsonart.tarotrl.world.GameMap3D;
 import com.aaroncarsonart.tarotrl.world.MapVoxel;
 import com.aaroncarsonart.tarotrl.world.Position3D;
+
+import java.util.function.Predicate;
 
 /**
  * This drives all game state behavior for the MAP_NAVIGATION GameMode.
@@ -50,7 +54,7 @@ public class MapController implements GameController {
 
             LOG.trace("+----------------------------------------------------+");
             LOG.trace(format, String.format("          turn: %s", gameState.getTurnCounter()));
-            LOG.trace(format, String.format("      position: %s", gameState.getGameMap().getCamera()));
+            LOG.trace(format, String.format("      position: %s", gameState.getActiveGameMap().getCamera()));
             LOG.trace(format, String.format("previousAction: %s", gameState.getPreviousAction()));
             LOG.trace(format, String.format(" currentAction: %s", gameState.getCurrentAction()));
             LOG.trace(format, String.format("       devMode: %s", gameState.isDevMode()));
@@ -116,6 +120,9 @@ public class MapController implements GameController {
             case AUTO_PICKUP_ITEMS:
                 doToggleAutoCollect(gameState);
 
+            case DEV_COLLECT_TAROT_CARD:
+                doCollectTarotCard(gameState);
+
             default:
                 LOG.warning("Case not handled: PlayerAction." + nextAction.name());
         }
@@ -155,7 +162,7 @@ public class MapController implements GameController {
      * @param direction The direction to attempt to move.
      */
     private void doMove(GameState gameState, Direction2D direction) {
-        GameMap world = gameState.getGameMap();
+        GameMap world = gameState.getActiveGameMap();
 
         // check if requested origin is available to be moved into.
         Position3D camera = world.getCamera();
@@ -203,7 +210,7 @@ public class MapController implements GameController {
     }
 
     private void attemptCollectItem(GameState gameState, Position3D position) {
-        GameMap world = gameState.getGameMap();
+        GameMap world = gameState.getActiveGameMap();
         if (world.hasItem(position)) {
             ItemEntity itemEntity = (ItemEntity) world.removeEntity(position);
             Item item = itemEntity.getItem();
@@ -338,7 +345,7 @@ public class MapController implements GameController {
     }
 
     private void doInspect(GameState gameState, Direction2D inspectDirection) {
-        GameMap world = gameState.getGameMap();
+        GameMap world = gameState.getActiveGameMap();
         Position3D playerPosition = world.getCamera();
         Position3D target = playerPosition.moveTowards(inspectDirection);
         gameState.setInspectedPosition(target);
@@ -356,7 +363,7 @@ public class MapController implements GameController {
      * @param gameState The current GameState.
      */
     private void doConfirm(GameState gameState) {
-        GameMap world = gameState.getGameMap();
+        GameMap world = gameState.getActiveGameMap();
         Position3D current = world.getCamera();
 
         if (world.hasItem(current)) {
@@ -416,5 +423,26 @@ public class MapController implements GameController {
      * @param gameState The current GameState.
      */
     private void doCancel(GameState gameState) {
+    }
+
+    /**
+     * For dev testing only. Auto collects the TarotCardItem found in the activeGameMap,
+     * and adds this card to the player's deck, if the card is still present in the map
+     * uncollected.
+     * @param gameState The GameState to use.
+     */
+    private void doCollectTarotCard(GameState gameState) {
+        GameMap3D gameMap = gameState.getActiveGameMap();
+
+        // fetch the TarotCardItem, and remove it from the GameMap3D
+        Predicate<MapEntity> isTarotCard = e -> e instanceof ItemEntity && ((ItemEntity) e).getItem() instanceof TarotCardItem;
+        ItemEntity cardEntity = (ItemEntity) gameMap.getFirstMapEntityMatching(isTarotCard);
+
+        // add the TarotCardItem to the player's deck
+        if (cardEntity != null) {
+            attemptCollectItem(gameState, cardEntity.getPosition());
+        } else {
+            gameState.setStatus("The tarot card for this map has already been collected.");
+        }
     }
 }

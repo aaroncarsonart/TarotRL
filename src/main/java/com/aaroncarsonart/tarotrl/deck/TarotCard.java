@@ -1,11 +1,21 @@
 package com.aaroncarsonart.tarotrl.deck;
 
-public class TarotCard extends Keywordable {
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Represents all essential information for modelling a Tarot card.
+ */
+public class TarotCard extends Keywordable implements Comparable<TarotCard> {
     private int order;
     private int rank;
     private String suit;
     private String name;
     private String type;
+
+    @Override
+    public int compareTo(@NotNull TarotCard that) {
+        return Integer.compare(this.order, that.order);
+    }
 
     public int getOrder() {
         return order;

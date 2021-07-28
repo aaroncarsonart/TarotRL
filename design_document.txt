@@ -1,0 +1,40 @@
+===============================
+````\\\||{ "TarotRL" }||///````
+===============================
+
+       Design Document
+
+
+
+
+Attack status effects
+=====================
+
+Stun (percent_chance, min_turns, max_turns)
+-------------------------------------------
+The attack has a chance of stunning the opponent, preventing any action from being taken for n turns.
+
+Poison (percent_chance, damage, min_turns, max_turns)
+-----------------------------------------------------
+The attack has a chance of causing a trickle of damage to occur as a result of the poison existing in the opponent's system.  This causes a set amount of damage for n turns after the attack which caused the status effect.
+
+Burning (percent_chance_start, percent_chance_end, damage)
+----------------------------------------------------------
+Similar to Poison, except it has the elemental affinity of fire. The target is engulfed in flames. Targets which cannot burn are immune. Flames have a chance of extinguishing every turn. Can be extinguished early by dousing in water, or by covering the target with water. Effect is exacerbated by wind, which feeds the fire.
+
+Haste (attacks_to_gain)
+-----------------------
+Gain the capacity for additional attack(s) every round.
+
+Slow (attacks_to_lose)
+----------------------
+Lose the capacity for attack(s) every other round.
+
+Speed-Up (percent_increase)
+---------------------------
+Gain additional movement during a turn.
+
+Speed-Down (percent_decrease)
+-----------------------------
+Lose some movement during a turn.
+

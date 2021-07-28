@@ -219,4 +219,11 @@ public class GameMap3D implements GameMap {
     public void setTileDefinitionSet(TileDefinitionSet tileDefinitionSet) {
         this.tileDefinitionSet = tileDefinitionSet;
     }
+
+    public MapEntity getFirstMapEntityMatching(Predicate<MapEntity> predicate) {
+        return entities.values().stream()
+                .filter(predicate)
+                .findFirst()
+                .orElse(null);
+    }
 }

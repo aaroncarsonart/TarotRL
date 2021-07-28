@@ -4,6 +4,7 @@ import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.map.Direction2D;
 import com.aaroncarsonart.tarotrl.util.TriIntSupplier;
 import com.aaroncarsonart.tarotrl.util.TriIntVisitor;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
 import java.util.LinkedList;
@@ -14,7 +15,7 @@ import java.util.function.Consumer;
  * The base class for all three dimensional game modeling.
  * Essentially a 3 dimensional origin structure.
  */
-public class Position3D {
+public class Position3D implements Comparable<Position3D> {
 
     public static final Position3D ORIGIN = new Position3D(0, 0, 0);
 
@@ -251,5 +252,19 @@ public class Position3D {
         LinkedList<Position3D> list = new LinkedList<>();
         Position3D.forEach(start, max, list::add);
         return list;
+    }
+
+    @Override
+    public int compareTo(@NotNull Position3D that) {
+        int xCompare = Integer.compare(this.x, that.x);
+        if (xCompare != 0) {
+            return xCompare;
+        }
+        int yCompare = Integer.compare(this.y, that.y);
+        if (yCompare != 0) {
+            return yCompare;
+        }
+        int zCompare = Integer.compare(this.z, that.z);
+        return zCompare;
     }
 }

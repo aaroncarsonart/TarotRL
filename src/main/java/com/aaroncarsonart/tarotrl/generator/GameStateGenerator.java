@@ -1,21 +1,21 @@
 package com.aaroncarsonart.tarotrl.generator;
 
-import com.aaroncarsonart.imbroglio.Maze;
-import com.aaroncarsonart.tarotrl.deck.Element;
+import com.aaroncarsonart.tarotrl.deck.TarotCard;
+import com.aaroncarsonart.tarotrl.deck.TarotDeck;
+import com.aaroncarsonart.tarotrl.entity.ItemEntity;
+import com.aaroncarsonart.tarotrl.entity.MapEntity;
 import com.aaroncarsonart.tarotrl.game.GameState;
-import com.aaroncarsonart.tarotrl.graphics.GameColorSet;
-import com.aaroncarsonart.tarotrl.map.GameMap2D;
+import com.aaroncarsonart.tarotrl.inventory.TarotCardItem;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
 import com.aaroncarsonart.tarotrl.util.Logger;
-import com.aaroncarsonart.tarotrl.util.Pair;
-import com.aaroncarsonart.tarotrl.util.RNG;
 import com.aaroncarsonart.tarotrl.world.GameMap3D;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class GameStateGenerator {
     private static final Logger LOG = new Logger(GameStateGenerator.class);
@@ -36,89 +36,10 @@ public class GameStateGenerator {
         GameState gameState = new GameState();
 
         GameMap3D world = gameWorldGenerator.generateImbroglioWorld();
-        gameState.setGameMap(world);
+        gameState.setActiveGameMap(world);
         gameState.toggleAutoCollect();
         gameState.setUndefinedTileType(TileType.EMPTY);
         gameState.gainTreasure(50);
-
-        return gameState;
-    }
-
-    public GameState generateTarotRLGameState2() {
-        LOG.info("Generating TarotRL GameState ...");
-        GameState gameState = new GameState();
-
-//        GameMap3D gameMap = gameWorldGenerator.generateCavernWorld();
-//        gameState.setGameMap(gameMap);
-
-//        Maze maze = Maze.generateRandomWalledMaze(30, 20);
-//        maze.setDifficulty(Difficulty.NORMAL);
-////        GameMap gameMap = GameMapGenerator.generateMapFrom(maze);
-////        Position3D camera = gameMap.findFirstOccurrence3D(TileType.PATH);
-//        gameMap.setCamera(camera);
-//        gameState.setGameMap(gameMap);
-
-        List<GameMap2D> gameMaps = new ArrayList<>();
-
-//        TileDefinitionSet greenTileSet = loader.loadTileDefinitionSet("tile_definitions/forest_green.json");
-//        TileDefinitionSet redTileSet = loader.loadTileDefinitionSet("tile_definitions/mountain_red.json");
-
-        int width = 30;
-        int height = 20;
-
-        List<Pair<Element, GameColorSet>> pairs = Arrays.asList(
-                new Pair<>(Element.EARTH, GameColorSet.GREEN),
-                new Pair<>(Element.AIR, GameColorSet.YELLOW),
-                new Pair<>(Element.WATER, GameColorSet.CYAN),
-                new Pair<>(Element.FIRE, GameColorSet.RED),
-                new Pair<>(Element.SPIRIT, GameColorSet.MAGENTA));
-
-        for (Pair<Element, GameColorSet> pair: pairs) {
-            Element element = pair.getKey();
-            GameColorSet colorSet = pair.getValue();
-            if (element == Element.SPIRIT) {
-                // TODO vary tile definition sets per map element
-                for (int i = 0; i <= 21; i++) {
-                    Maze maze = GameMapGenerator.generateCellularAutomataRoom(width, height, 3);
-                    GameMap2D map = GameMapGenerator.generateMapFrom(maze);
-                    map.setName(element.getCardType().name() + " " + i);
-                    map.setElement(element);
-                    map.setGameColorSet(colorSet);
-                    gameMaps.add(map);
-                }
-            } else {
-                // TODO vary tile definition sets per map
-                for (int i = 1; i <= 14; i++) {
-                    Maze maze = GameMapGenerator.generateCellularAutomataRoom(width, height, 3);
-                    GameMap2D map = GameMapGenerator.generateMapFrom(maze);
-                    map.setName(element.getCardType().name() + " " + i);
-                    map.setElement(element);
-                    map.setGameColorSet(colorSet);
-                    gameMaps.add(map);
-                }
-            }
-        }
-        // Add the fool to the end
-        Maze maze = GameMapGenerator.generateCellularAutomataRoom(width, height, 3);
-        GameMap2D map = GameMapGenerator.generateMapFrom(maze);
-        map.setName("The Fool");
-        map.setElement(Element.SPIRIT);
-        map.setGameColorSet(GameColorSet.GREY);
-        gameMaps.add(map);
-
-
-        RNG.shuffle(gameMaps);
-        // TODO: link all maps up with stairs connecting via tarot cards
-
-
-        // TODO  create mechanism for adding 2-way portals '%' between levels
-
-
-        gameState.toggleAutoCollect();
-        gameState.setUndefinedTileType(TileType.WALL);
-
-        String initialStatus = "Welcome to TarotRL!!!";
-        gameState.setStatus(initialStatus);
 
         return gameState;
     }
@@ -130,20 +51,34 @@ public class GameStateGenerator {
 
         GameState gameState = new GameState();
 
-//        GameMap3D gameMap = gameWorldGenerator.generateCavernWorld();
-        GameMap3D gameMap = gameWorldGenerator.generateTarotRLCavernWorld();
-        gameState.setGameMap(gameMap);
+        // load and shuffle tarot deck
+        TarotDeck tarotDeck = loader.loadTarotDeck();
+        gameState.setAllTarotCards(tarotDeck);
 
-//        Maze maze = Maze.generateRandomWalledMaze(30, 20);
-//        maze.setDifficulty(Difficulty.NORMAL);
-////        GameMap gameMap = GameMapGenerator.generateMapFrom(maze);
-////        Position3D camera = gameMap.findFirstOccurrence3D(TileType.PATH);
-//        gameMap.setCamera(camera);
-//        gameState.setGameMap(gameMap);
+        // save copy of list of cards to preserve ordering before shuffling
+        List<TarotCard> cards = tarotDeck.getSetOfCards();
+        tarotDeck.randomShuffle();
+
+        // generate GameMaps based on list of cards
+        for (TarotCard card : cards) {
+            GameMap3D gameMap = gameWorldGenerator.generateTarotRLGameMap(gameState, card);
+            gameState.addMap(card, gameMap);
+
+            // Extract the generated TarotCardItem for use in CARD_SELECTION mode
+            Predicate<MapEntity> isTarotCard = e -> e instanceof ItemEntity && ((ItemEntity) e).getItem() instanceof TarotCardItem;
+            ItemEntity cardEntity = (ItemEntity) gameMap.getFirstMapEntityMatching(isTarotCard);
+            TarotCardItem cardItem = (TarotCardItem) cardEntity.getItem();
+            gameState.getPlayersTarotDeck().add(cardItem);
+        }
+
+        // reset TarotDeck to original ordering
+        tarotDeck.setCards(cards);
+
+        // sort the TarotCardItem list for use in CARD_SELECTION mode
+        Collections.sort(gameState.getPlayersTarotDeck(), Comparator.comparingInt(c -> c.getTarotCard().getOrder()));
 
         gameState.toggleAutoCollect();
         gameState.setUndefinedTileType(TileType.WALL);
-
 
         String initialStatus = "Welcome to TarotRL!!!";
         gameState.setStatus(initialStatus);

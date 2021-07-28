@@ -2,14 +2,15 @@ package com.aaroncarsonart.tarotrl.game;
 
 import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.deck.TarotCard;
+import com.aaroncarsonart.tarotrl.deck.TarotDeck;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.input.UserInput;
 import com.aaroncarsonart.tarotrl.inventory.Item;
 import com.aaroncarsonart.tarotrl.inventory.TarotCardItem;
-import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.menu.InventoryMenuData;
 import com.aaroncarsonart.tarotrl.util.Logger;
+import com.aaroncarsonart.tarotrl.world.GameMap3D;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import org.apache.commons.lang3.StringUtils;
 
@@ -25,7 +26,8 @@ public class GameState implements Serializable {
     private Position3D inspectedPosition;
 
     private int turnCounter;
-    private GameMap gameMap;
+    private GameMap3D activeGameMap;
+    private TreeMap<TarotCard, GameMap3D> gameMaps = new TreeMap<>();
 
     private int stepCount;
     private int treasure;
@@ -33,9 +35,13 @@ public class GameState implements Serializable {
     private TreeMap<String, Item> encounteredItems = new TreeMap<>();
     private TreeMap<String, TarotCardItem> collectedCards = new TreeMap<>();
 
-    // TODO implement custom TarotDeckItem class, with the following:
-    // TODO shuffling, cutting, top card, bottom card functionalities
-    private ArrayList<TarotCardItem> tarotDeck = new ArrayList<>();
+    private ArrayList<TarotCardItem> playersTarotDeck = new ArrayList<>();
+    private TarotDeck allTarotCards;
+    private int selectedCardIndex;
+
+    // TODO Update CardSelectionRenderer to dynamically display this message
+    // TODO instead of the current, hardcoded 2-string message.
+    private ArrayList<String> cardSelectionMessage = new ArrayList<>();
 
     private PlayerAction previousAction = PlayerAction.UNKNOWN;
     private PlayerAction currentAction = PlayerAction.UNKNOWN;
@@ -62,8 +68,7 @@ public class GameState implements Serializable {
      * Default no-arg constructor
      */
     public GameState() {
-        inventoryMenuData = new InventoryMenuData();
-        inventoryMenuData.setCancelAction(() -> setGameMode(GameMode.MAP_NAVIGATION));
+        inventoryMenuData = new InventoryMenuData(this);
     }
 
     // ------------------------------------------------------
@@ -126,12 +131,12 @@ public class GameState implements Serializable {
         this.currentAction = currentAction;
     }
 
-    public void setGameMap(GameMap gameMap) {
-        this.gameMap = gameMap;
+    public void setActiveGameMap(GameMap3D activeGameMap) {
+        this.activeGameMap = activeGameMap;
     }
 
-    public GameMap getGameMap() {
-        return gameMap;
+    public GameMap3D getActiveGameMap() {
+        return activeGameMap;
     }
 
     public int getStepCount() {
@@ -234,8 +239,8 @@ public class GameState implements Serializable {
         return encounteredItems;
     }
 
-    public ArrayList<TarotCardItem> getTarotDeck() {
-        return tarotDeck;
+    public ArrayList<TarotCardItem> getPlayersTarotDeck() {
+        return playersTarotDeck;
     }
 
     public void addTarotCardToDeck(TarotCardItem tarotCardItem) {
@@ -247,7 +252,38 @@ public class GameState implements Serializable {
 
         // TODO consider the ordering. Add to top or bottom of the deck?
         // TODO which end of the list is the top, and which end is the bottom?
-        tarotDeck.add(tarotCardItem);
+        playersTarotDeck.add(0, tarotCardItem);
     }
 
+    public TarotDeck getAllTarotCards() {
+        return allTarotCards;
+    }
+
+    public void setAllTarotCards(TarotDeck allTarotCards) {
+        this.allTarotCards = allTarotCards;
+    }
+
+    public int getSelectedCardIndex() {
+        return selectedCardIndex;
+    }
+
+    public void setSelectedCardIndex(int selectedCardIndex) {
+        this.selectedCardIndex = selectedCardIndex;
+    }
+
+    public GameMap3D getMapFromTarotCard(TarotCard key) {
+        return gameMaps.get(key);
+    }
+
+    public void addMap(TarotCard key, GameMap3D value) {
+        gameMaps.put(key, value);
+    }
+
+    public ArrayList<String> getCardSelectionMessage() {
+        return cardSelectionMessage;
+    }
+
+    public void setCardSelectionMessage(ArrayList<String> cardSelectionMessage) {
+        this.cardSelectionMessage = cardSelectionMessage;
+    }
 }

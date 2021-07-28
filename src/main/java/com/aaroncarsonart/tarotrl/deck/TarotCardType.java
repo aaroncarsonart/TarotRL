@@ -53,7 +53,7 @@ public enum TarotCardType {
         if (StringUtils.isBlank(value)) {
             return null;
         }
-        char suit = value.charAt(0);
+        char suit = value.charAt(1);
         return fromCharacter(suit);
     }
 

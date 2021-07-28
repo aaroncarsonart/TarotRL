@@ -9,7 +9,8 @@ import com.aaroncarsonart.tarotrl.util.Logger;
 public enum GameMode {
     MAP_NAVIGATION,
     SNAPSHOT_HISTORY,
-    INVENTORY;
+    INVENTORY,
+    CARD_SELECTION;
 
     private static Logger LOG = new Logger(GameMode.class);
     private GameModeComponents components;

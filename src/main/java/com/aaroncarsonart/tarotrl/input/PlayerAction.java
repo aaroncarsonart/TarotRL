@@ -30,6 +30,8 @@ public enum PlayerAction {
     INSPECT("Inspect the focused origin, reporting any relevant info."),
     INVENTORY("Enter the inventory screen."),
     SNAPSHOT_HISTORY("Enter snapshot history game mode."),
+
+    DEV_COLLECT_TAROT_CARD("Auto collect the tarot card for the given level."),
     ;
 
     /**

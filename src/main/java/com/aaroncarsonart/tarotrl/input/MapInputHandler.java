@@ -69,6 +69,10 @@ public class MapInputHandler implements InputHandler {
 
         PlayerAction nextAction = getPlayerActionFromKeyCode(event.getCode());
 
+        if (input.hasModifer(MapActionModifier.DEV_MODE) && keyCode == KeyCode.KEY_C) {
+            nextAction = PlayerAction.DEV_COLLECT_TAROT_CARD;
+        }
+
         if (nextAction != PlayerAction.UNKNOWN) {
             input.setAction(nextAction);
             input.doUpdateController();
@@ -76,7 +80,6 @@ public class MapInputHandler implements InputHandler {
             nextAction = inputActionsMap.getOrDefault(event.getKey(), PlayerAction.UNKNOWN);
             input.setAction(nextAction);
             input.doUpdateController();
-
         }
 
         return UIEventResponses.processed();

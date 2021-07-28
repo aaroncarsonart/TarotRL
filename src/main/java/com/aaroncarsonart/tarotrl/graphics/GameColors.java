@@ -36,10 +36,13 @@ public class GameColors {
     public static final TileColor GREEN_3   = TileColors.fromString("#002A00");
     public static final TileColor GREEN_4   = TileColors.fromString("#001100");
 
-    public static final TileColor BLUE_1   = TileColors.fromString("#0000C8");
+    public static final TileColor BLUE_1   = TileColors.fromString("#6464C8");
     public static final TileColor BLUE_2   = TileColors.fromString("#000032");
     public static final TileColor BLUE_3   = TileColors.fromString("#00002A");
     public static final TileColor BLUE_4   = TileColors.fromString("#000011");
+//    public static final TileColor BLUE_2   = TileColors.fromString("#484832");
+//    public static final TileColor BLUE_3   = TileColors.fromString("#32322A");
+//    public static final TileColor BLUE_4   = TileColors.fromString("#161611");
 
 //    public static final TileColor BLUE_1   = TileColors.fromString("#0000F8");
 //    public static final TileColor BLUE_2   = TileColors.fromString("#000062");

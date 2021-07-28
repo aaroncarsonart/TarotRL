@@ -24,7 +24,7 @@ public class MapTileRenderer implements TileRenderer {
 
     private ViewPort mapViewPort;
 
-    private void initMapViewPort(TileGrid tileGrid) {
+    public static ViewPort createMapViewPort(TileGrid tileGrid) {
         int windowWidth = tileGrid.getWidth();
         int windowHeight = tileGrid.getHeight();
 
@@ -37,14 +37,13 @@ public class MapTileRenderer implements TileRenderer {
         int vHeight = windowHeight - (topOffSet + bottomOffSet);
 
         Size vDimensions = Sizes.create(vWidth, vHeight);
-        mapViewPort = new ViewPort(vOffset, vDimensions);
+        return new ViewPort(vOffset, vDimensions);
     }
-
 
     @Override
     public void render(GameState gameState, TileGrid tileGrid) {
         if (mapViewPort == null) {
-            initMapViewPort(tileGrid);
+            mapViewPort = createMapViewPort(tileGrid);
         }
         renderTarotRLGame(tileGrid, gameState, mapViewPort);
     }
@@ -59,7 +58,7 @@ public class MapTileRenderer implements TileRenderer {
                                              GameState gameState,
                                              ViewPort viewPort,
                                              boolean drawViewportBorder) {
-        GameMap world = gameState.getGameMap();
+        GameMap world = gameState.getActiveGameMap();
 
         // ensure coordinate spaces of viewport fit on the TileGrid.
         checkCoordinatesFit(tileGrid, viewPort);
@@ -168,7 +167,7 @@ public class MapTileRenderer implements TileRenderer {
 //        ViewPort infoViewPort = new ViewPort(0, 0, vw, vh);
 ////        drawSimpleBorder(tileGrid, infoViewPort, false);
 //
-        Position3D camera = gameState.getGameMap().getCamera();
+        Position3D camera = gameState.getActiveGameMap().getCamera();
         int px = camera.x;
         int py = camera.y;
         int pz = camera.z;

@@ -2,6 +2,7 @@ package com.aaroncarsonart.imbroglio;
 
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import com.aaroncarsonart.tarotrl.map.Region2D;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.function.Consumer;
  * @author Aaron Carson
  * @version 1.0
  */
-public final class Position2D implements Serializable {
+public final class Position2D implements Serializable, Comparable<Position2D> {
 
     // ************************************************************************
     // Fields
@@ -393,6 +394,13 @@ public final class Position2D implements Serializable {
         return "(" + x + "," + y + "," + ")";
     }
 
-
-
+    @Override
+    public int compareTo(@NotNull Position2D that) {
+        int xCompare = Integer.compare(this.x, that.x);
+        if (xCompare != 0) {
+            return xCompare;
+        }
+        int yCompare = Integer.compare(this.y, that.y);
+        return yCompare;
+    }
 }

@@ -1,6 +1,8 @@
 package com.aaroncarsonart.tarotrl.graphics;
 
 import com.aaroncarsonart.tarotrl.deck.TarotCardType;
+import com.aaroncarsonart.tarotrl.util.LogLevel;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.TileColors;
 import org.hexworks.zircon.api.Tiles;
@@ -14,6 +16,7 @@ import org.hexworks.zircon.api.grid.TileGrid;
  * Encapsulate all logic for the drawing of tarot cards to the TileGrid.
  */
 public class TarotRenderer extends GameTileRenderer {
+    private static final Logger LOG = new Logger(TarotRenderer.class).withLogLevel(LogLevel.INFO);
 
     private static final char TL = '╔';
     private static final char TR = '╗';
@@ -31,7 +34,7 @@ public class TarotRenderer extends GameTileRenderer {
                 {BL, BR}};
     }
 
-    private void renderTarotCardTest(TileGrid tileGrid, ViewPort viewPort) {
+    protected void renderTarotCardTest(TileGrid tileGrid, ViewPort viewPort) {
         int sx = viewPort.x + 2;
         int sy = viewPort.y + 2;
 
@@ -80,7 +83,7 @@ public class TarotRenderer extends GameTileRenderer {
         }
     }
 
-    private void renderTarotCardTest_closelySpaced(TileGrid tileGrid, ViewPort viewPort) {
+    protected void renderTarotCardTest_closelySpaced(TileGrid tileGrid, ViewPort viewPort) {
         int sx = viewPort.x + 2;
         int sy = viewPort.y + 2;
 
@@ -91,7 +94,7 @@ public class TarotRenderer extends GameTileRenderer {
         renderTarotCard(tileGrid, "15", Positions.create(sx + 2, sy + 3));
     }
 
-    private void renderTarotDeck(TileGrid tileGrid, Position pos) {
+    protected void renderTarotDeck(TileGrid tileGrid, Position pos) {
         renderBackOfTarotCard(tileGrid, pos);
 
         Tile edgeTile = Tiles.newBuilder()
@@ -106,25 +109,25 @@ public class TarotRenderer extends GameTileRenderer {
         tileGrid.setTileAt(rightEdgePosition, edgeTile);
     }
 
-    private void renderBackOfTarotCard(TileGrid tileGrid, Position pos) {
+    protected void renderBackOfTarotCard(TileGrid tileGrid, Position pos) {
         // ░▒▓
         renderTarotCard(tileGrid, "░║", pos, GameColors.CYAN_5, GameColors.CYAN_2);
         renderTarotCardAsOverlay(tileGrid, "║║", pos, GameColors.CYAN_1, TileColors.transparent());
     }
 
-    private void renderTarotCard(TileGrid tileGrid, String key, Position pos) {
+    protected void renderTarotCard(TileGrid tileGrid, String key, Position pos) {
         renderTarotCard(tileGrid, key, pos, null, null, false);
     }
 
-    private void renderTarotCard(TileGrid tileGrid, String key, Position pos, TileColor fg, TileColor bg) {
+    protected void renderTarotCard(TileGrid tileGrid, String key, Position pos, TileColor fg, TileColor bg) {
         renderTarotCard(tileGrid, key, pos, fg, bg, false);
     }
 
-    private void renderTarotCardAsOverlay(TileGrid tileGrid, String key, Position pos, TileColor fg, TileColor bg) {
+    protected void renderTarotCardAsOverlay(TileGrid tileGrid, String key, Position pos, TileColor fg, TileColor bg) {
         renderTarotCard(tileGrid, key, pos, fg, bg, true);
     }
 
-    private void renderTarotCard(TileGrid tileGrid, String key, Position pos, TileColor fg, TileColor bg, boolean asOverlay) {
+    protected void renderTarotCard(TileGrid tileGrid, String key, Position pos, TileColor fg, TileColor bg, boolean asOverlay) {
         char rankChar = key.charAt(0);
         char suitChar = key.charAt(1);
         TarotCardType suit = TarotCardType.fromCharacter(suitChar);
@@ -195,7 +198,7 @@ public class TarotRenderer extends GameTileRenderer {
         }
     }
 
-    private char getRankSymbol(int rank) {
+    protected char getRankSymbol(int rank) {
         switch (rank) {
             case 10: return 'X';
             case 11: return 'p';

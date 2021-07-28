@@ -232,7 +232,7 @@ public class GameTileRenderer implements TileRenderer {
         ViewPort infoViewPort = new ViewPort(0, 0, vw, vh);
 //        drawSimpleBorder(tileGrid, infoViewPort, false);
 
-        Position3D camera = gameState.getGameMap().getCamera();
+        Position3D camera = gameState.getActiveGameMap().getCamera();
         int px = camera.x;
         int py = camera.y;
         int pz = camera.z;
@@ -373,7 +373,7 @@ public class GameTileRenderer implements TileRenderer {
         writeText(tileGrid, statusMsg, sx, sy, GameColors.LIGHT_GRAY, GameColors.DARKER_GRAY);
 
         // top right
-        int level = 1 - gameState.getGameMap().getCamera().z;
+        int level = 1 - gameState.getActiveGameMap().getCamera().z;
         String levelMsg = "Level " + level;
 
         sx = width - levelMsg.length();

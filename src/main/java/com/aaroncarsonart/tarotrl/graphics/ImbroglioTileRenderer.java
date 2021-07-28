@@ -57,7 +57,7 @@ public class ImbroglioTileRenderer implements TileRenderer {
                                              GameState gameState,
                                              ViewPort viewPort,
                                              boolean drawViewportBorder) {
-        GameMap world = gameState.getGameMap();
+        GameMap world = gameState.getActiveGameMap();
 
         // ensure coordinate spaces of viewport fit on the TileGrid.
         checkCoordinatesFit(tileGrid, viewPort);
@@ -186,7 +186,7 @@ public class ImbroglioTileRenderer implements TileRenderer {
         writeText(tileGrid, statusMsg, sx, sy, GameColors.LIGHT_GRAY, GameColors.DARKER_GRAY);
 
         // top right
-        int level = 1 - gameState.getGameMap().getCamera().z;
+        int level = 1 - gameState.getActiveGameMap().getCamera().z;
         String levelMsg = "Level " + level;
 
         sx = width - levelMsg.length();

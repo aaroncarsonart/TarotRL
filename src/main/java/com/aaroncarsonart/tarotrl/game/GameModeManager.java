@@ -12,6 +12,7 @@ public class GameModeManager {
 
     public void registerComponents(GameMode gameMode, GameModeComponents components) {
         componentsMap.put(gameMode, components);
+        gameMode.registerComponents(components);
     }
 
     public Set<GameMode> getRegisteredModes() {

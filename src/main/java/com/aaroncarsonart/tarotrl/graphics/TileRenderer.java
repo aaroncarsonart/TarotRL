@@ -160,25 +160,25 @@ public interface TileRenderer {
     default void drawDecoratedCorners(TileGrid tileGrid, ViewPort viewport) {
         Tile swords = Tiles.newBuilder()
                 .withCharacter(Symbols.SPADES)
-                .withForegroundColor(GameColors.BLUE)
+                .withForegroundColor(GameColors.BLUE_1)
                 .withBackgroundColor(GameColors.BLACK)
                 .build();
 
         Tile cups = Tiles.newBuilder()
                 .withCharacter(Symbols.HEART)
-                .withForegroundColor(GameColors.GREEN)
+                .withForegroundColor(GameColors.GREEN_1)
                 .withBackgroundColor(GameColors.BLACK)
                 .build();
 
         Tile wands = Tiles.newBuilder()
                 .withCharacter(Symbols.CLUB)
-                .withForegroundColor(GameColors.RED)
+                .withForegroundColor(GameColors.RED_1)
                 .withBackgroundColor(GameColors.BLACK)
                 .build();
 
         Tile pentacles = Tiles.newBuilder()
                 .withCharacter(Symbols.DIAMOND)
-                .withForegroundColor(GameColors.YELLOW)
+                .withForegroundColor(GameColors.YELLOW_1)
                 .withBackgroundColor(GameColors.BLACK)
                 .build();
 
