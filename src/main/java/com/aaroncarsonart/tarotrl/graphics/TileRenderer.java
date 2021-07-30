@@ -4,6 +4,7 @@ import com.aaroncarsonart.tarotrl.exception.TarotRLException;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 import com.aaroncarsonart.tarotrl.util.Logger;
+import com.aaroncarsonart.tarotrl.util.TextUtils;
 import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.Tiles;
 import org.hexworks.zircon.api.color.TileColor;
@@ -26,6 +27,7 @@ public interface TileRenderer {
 
     /**
      * Clear any previously set tile within the TileGrid.
+     *
      * @param tileGrid The TileGrid to clear.
      */
     default void clearTileData(TileGrid tileGrid) {
@@ -75,8 +77,10 @@ public interface TileRenderer {
         int startOffset = 1 + cornerOffset;
         int endOffset = cornerOffset;
 
+        int maxX = viewPort.x + viewPort.width - endOffset - 1;
+
         // draw top horizontal line
-        for (int x = viewPort.x + startOffset; x < viewPort.x + viewPort.width - endOffset; x++) {
+        for (int x = viewPort.x + startOffset; x < maxX; x++) {
             int y = viewPort.y;
             Position next = Positions.create(x, y);
             tileGrid.setTileAt(next, Tiles.newBuilder()
@@ -87,8 +91,8 @@ public interface TileRenderer {
         }
 
         // draw bottom horizontal line
-        for (int x = viewPort.x + startOffset; x < viewPort.x + viewPort.width - endOffset; x++) {
-            int y = viewPort.y + viewPort.height;
+        for (int x = viewPort.x + startOffset; x < maxX; x++) {
+            int y = viewPort.y + viewPort.height - 1;
             Position next = Positions.create(x, y);
             tileGrid.setTileAt(next, Tiles.newBuilder()
                     .withBackgroundColor(bg)
@@ -97,8 +101,10 @@ public interface TileRenderer {
                     .build());
         }
 
+        int maxY = viewPort.y + viewPort.height - endOffset - 1;
+
         // draw left vertical line
-        for (int y = viewPort.y + startOffset; y < viewPort.y + viewPort.height - endOffset; y++) {
+        for (int y = viewPort.y + startOffset; y < maxY; y++) {
             int x = viewPort.x;
             Position next = Positions.create(x, y);
             tileGrid.setTileAt(next, Tiles.newBuilder()
@@ -109,8 +115,8 @@ public interface TileRenderer {
         }
 
         // draw right vertical line
-        for (int y = viewPort.y + startOffset; y < viewPort.y + viewPort.height - endOffset; y++) {
-            int x = viewPort.x + viewPort.width;
+        for (int y = viewPort.y + startOffset; y < maxY; y++) {
+            int x = viewPort.x + viewPort.width - 1;
             Position next = Positions.create(x, y);
             tileGrid.setTileAt(next, Tiles.newBuilder()
                     .withBackgroundColor(bg)
@@ -132,7 +138,7 @@ public interface TileRenderer {
 //                .withCharacter(Symbols.SINGLE_LINE_TOP_LEFT_CORNER)
                 .build());
 
-        Position topRight = Positions.create(viewport.x + viewport.width, viewport.y);
+        Position topRight = Positions.create(viewport.x + viewport.width - 1, viewport.y);
         tileGrid.setTileAt(topRight, Tiles.newBuilder()
                 .withBackgroundColor(bg)
                 .withForegroundColor(fg)
@@ -140,7 +146,7 @@ public interface TileRenderer {
 //                .withCharacter(Symbols.SINGLE_LINE_TOP_RIGHT_CORNER)
                 .build());
 
-        Position bottomLeft = Positions.create(viewport.x, viewport.y + viewport.height);
+        Position bottomLeft = Positions.create(viewport.x, viewport.y + viewport.height - 1);
         tileGrid.setTileAt(bottomLeft, Tiles.newBuilder()
                 .withBackgroundColor(bg)
                 .withForegroundColor(fg)
@@ -148,7 +154,7 @@ public interface TileRenderer {
 //                .withCharacter(Symbols.SINGLE_LINE_BOTTOM_LEFT_CORNER)
                 .build());
 
-        Position bottomRight = Positions.create(viewport.x + viewport.width, viewport.y + viewport.height);
+        Position bottomRight = Positions.create(viewport.x + viewport.width - 1, viewport.y + viewport.height - 1);
         tileGrid.setTileAt(bottomRight, Tiles.newBuilder()
                 .withBackgroundColor(bg)
                 .withForegroundColor(fg)
@@ -183,9 +189,9 @@ public interface TileRenderer {
                 .build();
 
         Position topLeftCorner = Positions.create(viewport.x, viewport.y);
-        Position topRightCorner = Positions.create(viewport.x + viewport.width, viewport.y);
-        Position bottomLeftCorner = Positions.create(viewport.x, viewport.y + viewport.height);
-        Position bottomRightCorner = Positions.create(viewport.x + viewport.width, viewport.y + viewport.height);
+        Position topRightCorner = Positions.create(viewport.x + viewport.width - 1, viewport.y);
+        Position bottomLeftCorner = Positions.create(viewport.x, viewport.y + viewport.height - 1);
+        Position bottomRightCorner = Positions.create(viewport.x + viewport.width - 1, viewport.y + viewport.height - 1);
 
         tileGrid.setTileAt(topLeftCorner, swords);
         tileGrid.setTileAt(topRightCorner, wands);
@@ -262,5 +268,78 @@ public interface TileRenderer {
                 .withForegroundColor(fgColor)
                 .withCharacter(displaySprite)
                 .build();
+    }
+
+    /**
+     * Write The given text within a box. The height is dynamically
+     * calculated, based on the length of the text.
+     *
+     * @param tileGrid The TileGrid to draw the text and box on.
+     * @param text     The text to write.
+     * @param x        The top-left x coordinate of the box.
+     * @param y        The top-left y coordinate of the box.
+     * @param boxWidth The width of the box.
+     */
+    default void writeTextInBox(TileGrid tileGrid, String text, TextAlignment alignment,
+                                int x, int y, int boxWidth) {
+        if (boxWidth <= 2) {
+            throw new IllegalArgumentException("boxWidth must be greater than 2 for text to display in the box.");
+        }
+        int messageWidth = boxWidth - 2;
+        List<String> textList = TextUtils.getWordWrappedText(text, messageWidth);
+        writeTextInBox(tileGrid, textList, alignment, x, y, boxWidth);
+    }
+
+    /**
+     * Write The given text within a box. The height is dynamically
+     * calculated, based on the length of the text.
+     *
+     * @param tileGrid The TileGrid to draw the text and box on.
+     * @param textList The text to write.
+     * @param x        The top-left x coordinate of the box.
+     * @param y        The top-left y coordinate of the box.
+     * @param boxWidth The width of the box.
+     */
+    default void writeTextInBox(TileGrid tileGrid, List<String> textList, TextAlignment alignment,
+                                int x, int y, int boxWidth) {
+        if (boxWidth <= 2) {
+            throw new IllegalArgumentException("boxWidth must be greater than 2 for text to display in the box.");
+        }
+        int textWidth = boxWidth - 2;
+        int textHeight = textList.size();
+        int boxHeight = textHeight + 2;
+        ViewPort boxViewPort = new ViewPort(x, y, boxWidth, boxHeight);
+        drawSimpleBorder(tileGrid, boxViewPort, false);
+
+        switch (alignment) {
+            case LEFT: {
+                for (int i = 0; i < textHeight; i++) {
+                    String text = textList.get(i);
+                    int cx = 1 + x;
+                    int cy = 1 + y + i;
+                    writeText(tileGrid, text, cx, cy);
+                }
+                break;
+            }
+            case RIGHT: {
+                for (int i = 0; i < textHeight; i++) {
+                    String text = textList.get(i);
+                    int cx = 1 + x + textWidth - text.length();
+                    int cy = 1 + y + i;
+                    writeText(tileGrid, text, cx, cy);
+                }
+                break;
+            }
+            case CENTER: {
+                int mx = textWidth / 2;
+                for (int i = 0; i < textHeight; i++) {
+                    String text = textList.get(i);
+                    int cx = 1 + x + mx - text.length() / 2;
+                    int cy = 1 + y + i;
+                    writeText(tileGrid, text, cx, cy);
+                }
+                break;
+            }
+        }
     }
 }

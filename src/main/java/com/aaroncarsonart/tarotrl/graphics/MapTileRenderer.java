@@ -33,7 +33,7 @@ public class MapTileRenderer implements TileRenderer {
         int bottomOffSet = 10;
         Position vOffset = Positions.create(xOffset, topOffSet);
 
-        int vWidth = windowWidth - (xOffset) - 2;
+        int vWidth = windowWidth - (xOffset) - 1;
         int vHeight = windowHeight - (topOffSet + bottomOffSet);
 
         Size vDimensions = Sizes.create(vWidth, vHeight);
@@ -147,14 +147,13 @@ public class MapTileRenderer implements TileRenderer {
                            ViewPort mapViewPort){
         // draw status log
         int lx = mapViewPort.x;
-        int ly = mapViewPort.y + mapViewPort.height + 2;
+        int ly = mapViewPort.y + mapViewPort.height + 1;
         int lw = mapViewPort.width;
-        int lh = tileGrid.getHeight() - (ly + 1);
+        int lh = tileGrid.getHeight() - (ly);
 
         ViewPort logViewPort = new ViewPort(lx, ly, lw, lh);
-        drawSimpleBorder(tileGrid, logViewPort, false);
         writeSingleLogStatus(tileGrid, gameState, logViewPort);
-
+        drawSimpleBorder(tileGrid, logViewPort, false);
     }
 
 

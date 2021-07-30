@@ -2,6 +2,7 @@ package com.aaroncarsonart.tarotrl.graphics;
 
 import com.aaroncarsonart.tarotrl.deck.TarotCard;
 import com.aaroncarsonart.tarotrl.game.GameState;
+import com.aaroncarsonart.tarotrl.game.controller.CardSelectionData;
 import com.aaroncarsonart.tarotrl.inventory.TarotCardItem;
 import com.aaroncarsonart.tarotrl.util.LogLevel;
 import com.aaroncarsonart.tarotrl.util.Logger;
@@ -12,6 +13,9 @@ import org.hexworks.zircon.api.grid.TileGrid;
 
 import java.util.List;
 
+/**
+ * Encapsulates logic for rendering the CARD_SELECTION GameMode.
+ */
 public class CardSelectionRenderer extends TarotRenderer {
     private static final Logger LOG = new Logger(CardSelectionRenderer.class).withLogLevel(LogLevel.INFO);
 
@@ -30,34 +34,21 @@ public class CardSelectionRenderer extends TarotRenderer {
         int mx = width / 2;
         int my = height / 3;
 
-//        renderTarotCardTest(tileGrid, mapViewPort);
+        // write message prompt
+        CardSelectionData cardSelectionData = gameState.getCardSelectionData();
+        List<String> messagePrompt = cardSelectionData.getMessagePrompt();
+        int longestMessageLength = messagePrompt.stream()
+                .map(String::length)
+                .max(Integer::compare)
+                .orElseThrow(() -> new IllegalStateException("Expected an int from message prompt length."));
 
-        // -----------------------------------------------------------------
-        // TODO replace section with method for printing multi-line messages
-        // TODO within a box with alignment to left | center | right.
-        // -----------------------------------------------------------------
-        String promptMessage1 = "Select your starting Tarot Card";
-        String promptMessage2 = "using the arrow keys.";
-
-        int longestMessageLength = Math.max(promptMessage1.length(), promptMessage2.length());
-
-        int p1x = mx - promptMessage1.length() / 2;
-        int p1y = 1;
-        int p2x = mx - promptMessage2.length() / 2;
-        int p2y = p1y + 1;
-
-        int pbx = mx - longestMessageLength / 2 - 1;
-        int pby = p1y - 1;
-        int pbw = longestMessageLength + 1;
-        int pbh = 3;
-
-        ViewPort promptMessageViewPort = new ViewPort(pbx, pby, pbw, pbh);
-        drawSimpleBorder(tileGrid, promptMessageViewPort, false);
-        writeText(tileGrid, promptMessage1, p1x, p1y);
-        writeText(tileGrid, promptMessage2, p2x, p2y);
+        int bx = mx - longestMessageLength / 2;
+        int by = 0;
+        int bWidth = longestMessageLength + 2;
+        writeTextInBox(tileGrid, messagePrompt, TextAlignment.CENTER, bx, by, bWidth);
 
         // render selected card
-        int selectedCardIndex = gameState.getSelectedCardIndex();
+        int selectedCardIndex = cardSelectionData.getSelectedCardIndex();
         LOG.info("selectedCardIndex: " + selectedCardIndex);
         List<TarotCardItem> cards = gameState.getPlayersTarotDeck();
         TarotCardItem cardItem = cards.get(selectedCardIndex);
@@ -88,18 +79,16 @@ public class CardSelectionRenderer extends TarotRenderer {
 //        }
 
         int maxLength = gameState.getAllTarotCards().getMaxDisplayNameLength();
-//        String blankString = " ";
-//        blankString = blankString.repeat(maxLength);
 
-        // draw box
+        // draw box around card names
         int vx = mx - maxLength / 2 - 1;
         int vy = listTop - 1;
-        int vWidth = maxLength + 1;
-        int vHeight = listLength + 1;
+        int vWidth = maxLength + 2;
+        int vHeight = listLength + 2;
         ViewPort cardNameViewPort = new ViewPort(vx, vy, vWidth, vHeight);
         drawSimpleBorder(tileGrid, cardNameViewPort, false);
 
-        // draw card names
+        // write list of card names
         for (int i = 0; i < listLength; i++) {
             int cardIndex = selectedCardIndex - middleOffset + i;
 
@@ -118,23 +107,17 @@ public class CardSelectionRenderer extends TarotRenderer {
 
             int cLength = cardName.length();
             int cx = mx - cLength / 2;
-            int cmx = mx - maxLength / 2;
             int cy = listTop + i;
 
             TileColor fg, bg;
             if (cardIndex == selectedCardIndex) {
-//                fg = tileGrid.getBackgroundColor();
-//                bg = tileGrid.getForegroundColor();
                 fg = GameColors.BLACK;
                 bg = currentCard.getTarotCardType().symbolColor;
             } else {
-//                fg = tileGrid.getForegroundColor();
-//                bg = tileGrid.getBackgroundColor();
                 fg = currentCard.getTarotCardType().symbolColor;
                 bg = GameColors.BLACK;
             }
 
-//            writeText(tileGrid, blankString, cmx, cy, fg, bg);
             writeText(tileGrid, cardName, cx, cy, fg, bg);
         }
     }

@@ -6,7 +6,7 @@ import org.hexworks.zircon.api.uievent.KeyboardEvent;
 import org.hexworks.zircon.api.uievent.UIEventResponse;
 
 /**
- * Handle user input for selection of the player's starting Tarot Card.
+ * Encapsulates logic for handling input for the CARD_SELECTION GameMode.
  */
 public class CardSelectionInputHandler implements InputHandler {
     private static final Logger LOG = new Logger(CardSelectionInputHandler.class);

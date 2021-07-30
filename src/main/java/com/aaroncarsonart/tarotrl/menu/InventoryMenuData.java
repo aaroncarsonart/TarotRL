@@ -3,6 +3,7 @@ package com.aaroncarsonart.tarotrl.menu;
 import com.aaroncarsonart.tarotrl.game.GameMode;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.game.controller.CardSelectionController;
+import com.aaroncarsonart.tarotrl.game.controller.CardSelectionData;
 import com.aaroncarsonart.tarotrl.util.Callback;
 import com.aaroncarsonart.tarotrl.util.TextAlignment;
 
@@ -10,6 +11,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Encapsulates data used for the the INVENTORY GameMode.
+ */
 public class InventoryMenuData {
 
     private Menu rootMenu;
@@ -88,6 +92,11 @@ public class InventoryMenuData {
         CardSelectionController controller = (CardSelectionController) GameMode.CARD_SELECTION.getGameController();
         controller.setCancelCallback(() -> state.setGameMode(GameMode.INVENTORY));
         controller.setSelectCallback(controller::warpToGameMapUsingTarotCard);
-        state.setSelectedCardIndex(0);
+        CardSelectionData cardSelectionData = state.getCardSelectionData();
+        List<String> messagePrompt = List.of(
+                CardSelectionData.WARP_PROMPT_MESSAGE_1,
+                CardSelectionData.WARP_PROMPT_MESSAGE_2);
+        cardSelectionData.setMessagePrompt(messagePrompt);
+        cardSelectionData.setSelectedCardIndex(0);
     }
 }

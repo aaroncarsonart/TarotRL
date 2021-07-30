@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
- * Controller for the menu for selecting the player's starting Tarot card.
+ * Encapsulates logic for controlling the CARD_SELECTION GameMode.
  */
 public class CardSelectionController implements GameController {
     private static final Logger LOG = new Logger(CardSelectionController.class);
@@ -30,7 +30,8 @@ public class CardSelectionController implements GameController {
         if (action instanceof CardSelectionAction) {
             CardSelectionAction cardAction = (CardSelectionAction) action;
             int maxCardIndex = state.getPlayersTarotDeck().size() - 1;
-            int selectedCardIndex = state.getSelectedCardIndex();
+            CardSelectionData cardSelectionData = state.getCardSelectionData();
+            int selectedCardIndex = cardSelectionData.getSelectedCardIndex();
             switch (cardAction) {
                 case PREVIOUS:
                     selectedCardIndex--;
@@ -53,7 +54,7 @@ public class CardSelectionController implements GameController {
                     cancelCallback.execute();
                     break;
             }
-            state.setSelectedCardIndex(selectedCardIndex);
+            cardSelectionData.setSelectedCardIndex(selectedCardIndex);
             LOG.info("selectedCardIndex: " + selectedCardIndex);
             return true;
         } else {

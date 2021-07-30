@@ -3,6 +3,7 @@ package com.aaroncarsonart.tarotrl.game;
 import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.deck.TarotCard;
 import com.aaroncarsonart.tarotrl.deck.TarotDeck;
+import com.aaroncarsonart.tarotrl.game.controller.CardSelectionData;
 import com.aaroncarsonart.tarotrl.input.PlayerAction;
 import com.aaroncarsonart.tarotrl.input.UserInput;
 import com.aaroncarsonart.tarotrl.inventory.Item;
@@ -37,11 +38,6 @@ public class GameState implements Serializable {
 
     private ArrayList<TarotCardItem> playersTarotDeck = new ArrayList<>();
     private TarotDeck allTarotCards;
-    private int selectedCardIndex;
-
-    // TODO Update CardSelectionRenderer to dynamically display this message
-    // TODO instead of the current, hardcoded 2-string message.
-    private ArrayList<String> cardSelectionMessage = new ArrayList<>();
 
     private PlayerAction previousAction = PlayerAction.UNKNOWN;
     private PlayerAction currentAction = PlayerAction.UNKNOWN;
@@ -63,12 +59,14 @@ public class GameState implements Serializable {
     private transient UserInput userInput = new UserInput();
 
     private InventoryMenuData inventoryMenuData;
+    private CardSelectionData cardSelectionData;
 
     /**
      * Default no-arg constructor
      */
     public GameState() {
         inventoryMenuData = new InventoryMenuData(this);
+        cardSelectionData = new CardSelectionData();
     }
 
     // ------------------------------------------------------
@@ -263,14 +261,6 @@ public class GameState implements Serializable {
         this.allTarotCards = allTarotCards;
     }
 
-    public int getSelectedCardIndex() {
-        return selectedCardIndex;
-    }
-
-    public void setSelectedCardIndex(int selectedCardIndex) {
-        this.selectedCardIndex = selectedCardIndex;
-    }
-
     public GameMap3D getMapFromTarotCard(TarotCard key) {
         return gameMaps.get(key);
     }
@@ -279,11 +269,7 @@ public class GameState implements Serializable {
         gameMaps.put(key, value);
     }
 
-    public ArrayList<String> getCardSelectionMessage() {
-        return cardSelectionMessage;
-    }
-
-    public void setCardSelectionMessage(ArrayList<String> cardSelectionMessage) {
-        this.cardSelectionMessage = cardSelectionMessage;
+    public CardSelectionData getCardSelectionData() {
+        return cardSelectionData;
     }
 }

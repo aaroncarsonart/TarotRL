@@ -5,6 +5,7 @@ import com.aaroncarsonart.tarotrl.game.GameMode;
 import com.aaroncarsonart.tarotrl.game.GameModeComponents;
 import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.game.controller.CardSelectionController;
+import com.aaroncarsonart.tarotrl.game.controller.CardSelectionData;
 import com.aaroncarsonart.tarotrl.game.controller.GameController;
 import com.aaroncarsonart.tarotrl.game.controller.InventoryGameController;
 import com.aaroncarsonart.tarotrl.game.controller.MapController;
@@ -17,7 +18,6 @@ import com.aaroncarsonart.tarotrl.graphics.SnapshotHistory;
 import com.aaroncarsonart.tarotrl.input.CardSelectionInputHandler;
 import com.aaroncarsonart.tarotrl.input.InventoryInputHandler;
 import com.aaroncarsonart.tarotrl.input.MapInputHandler;
-import com.aaroncarsonart.tarotrl.map.json.JsonDefinitionLoader;
 import org.hexworks.zircon.api.CP437TilesetResources;
 import org.hexworks.zircon.api.Sizes;
 import org.hexworks.zircon.api.data.Size;
@@ -25,6 +25,7 @@ import org.hexworks.zircon.api.resource.TilesetResource;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.List;
 
 /**
  * The TarotRL App!
@@ -88,14 +89,7 @@ public class TarotRLApp {
      * @return The fully configured Game instance that is ready to be played.
      */
     private static Game createTarotRLGame() {
-        JsonDefinitionLoader loader = new JsonDefinitionLoader();
-//        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/mountain_red.json");
-//        TileDefinitionSet tileDefinitionSet = loader.loadTileDefinitionSet("tile_definitions/forest_green.json");
-
         GameStateGenerator gameStateGenerator = new GameStateGenerator();
-//        GameState gameState = gameStateGenerator.generateTarotRLGameState();
-//        gameState.setGameMode(GameMode.MAP_NAVIGATION);
-
         GameState gameState = gameStateGenerator.generateTarotRLGameState();
 
         TilesetResource tilesetResource = CP437TilesetResources.mdCurses16x16();
@@ -125,7 +119,13 @@ public class TarotRLApp {
         CardSelectionController cardSelectionController = (CardSelectionController) controller;
         cardSelectionController.setCancelCallback(() -> {});
         cardSelectionController.setSelectCallback(cardSelectionController::selectStartingTarotCard);
-        gameState.setSelectedCardIndex(0);
+
+        CardSelectionData cardSelectionData = gameState.getCardSelectionData();
+        List<String> messagePrompt = List.of(
+                CardSelectionData.STARTING_PROMPT_MESSAGE_1,
+                CardSelectionData.STARTING_PROMPT_MESSAGE_2);
+        cardSelectionData.setMessagePrompt(messagePrompt);
+        cardSelectionData.setSelectedCardIndex(0);
 
         return game;
     }

@@ -84,8 +84,8 @@ public class InventoryTileRenderer implements TileRenderer {
 
     private void renderMenuBorder(Menu menu, TileGrid tileGrid, Position position) {
         Region2D region = menu.getContentRegion(position.getX(), position.getY());
-        int width = region.dimensions.x() + 1;
-        int height = region.dimensions.y() + 1;
+        int width = region.dimensions.x() + 2;
+        int height = region.dimensions.y() + 2;
         ViewPort viewPort = new ViewPort(region.position.x(), region.position.y(), width, height);
         drawSimpleBorder(tileGrid, viewPort, false);
     }
