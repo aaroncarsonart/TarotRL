@@ -5,15 +5,24 @@ import com.aaroncarsonart.tarotrl.deck.Element;
 import com.aaroncarsonart.tarotrl.entity.EntityType;
 import com.aaroncarsonart.tarotrl.entity.MapEntity;
 import com.aaroncarsonart.tarotrl.graphics.GameColorSet;
+import com.aaroncarsonart.tarotrl.util.LogLevel;
+import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.world.MapVoxel;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import com.aaroncarsonart.tarotrl.world.Region3D;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -26,6 +35,7 @@ import java.util.stream.Collectors;
  * with (mapHeight, mapWidth) as the bottom right corner of the tileGrid.
  */
 public class GameMap2D implements GameMap, Serializable {
+    private static final Logger LOG = new Logger(GameMap2D.class).withLogLevel(LogLevel.INFO);
 
     private String name;
     private char[][] tileGrid;
@@ -99,7 +109,7 @@ public class GameMap2D implements GameMap, Serializable {
     public boolean isPassable(int py, int px) {
         if(withinBounds(py, px)) {
             char sprite = tileGrid[py][px];
-            TileType.valueOf(sprite).getMetadata().isPassable();
+            return TileType.valueOf(sprite).getMetadata().isPassable();
         }
         return false;
     }
@@ -333,4 +343,123 @@ public class GameMap2D implements GameMap, Serializable {
         }
         return neighbors;
     }
+
+    /**
+     * Generates a list of positions most distant from the start position.
+     * Only positions with the greatest local distance of its neighbors are
+     * included. Positions with another position within a given distance are
+     * excluded.
+     *
+     * @param start The starting position to calculate distances from.
+     * @return The list of positions most distant from the start position.
+     */
+    public List<Position2D> findListOfDistantPositions(Position2D start) {
+        Position2D startPos = start;
+
+        // calculate distances from starting position for every open space
+        HashMap<Position2D, Integer> distances = new HashMap<>();
+        HashSet<Position2D> visited = new HashSet<>();
+        Queue<Position2D> queue = new LinkedList<>();
+        queue.add(startPos);
+        visited.add(startPos);
+        distances.put(startPos, 0);
+        while (!queue.isEmpty()) {
+            Position2D current = queue.poll();
+            int nextDistance = distances.get(current) + 1;
+            List<Position2D> neighbors = current.getNeighbors();
+            for (Position2D neighbor : neighbors) {
+                if (!visited.contains(neighbor)) {
+                    if (isPassable(neighbor)) {
+                        queue.add(neighbor);
+                        visited.add(neighbor);
+                        distances.put(neighbor, nextDistance);
+                    }
+                }
+            }
+        }
+
+//        String distancesMapStr = getDistanceHashMapAsString(distances);
+//        LOG.info("distancesMapStr:\n" + distancesMapStr);
+
+        // function for filtering positions with the greatest local distance
+        Predicate<Map.Entry<Position2D, Integer>> hasNoGreaterNeighbors = (e -> {
+            Position2D current = e.getKey();
+            int distance = e.getValue();
+            List<Position2D> neighbors = current.getNeighbors();
+            for (Position2D neighbor : neighbors) {
+                if (distances.containsKey(neighbor)) {
+                    int neighborDistance = distances.get(neighbor);
+                    if (neighborDistance > distance) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        });
+
+        // filter and sort positions with greatest local distance
+        List<Position2D> distantPositions = distances.entrySet().stream()
+                .filter(hasNoGreaterNeighbors)
+                .sorted(Collections.reverseOrder(Comparator.comparingInt(Map.Entry::getValue)))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        // filter out positions with another position within a given distance.
+        double minDistance = 3;
+        Iterator<Position2D> distantPositionsIterator = distantPositions.iterator();
+        while(distantPositionsIterator.hasNext()) {
+            Position2D candidate = distantPositionsIterator.next();
+
+            boolean skipCandidate = false;
+            for (Position2D other : distantPositions) {
+                double distance = candidate.distance(other);
+                if (!candidate.equals(other) && distance <= minDistance) {
+                    skipCandidate = true;
+                    break;
+                }
+            }
+            if (skipCandidate) {
+                distantPositionsIterator.remove();
+            }
+        }
+
+        return distantPositions;
+    }
+
+    /**
+     * For debugging {@link #findListOfDistantPositions}.
+     * @param distances The HashMap of distances for every open position.
+     * @return A String representation the map printing the distance values
+     *         for every Position2D present in the distances map.
+     */
+    private String getDistanceHashMapAsString(HashMap<Position2D, Integer> distances) {
+        int maxDistance = distances.values().stream()
+                .max(Comparator.comparingInt(Integer::intValue))
+                .orElseThrow(() -> new IllegalStateException("Expected at least one value in distances map."));
+        String maxDistanceStr = String.valueOf(maxDistance);
+        int maxStrLength = maxDistanceStr.length();
+        String formatStr = "%" + maxStrLength + "s ";
+
+        StringBuilder sb = new StringBuilder();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                char nextTile = tileGrid[y][x];
+                String nextStr;
+                Position2D nextPos = new Position2D(x, y);
+                if (distances.containsKey(nextPos)) {
+                    int distance = distances.get(nextPos);
+                    nextStr = String.valueOf(distance);
+                } else {
+                    nextStr = String.valueOf(nextTile);
+                }
+                String nextAppendStr = String.format(formatStr, nextStr);
+                sb.append(nextAppendStr);
+                sb.append(' ');
+            }
+            sb.append('\n');
+            sb.append('\n');
+        }
+        return sb.toString();
+    }
+
 }

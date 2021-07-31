@@ -352,7 +352,6 @@ public class GameWorldGenerator {
             } while (!maze.toBorderedString('.', '#').contains("."));
             GameMap2D map = GameMapGenerator.generateMapFrom(maze);
             map.setName("Level " + level);
-            //LOG.info("map data:\n" + map.toString());
 
             ArrayList<Position2D> mapPaths = map.getPositionsMatching(t -> t.equals(TileType.PATH));
             RNG.shuffle(mapPaths);
@@ -360,11 +359,13 @@ public class GameWorldGenerator {
             Position3D mapOrigin;
             Position2D upstairs = mapPaths.remove(0);
             Position2D downstairs = mapPaths.remove(0);
+            Position2D entryPosition;
 
             if (level == 1) {
 //                Position3D startingPosition = map.findFirstOccurrence2D(TileType.PATH).to3D();
 //                Position3D startingPosition = new Position3D(1, 1, 0);
                 Position3D startingPosition = mapPaths.remove(0).to3D(0);
+                entryPosition = startingPosition.to2D();
                 LOG.info("startingPosition: " + startingPosition);
 
                 world.setCamera(startingPosition);
@@ -378,9 +379,11 @@ public class GameWorldGenerator {
                 mapOrigin = prevStairs.subtract(upstairs.to3D());
                 map.setTile(upstairs, TileType.UPSTAIRS);
                 map.setTile(downstairs, TileType.DOWNSTAIRS);
+                entryPosition = upstairs;
             } else {
                 mapOrigin = prevStairs.subtract(upstairs.to3D());
                 map.setTile(upstairs, TileType.UPSTAIRS);
+                entryPosition = upstairs;
             }
             LOG.info("mapOrigin: " + mapOrigin);
 
@@ -388,10 +391,42 @@ public class GameWorldGenerator {
             putMap(world, map, mapOrigin);
             LOG.info("map level z: " + mapOrigin.z);
 
+            // get most distant paths
+            List<Position2D> distantPaths = map.findListOfDistantPositions(entryPosition);
+            distantPaths.remove(mapOrigin);
+            distantPaths.remove(upstairs);
+            distantPaths.remove(downstairs);
+            mapPaths.removeAll(distantPaths);
+
+            // add tarot card to bottom level of world
+            if (level == levelCount) {
+                TarotDeck tarotDeck = gameState.getAllTarotCards();
+                TarotCard cardToFind = tarotDeck.drawTopCard();
+                Position3D cardPos = distantPaths.remove(0).to3D();
+                cardPos = cardPos.add(mapOrigin);
+                Item cardToFindItem = new TarotCardItem(cardToFind);
+                TileColor cardColor = cardToFind.getTarotCardType().symbolColor;
+                TileDefinition tarotCardTile = TileDefinition.custom('☼',
+                        TileType.ITEM,
+                        cardColor,
+                        TileType.ITEM.getMetadata().getBackgroundColor());
+
+                String entityDescription = "there lies a mysterious item of immense power";
+                ItemEntity entity = new ItemEntity(tarotCardTile, cardPos, cardToFindItem, entityDescription);
+                world.addEntity(entity);
+            }
+
             // add treasures
             int treasureCount = (width + height) / 10 - 3;
             for (int i = 0; i < treasureCount; i++) {
-                Position3D position = mapPaths.remove(0).to3D();
+                Position3D position;
+                if (RNG.nextInt(0, 3) == 0 && !distantPaths.isEmpty()) {
+                    int randomIndex = RNG.nextInt(distantPaths.size());
+                    position = distantPaths.remove(randomIndex).to3D();
+                } else {
+                    position = mapPaths.remove(0).to3D();
+                }
+
                 position = mapOrigin.add(position);
 
                 Treasure treasure = new Treasure();
@@ -399,36 +434,30 @@ public class GameWorldGenerator {
                 world.addEntity(entity);
             }
 
+//            // add all other distant paths as simple items
+//            for (Position2D distantPath : distantPaths) {
+//                Position3D itemPos = distantPath.to3D().add(mapOrigin);
+//                Item item = new Item("Hat", "it's a nice hat");
+//                ItemEntity entity = new ItemEntity(TileType.ITEM, itemPos, item);
+//                world.addEntity(entity);
+//            }
+//            distantPaths.clear();
+
             // update prevStairs
             prevStairs = mapOrigin.add(downstairs.to3D()).moveTowards(Direction3D.BELOW);
         }
 
         // add tarot card to bottom level
-        int bottomLevel = 1 - levelCount;
-        LOG.info("bottomLevel: " + bottomLevel);
-        ArrayList<Position3D> bottomLevelPositions = world.getWorldMap().values().stream()
-                .filter(v -> v.getTileType() == TileType.PATH)
-                .filter(v -> v.map.getEntity(v.position) == null)
-                .map(v -> v.position)
-                .filter(v -> v.z == bottomLevel)
-                .collect(Collectors.toCollection(ArrayList::new));
-
-        RNG.shuffle(bottomLevelPositions);
-        TarotDeck tarotDeck = gameState.getAllTarotCards();
-
-        // add tarot card to world
-        TarotCard cardToFind = tarotDeck.drawTopCard();
-        Position3D position = bottomLevelPositions.remove(0);
-        Item cardToFindItem = new TarotCardItem(cardToFind);
-        TileColor cardColor = cardToFind.getTarotCardType().symbolColor;
-        TileDefinition tarotCardTile = TileDefinition.custom('☼',
-                TileType.ITEM,
-                cardColor,
-                TileType.ITEM.getMetadata().getBackgroundColor());
-
-        String entityDescription = "there lies a mysterious item of immense power";
-        ItemEntity entity = new ItemEntity(tarotCardTile, position, cardToFindItem, entityDescription);
-        world.addEntity(entity);
+//        int bottomLevel = 1 - levelCount;
+//        LOG.info("bottomLevel: " + bottomLevel);
+//        ArrayList<Position3D> bottomLevelPositions = world.getWorldMap().values().stream()
+//                .filter(v -> v.getTileType() == TileType.PATH)
+//                .filter(v -> v.map.getEntity(v.position) == null)
+//                .map(v -> v.position)
+//                .filter(v -> v.z == bottomLevel)
+//                .collect(Collectors.toCollection(ArrayList::new));
+//
+//        RNG.shuffle(bottomLevelPositions);
 
         return world;
     }

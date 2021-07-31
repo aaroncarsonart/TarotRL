@@ -26,6 +26,10 @@ public class RNG {
         Collections.shuffle(list, rng);
     }
 
+    public static boolean nextBoolean() {
+        return rng.nextBoolean();
+    }
+
     public static int nextInt() {
         return rng.nextInt();
     }

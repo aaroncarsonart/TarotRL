@@ -2,11 +2,11 @@ package com.aaroncarsonart.tarotrl.graphics;
 
 import com.aaroncarsonart.tarotrl.entity.MapEntity;
 import com.aaroncarsonart.tarotrl.game.GameState;
-import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinition;
 import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.util.TextUtils;
+import com.aaroncarsonart.tarotrl.world.GameMap3D;
 import com.aaroncarsonart.tarotrl.world.MapVoxel;
 import com.aaroncarsonart.tarotrl.world.Position3D;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +58,7 @@ public class MapTileRenderer implements TileRenderer {
                                              GameState gameState,
                                              ViewPort viewPort,
                                              boolean drawViewportBorder) {
-        GameMap world = gameState.getActiveGameMap();
+        GameMap3D world = gameState.getActiveGameMap();
 
         // ensure coordinate spaces of viewport fit on the TileGrid.
         checkCoordinatesFit(tileGrid, viewPort);
