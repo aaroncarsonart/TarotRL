@@ -1,5 +1,9 @@
 # TarotRL
 
+*NOTE: Some of this README is quite out of date, reflecting the state of the project as when it was initially started in 2019 and then shortly after shelved for over two years. It does not reflect the active development which has been taking place since I picked the project up again in 2021. The [Gameplay](#gameplay), [Depencencies](#dependencies), and [Build](#build) sections have been kept up-to-date and so are accurate.*
+
+---
+
 A very in-progress procedurally generated Roguelike, developed in Java using [Ziron](https://github.com/Hexworks/zircon) to render ASCII tile map graphics.
 
 ![Screenshot](screenshots/TarotRL-Screenshot-01.png)
@@ -39,11 +43,17 @@ before the additional game modes are fully integrated into the game.
 Overall, I am satisfied with the result for the time and effort invested.
 
 ## Gameplay
+Currently you can explore a set of descending cave levels. The goal is to collect the Tarot card item `☼` at the bottom level of the map. Navigate with the arrow keys, collect the treasures `$` encounted along the way by moving over them.  Descend the stairs `<` and `>` with `Enter`.  Also, the beginnings of a menu system will toggle on the screen with `i`. (Back is `Esc`).
 
-Development and evolution of gameplay and features is very much in flux.  Currently you can explore a
-set of descending cave levels.  Navigate with the arrow keys, collect some simple assorted items `*` and `$` on the floor by moving over them.  Descend the stairs `<` and `>` with `Enter`.  Also, the beginnings of a menu system will toggle on the screen with `i`. (Back is `Esc`).
+Every Tarot card has an associated map. You can use your collected Tarot cards to warp to these maps. Once you've collected a new Tarot card, select the `Deck` menu option and select the newly collected card to warp to the new map.
+
+Gameplay is currently quite simple. There are no additional monsters, items, or dungeon features to encounter along the way of collecting the cards. Future commits will add these features in time.
 
 Other map types not included in the current build have interactable doors.  There are more nuanced input options for features at varying levels of implementation.  For now, the curious can inspect these in the [input](src/main/java/com/aaroncarsonart/tarotrl/input) package.
+
+## Dependencies
+
+This project requires at minimum Java JDK 11, and Maven.
 
 ## Build
 
