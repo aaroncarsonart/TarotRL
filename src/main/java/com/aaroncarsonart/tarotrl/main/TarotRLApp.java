@@ -135,7 +135,7 @@ public class TarotRLApp {
         cardSelectionData.setMessagePrompt(messagePrompt);
         cardSelectionData.setSelectedCardIndex(0);
 
-        initDevPlayerStatus(gameState);
+//        initDevPlayerStatus(gameState);
 
         return game;
     }
