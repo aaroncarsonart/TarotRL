@@ -97,6 +97,5 @@ public class InventoryMenuData {
                 CardSelectionData.WARP_PROMPT_MESSAGE_1,
                 CardSelectionData.WARP_PROMPT_MESSAGE_2);
         cardSelectionData.setMessagePrompt(messagePrompt);
-        cardSelectionData.setSelectedCardIndex(0);
     }
 }

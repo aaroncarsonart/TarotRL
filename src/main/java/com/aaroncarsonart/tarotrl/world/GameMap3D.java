@@ -3,13 +3,18 @@ package com.aaroncarsonart.tarotrl.world;
 import com.aaroncarsonart.imbroglio.Position2D;
 import com.aaroncarsonart.tarotrl.entity.EntityType;
 import com.aaroncarsonart.tarotrl.entity.MapEntity;
+import com.aaroncarsonart.tarotrl.game.GameState;
 import com.aaroncarsonart.tarotrl.map.GameMap;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
+import com.aaroncarsonart.tarotrl.util.Bresenham;
+import com.aaroncarsonart.tarotrl.util.Logger;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,16 +28,14 @@ import java.util.stream.Collectors;
  * which are dynamically loaded as they are first accessed.
  */
 public class GameMap3D implements GameMap {
+    private static final Logger LOG = new Logger(GameMap3D.class);
     private static final int DEFAULT_Z_COORDINATE = 0;
 
-    /**
-     * This WorldBlock contains the WorldVoxels from coordinates
-     * (0, 0, 0) to (16, 16, 16).
-     */
     private Map<Position3D, MapVoxel> worldMap;
     private Position3D camera;
 
     private Map<Position3D, MapEntity> entities;
+    private List<Region3D> levelRegions;
 
     public GameMap3D() {
         // estimate screen size in tiles as initial hashmap capacity
@@ -42,6 +45,7 @@ public class GameMap3D implements GameMap {
         int initialCapacity = widthInTiles * heightInTiles;
         worldMap = new HashMap<>(initialCapacity);
         entities = new LinkedHashMap<>();
+        levelRegions = new ArrayList<>();
     }
 
     public Position3D getCamera() {
@@ -137,7 +141,29 @@ public class GameMap3D implements GameMap {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Visit every MapVoxel within the given region, applying the visitor
+     * function to every MapVoxel.
+     *
+     * @param region The region to visit.
+     * @param visitor The visitor function to apply to every visited MapVoxel.
+     */
+    public void visit(Region3D region, Consumer<MapVoxel> visitor) {
+        Position3D start = region.position;
+        Position3D max = start.add(region.dimensions);
+        visit (start, max, visitor);
+    }
+
+    /**
+     * Visit every MapVoxel within the given region defined by the start and
+     * max positions. applying the visitor function to every MapVoxel.
+     *
+     * @param start The smallest position of the region to visit.
+     * @param max The largest position of the region to visit.
+     * @param visitor The visitor function to apply to every visited MapVoxel.
+     */
     public void visit(Position3D start, Position3D max, Consumer<MapVoxel> visitor) {
+        LOG.info("visit region: " + start + " to " + max);
         for (int x = start.x; x < max.x; x++) {
             for (int y = start.y; y < max.y; y++) {
                 for (int z = start.z; z < max.z; z++) {
@@ -226,4 +252,142 @@ public class GameMap3D implements GameMap {
                 .findFirst()
                 .orElse(null);
     }
+
+    /**
+     * Get the level region for the current depth (the z value).
+     * @return the level region for the current depth.
+     */
+    public Region3D getActiveLevelRegion() {
+        int depth = camera.z;
+        return getLevelRegion(depth);
+    }
+
+    /**
+     * Get the level region for the given input depth (the z value).
+     * @param depth The z value for the level region to get.
+     * @return the level region for the given input depth.
+     */
+    public Region3D getLevelRegion(int depth) {
+        if (levelRegions.isEmpty()) {
+            levelRegions.addAll(calculateLevelRegions());
+        }
+        int index = depth * -1;
+        Region3D levelRegion = levelRegions.get(index);
+        return levelRegion;
+    }
+
+    /**
+     * Calculates all level regions for this GameMap3D. Each region is
+     * a horizontal slice of the map, sharing the same depth.
+     *
+     * @return The list of all level regions, grouped by depth.
+     */
+    private List<Region3D> calculateLevelRegions() {
+        List<Region3D> levelRegions = new ArrayList<>();
+        Map<Integer, List<MapVoxel>> voxelsGroupedByDepth = worldMap.values().stream()
+                .collect(Collectors.groupingBy(v -> v.position.z));
+
+        for (Map.Entry<Integer, List<MapVoxel>> entry : voxelsGroupedByDepth.entrySet()) {
+            List<MapVoxel> voxels = entry.getValue();
+
+            Position3D start = voxels.get(0).position;
+            int minX = start.x;
+            int maxX = start.x;
+            int minY = start.y;
+            int maxY = start.y;
+            int z = entry.getKey();
+
+            for(MapVoxel voxel : voxels) {
+                Position3D current = voxel.position;
+                minX = Math.min(minX, current.x);
+                maxX = Math.max(maxX, current.x);
+                minY = Math.min(minY, current.y);
+                maxY = Math.max(maxY, current.y);
+            }
+
+            Position3D min = new Position3D(minX, minY, z);
+            Position3D max = new Position3D(maxX, maxY, z).withRelativeZ(1);
+
+            // Grow region by one horizontally and vertically to allow for visibility
+            // processing on map borders.
+            // maxOffset x and y must be offset by an additional point to include the
+            // outermost edges as regions are exclusive with regards to upper boundaries.
+            Position3D minOffset = new Position3D(1, 1, 0);
+            Position3D maxOffset = new Position3D(2, 2, 0);
+            min = min.subtract(minOffset);
+            max = max.add(maxOffset);
+
+            Position3D position = min;
+            Position3D dimensions = max.subtract(min);
+
+            Region3D levelRegion = new Region3D(position, dimensions);
+            levelRegions.add(levelRegion);
+        }
+        return levelRegions;
+    }
+
+    /**
+     * Calculate the current field of view for the player.
+     * @param state The GameState to use.
+     */
+    public void calculatePlayerFov(GameState state) {
+        Region3D activeLevelRegion = getActiveLevelRegion();
+
+        // clear old lighting
+        visit(activeLevelRegion, voxel -> {
+            if (voxel.getVisibility() == MapVoxel.VISIBLE) {
+                voxel.setVisibility(MapVoxel.KNOWN);
+            }
+        });
+
+        // update new lighting
+        int fovRange = state.getPlayerFovRange();
+        List<Position3D> visiblePositions = fov(camera, fovRange);
+        for (Position3D current : visiblePositions) {
+            MapVoxel voxel = getVoxel(current);
+            voxel.setVisibility(MapVoxel.VISIBLE);
+        }
+    }
+
+    /**
+     * Get the list of visible positions for the field of view
+     * defined by the given position and range.
+     *
+     * @param center The position to calculate the fov for.
+     * @param range The range of the fov.
+     * @return The list of visible positions for the given fov.
+     */
+    public List<Position3D> fov(Position3D center, int range) {
+        List<Position3D> visiblePositions = new ArrayList<>();
+
+        // use simple line tracing
+        int z = center.z;
+        for (int x = center.x - range; x < center.x + range; x++) {
+            for (int y = center.y - range; y < center.y + range; y++) {
+                Position3D current = new Position3D(x, y, z);
+                if (center.distance(current) <= range) {
+                    List<Position2D> line = Bresenham.plotLine(center.x, center.y, x, y);
+
+                    // the first position is always visible
+                    Iterator<Position2D> it = line.iterator();
+                    Position3D next = it.next().to3D(z);
+                    visiblePositions.add(next);
+
+                    while (it.hasNext()) {
+                        next = it.next().to3D(z);
+                        MapVoxel voxel = getVoxel(next);
+                        visiblePositions.add(next);
+
+                        // check if a blocking character is encountered
+                        char c = voxel.getTileType().getSprite();
+                        if ("#+ ".indexOf(c) != -1) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return visiblePositions;
+    }
+
 }

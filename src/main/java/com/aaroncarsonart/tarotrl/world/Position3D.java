@@ -177,6 +177,38 @@ public class Position3D implements Comparable<Position3D> {
         return moveTowards(direction.getDirection3D());
     }
 
+    public Position3D north() {
+        return new Position3D(x, y - 1, z);
+    }
+
+    public Position3D south() {
+        return new Position3D(x, y + 1, z);
+    }
+
+    public Position3D west() {
+        return new Position3D(x - 1, y, z);
+    }
+
+    public Position3D east() {
+        return new Position3D(x + 1, y, z);
+    }
+
+    public Position3D below() {
+        return new Position3D(x, y, z - 1);
+    }
+
+    public Position3D above() {
+        return new Position3D(x, y, z + 1);
+    }
+
+    public List<Position3D> getAllSurroundingNeighborsForDepth() {
+        return List.of(
+                north().west(), north(), north().east(),
+                west(), east(),
+                south().west(), south(), south().east()
+        );
+    }
+
     public static Position3D from(int[] v) {
         int x = v.length > 0 ? v[0] : 0;
         int y = v.length > 1 ? v[1] : 0;

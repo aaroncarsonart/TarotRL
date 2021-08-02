@@ -3,7 +3,7 @@ package com.aaroncarsonart.tarotrl.util;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -11,9 +11,16 @@ import java.util.stream.IntStream;
 public class TextUtils {
 
     public static List<String> getWordWrappedText(String text, int maxWidth) {
-        String wrappedText = WordUtils.wrap(text, maxWidth);
-        String[] wrappedTextArray = wrappedText.split("\n");
-        return Arrays.asList(wrappedTextArray);
+        List<String> finalList = new ArrayList<>();
+        String[] initialWordWrap = text.split("\n");
+        for (String segment : initialWordWrap) {
+            String wrappedText = WordUtils.wrap(segment, maxWidth);
+            String[] wrappedTextArray = wrappedText.split("\n");
+            for (String finalSegment : wrappedTextArray) {
+                finalList.add(finalSegment);
+            }
+        }
+        return finalList;
     }
 
     public static String getLowerCaseStringWithSpaces(String text) {

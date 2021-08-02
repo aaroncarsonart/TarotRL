@@ -42,7 +42,7 @@ public class CardSelectionRenderer extends TarotRenderer {
                 .max(Integer::compare)
                 .orElseThrow(() -> new IllegalStateException("Expected an int from message prompt length."));
 
-        int bx = mx - longestMessageLength / 2;
+        int bx = mx - longestMessageLength / 2 - 1;
         int by = 0;
         int bWidth = longestMessageLength + 2;
         writeTextInBox(tileGrid, messagePrompt, TextAlignment.CENTER, bx, by, bWidth);

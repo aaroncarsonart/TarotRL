@@ -18,8 +18,7 @@ public class TileDefinition {
     private TileType tileType;
 
     /**
-     * The character used to represent this tile in the {@link GameMapDefinition#mapTerrainData}
-     * during the procedural generation/level design phase.
+     * The character used to represent this tile in the {@link GameMapDefinition#getMapTerrainData()}      * during the procedural generation/level design phase.
      */
     private char sprite;
 
@@ -47,10 +46,22 @@ public class TileDefinition {
 
     private boolean passable;
     private boolean openable;
+    private boolean highlight;
 
     private PortalTrigger portalTrigger;
 
     public TileDefinition() {
+    }
+
+    public TileDefinition(TileType tileType,
+                          TileColor foregroundColor,
+                          TileColor backgroundColor,
+                          boolean passable,
+                          boolean openable,
+                          boolean highlight,
+                          PortalTrigger portalTrigger) {
+        this(tileType.getSprite(), tileType, foregroundColor, backgroundColor, passable, openable,
+                highlight, portalTrigger);
     }
 
     public TileDefinition(char sprite,
@@ -59,6 +70,7 @@ public class TileDefinition {
                           TileColor backgroundColor,
                           boolean passable,
                           boolean openable,
+                          boolean highlight,
                           PortalTrigger portalTrigger) {
         this.sprite = sprite;
         this.displaySprite = sprite;
@@ -67,6 +79,7 @@ public class TileDefinition {
         this.backgroundColor = backgroundColor;
         this.passable = passable;
         this.openable = openable;
+        this.highlight = highlight;
         this.portalTrigger = portalTrigger;
     }
 
@@ -76,6 +89,7 @@ public class TileDefinition {
         definition.tileType = tileType;
         definition.foregroundColor = foregroundColor;
         definition.backgroundColor = backgroundColor;
+        definition.highlight = true;
         return definition;
     }
 
@@ -85,7 +99,22 @@ public class TileDefinition {
         definition.tileType = tileType;
         definition.foregroundColor = TileColors.fromString(foregroundColor);
         definition.backgroundColor = TileColors.fromString(backgroundColor);
+        definition.highlight = true;
         return definition;
+    }
+
+    public TileDefinition copy() {
+        TileDefinition copy = new TileDefinition();
+        copy.sprite = this.sprite;
+        copy.displaySprite = this.sprite;
+        copy.tileType = this.tileType;
+        copy.foregroundColor = this.foregroundColor;
+        copy.backgroundColor = this.backgroundColor;
+        copy.passable = this.passable;
+        copy.openable = this.openable;
+        copy.highlight = this.highlight;
+        copy.portalTrigger = this.portalTrigger;
+        return copy;
     }
 
     @JsonIgnore
@@ -148,6 +177,14 @@ public class TileDefinition {
 
     public void setOpenable(boolean openable) {
         this.openable = openable;
+    }
+
+    public boolean hasHighlight() {
+        return highlight;
+    }
+
+    public void setHighlight(boolean highlight) {
+        this.highlight = highlight;
     }
 
     public PortalTrigger getPortalTrigger() {

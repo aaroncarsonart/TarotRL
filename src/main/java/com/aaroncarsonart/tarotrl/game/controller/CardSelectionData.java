@@ -13,6 +13,7 @@ public class CardSelectionData {
     public static final String WARP_PROMPT_MESSAGE_2 = "to its associated level.";
 
     private int selectedCardIndex = 0;
+    private int lastCollectedCardIndex = 0;
     private List<String> messagePrompt = new ArrayList<>();
 
     public int getSelectedCardIndex() {
@@ -21,6 +22,14 @@ public class CardSelectionData {
 
     public void setSelectedCardIndex(int selectedCardIndex) {
         this.selectedCardIndex = selectedCardIndex;
+    }
+
+    public int getLastCollectedCardIndex() {
+        return lastCollectedCardIndex;
+    }
+
+    public void setLastCollectedCardIndex(int lastCollectedCardIndex) {
+        this.lastCollectedCardIndex = lastCollectedCardIndex;
     }
 
     public List<String> getMessagePrompt() {

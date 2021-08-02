@@ -72,7 +72,9 @@ public class MapInputHandler implements InputHandler {
         if (input.hasModifer(MapActionModifier.DEV_MODE) && keyCode == KeyCode.KEY_C) {
             nextAction = PlayerAction.DEV_COLLECT_TAROT_CARD;
         }
-
+        if (input.hasModifer(MapActionModifier.DEV_MODE) && keyCode == KeyCode.KEY_M) {
+            nextAction = PlayerAction.MAP_LEVEL;
+        }
         if (nextAction != PlayerAction.UNKNOWN) {
             input.setAction(nextAction);
             input.doUpdateController();

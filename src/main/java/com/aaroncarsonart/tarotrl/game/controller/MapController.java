@@ -19,7 +19,9 @@ import com.aaroncarsonart.tarotrl.world.Direction3D;
 import com.aaroncarsonart.tarotrl.world.GameMap3D;
 import com.aaroncarsonart.tarotrl.world.MapVoxel;
 import com.aaroncarsonart.tarotrl.world.Position3D;
+import com.aaroncarsonart.tarotrl.world.Region3D;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -31,12 +33,19 @@ public class MapController implements GameController {
     @Override
     public boolean update(GameState state, UserInput input) {
         state.setDevMode(input.hasModifer(MapActionModifier.DEV_MODE));
+        state.setPlayerMoved(false);
 
         Enum action = input.getAction();
         if (action instanceof PlayerAction) {
             PlayerAction playerAction = (PlayerAction) action;
             processPlayerAction(playerAction, state);
         }
+
+        if (state.playerMoved()) {
+            GameMap3D activeMap = state.getActiveGameMap();
+            activeMap.calculatePlayerFov(state);
+        }
+
         return true;
     }
 
@@ -119,9 +128,15 @@ public class MapController implements GameController {
 
             case AUTO_PICKUP_ITEMS:
                 doToggleAutoCollect(gameState);
+                break;
 
             case DEV_COLLECT_TAROT_CARD:
                 doCollectTarotCard(gameState);
+                break;
+
+            case MAP_LEVEL:
+                doMapLevel(gameState);
+                break;
 
             default:
                 LOG.warning("Case not handled: PlayerAction." + nextAction.name());
@@ -205,7 +220,8 @@ public class MapController implements GameController {
 
         // MOVE mode: try to move into the nextInt position on the map.
         else {
-            attemptMove(gameState, targetVoxel, direction);
+            boolean moved = attemptMove(gameState, targetVoxel, direction);
+            gameState.setPlayerMoved(moved);
         }
     }
 
@@ -233,7 +249,7 @@ public class MapController implements GameController {
         }
     }
 
-    private void attemptMove(GameState gameState, MapVoxel voxel, Direction2D originDirection) {
+    private boolean attemptMove(GameState gameState, MapVoxel voxel, Direction2D originDirection) {
         if (gameState.isDevMode() || voxel.isPassable()) {
             voxel.map.setCamera(voxel.position);
 
@@ -248,12 +264,14 @@ public class MapController implements GameController {
             if (gameState.isAutoCollectMode()) {
                 attemptCollectItem(gameState, voxel.position);
             }
+            return true;
         }
 
         // INSPECT mode; if can't move, just inspect the current space.
         else {
             gameState.setCurrentAction(PlayerAction.INSPECT);
             doInspect(gameState, originDirection);
+            return false;
         }
     }
 
@@ -279,7 +297,7 @@ public class MapController implements GameController {
         //TODO implement
     }
 
-    private void attemptStairs(GameState gameState, MapVoxel voxel) {
+    private boolean attemptStairs(GameState gameState, MapVoxel voxel) {
         TileType tileType = voxel.getTileType();
         if (tileType == TileType.UPSTAIRS) {
             MapVoxel upstairs = voxel.getNeighbor(Direction3D.ABOVE);
@@ -288,6 +306,7 @@ public class MapController implements GameController {
                 gameState.incrementStepCount();
                 gameState.setStatus("You ascended the stairs.");
                 gameState.setCurrentAction(PlayerAction.ASCEND);
+                return true;
             } else {
                 // TODO reference above tile's material type, when implemented.
                 gameState.setStatus("You tried to ascend the stairs, " +
@@ -300,12 +319,14 @@ public class MapController implements GameController {
                 gameState.incrementStepCount();
                 gameState.setStatus("You descended the stairs.");
                 gameState.setCurrentAction(PlayerAction.DESCEND);
+                return true;
             } else {
                 // TODO reference above tile's material type, when implemented.
                 gameState.setStatus("You tried to descend the stairs, " +
                         "but the stairway was obstructed by immovable debris.");
             }
         }
+        return false;
     }
 
     /**
@@ -384,7 +405,8 @@ public class MapController implements GameController {
 
         // handle stairs
         if (tileType.isStairs()) {
-            attemptStairs(gameState, voxel);
+            boolean moved = attemptStairs(gameState, voxel);
+            gameState.setPlayerMoved(moved);
             if (gameState.getCurrentAction() != PlayerAction.CONFIRM) {
                 return;
             }
@@ -431,7 +453,7 @@ public class MapController implements GameController {
      * uncollected.
      * @param gameState The GameState to use.
      */
-    private void doCollectTarotCard(GameState gameState) {
+    public void doCollectTarotCard(GameState gameState) {
         GameMap3D gameMap = gameState.getActiveGameMap();
 
         // fetch the TarotCardItem, and remove it from the GameMap3D
@@ -445,4 +467,35 @@ public class MapController implements GameController {
             gameState.setStatus("The tarot card for this map has already been collected.");
         }
     }
+
+    /**
+     * Map the current level, setting each MapVoxel's visible field to MAPPED.
+     * @param gameState The GameState to use.
+     */
+    public void doMapLevel(GameState gameState) {
+        GameMap3D gameMap = gameState.getActiveGameMap();
+        Region3D activeRegion = gameMap.getActiveLevelRegion();
+        gameMap.visit(activeRegion, voxel -> {
+
+            Position3D pos = voxel.position;
+            List<Position3D> allSurroundingNeighbors = pos.getAllSurroundingNeighborsForDepth();
+
+            // skip tiles the player couldn't normally see
+            int surroundingWalls = 0;
+            for (Position3D neighbor : allSurroundingNeighbors) {
+                MapVoxel neighborVoxel = gameMap.getVoxel(neighbor);
+                TileType neighborType = neighborVoxel.getTileType();
+                if (neighborType == TileType.WALL || neighborType == TileType.EMPTY) {
+                    surroundingWalls++;
+                }
+            }
+            boolean skipMappingTile = surroundingWalls == 8;
+
+            // set all UNKNOWN tiles to MAPPED
+            if (!skipMappingTile && voxel.getVisibility() == MapVoxel.UNKNOWN) {
+                voxel.setVisibility(MapVoxel.MAPPED);
+            }
+        });
+    }
+
 }

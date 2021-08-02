@@ -1,12 +1,13 @@
 package com.aaroncarsonart.tarotrl.game.controller;
 
+import com.aaroncarsonart.tarotrl.deck.TarotCard;
 import com.aaroncarsonart.tarotrl.game.GameMode;
 import com.aaroncarsonart.tarotrl.game.GameState;
+import com.aaroncarsonart.tarotrl.input.CardSelectionAction;
 import com.aaroncarsonart.tarotrl.input.UserInput;
 import com.aaroncarsonart.tarotrl.inventory.TarotCardItem;
 import com.aaroncarsonart.tarotrl.map.TileType;
 import com.aaroncarsonart.tarotrl.map.json.TileDefinitionSet;
-import com.aaroncarsonart.tarotrl.input.CardSelectionAction;
 import com.aaroncarsonart.tarotrl.util.Callback;
 import com.aaroncarsonart.tarotrl.util.Logger;
 import com.aaroncarsonart.tarotrl.world.GameMap3D;
@@ -66,15 +67,21 @@ public class CardSelectionController implements GameController {
     /**
      * Warp the player to the GameMap associated with the selected TarotCard.
      * @param state The GameState.
-     * @param selectedCard The selected TarotCard to look up the GameMap with.
+     * @param selectedCardItem The selected TarotCard to look up the GameMap with.
      */
-    public void warpToGameMapUsingTarotCard(GameState state, TarotCardItem selectedCard) {
+    public void warpToGameMapUsingTarotCard(GameState state, TarotCardItem selectedCardItem) {
         LOG.info("warpToGameMapUsingTarotCard()");
-        GameMap3D firstGameMap = state.getMapFromTarotCard(selectedCard.getTarotCard());
-        TileDefinitionSet tileDefinitionSet = firstGameMap.getTileDefinitionSet();
+        TarotCard selectedCard = selectedCardItem.getTarotCard();
+        GameMap3D targetGameMap = state.getMapFromTarotCard(selectedCard);
+        targetGameMap.calculatePlayerFov(state);
+
+        TileDefinitionSet tileDefinitionSet = targetGameMap.getTileDefinitionSet();
         TileType.setTileTypeMetadata(tileDefinitionSet);
-        state.setActiveGameMap(firstGameMap);
+        state.setActiveGameMap(targetGameMap);
         state.setGameMode(GameMode.MAP_NAVIGATION);
+
+        String selectedCardName = selectedCard.getDisplayName();
+        state.setStatus("Warped to map for Tarot card:\n\"" + selectedCardName + ".\"");
     }
 
     /**

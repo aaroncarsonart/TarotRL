@@ -58,7 +58,6 @@ public class GameColors {
     public static final TileColor CYAN_2   = TileColors.fromString("#003232");
     public static final TileColor CYAN_3   = TileColors.fromString("#002A2A");
     public static final TileColor CYAN_4   = TileColors.fromString("#001111");
-
     public static final TileColor CYAN_5   = TileColors.fromString("#008787");
 
     public static final TileColor MAGENTA_1   = TileColors.fromString("#C800C8");
@@ -71,6 +70,14 @@ public class GameColors {
     public static final TileColor GREY_2   = TileColors.fromString("#323232");
     public static final TileColor GREY_3   = TileColors.fromString("#2A2A2A");
     public static final TileColor GREY_4   = TileColors.fromString("#111111");
+
+    public static final TileColor YELLOW_HIGHLIGHT  = TileColors.fromString("#5C5C00");
+    public static final TileColor RED_HIGHLIGHT     = TileColors.fromString("#7C0000");
+    public static final TileColor GREEN_HIGHLIGHT   = TileColors.fromString("#007C00");
+    public static final TileColor BLUE_HIGHLIGHT    = TileColors.fromString("#00005C");
+    public static final TileColor CYAN_HIGHLIGHT    = TileColors.fromString("#006C6C");
+    public static final TileColor MAGENTA_HIGHLIGHT = TileColors.fromString("#6C006C");
+    public static final TileColor GREY_HIGHLIGHT    = TileColors.fromString("#6C6C6C");
 
     public TileColor bgWall;
     public TileColor fgWall;

@@ -32,6 +32,7 @@ public enum PlayerAction {
     SNAPSHOT_HISTORY("Enter snapshot history game mode."),
 
     DEV_COLLECT_TAROT_CARD("Auto collect the tarot card for the given level."),
+    MAP_LEVEL("Map the current level's MapVoxels with visibility UNKNOWN as MAPPED."),
     ;
 
     /**

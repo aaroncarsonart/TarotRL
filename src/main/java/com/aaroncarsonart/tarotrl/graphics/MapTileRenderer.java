@@ -9,9 +9,11 @@ import com.aaroncarsonart.tarotrl.util.TextUtils;
 import com.aaroncarsonart.tarotrl.world.GameMap3D;
 import com.aaroncarsonart.tarotrl.world.MapVoxel;
 import com.aaroncarsonart.tarotrl.world.Position3D;
+import com.aaroncarsonart.tarotrl.world.Region3D;
 import org.apache.commons.lang3.StringUtils;
 import org.hexworks.zircon.api.Positions;
 import org.hexworks.zircon.api.Sizes;
+import org.hexworks.zircon.api.color.TileColor;
 import org.hexworks.zircon.api.data.Position;
 import org.hexworks.zircon.api.data.Size;
 import org.hexworks.zircon.api.data.Tile;
@@ -45,13 +47,42 @@ public class MapTileRenderer implements TileRenderer {
         if (mapViewPort == null) {
             mapViewPort = createMapViewPort(tileGrid);
         }
+        LOG.info("render(GameState gameState, TileGrid tileGrid)");
         renderTarotRLGame(tileGrid, gameState, mapViewPort);
     }
 
     private void renderTarotRLGame(TileGrid tileGrid, GameState gameState, ViewPort viewPort) {
+        tileGrid.clear();
         renderGameMapThroughViewPort(tileGrid, gameState, viewPort, true);
         renderTarotRLStatusLog(tileGrid, gameState, viewPort);
         //logTarotRLTextStatus(tileGrid, gameState, viewPort);
+    }
+
+    private void logCurrentLevelRegion(GameMap3D world) {
+        Region3D levelRegion = world.getLevelRegion(world.getCamera().z);
+        Position3D levelOrigin = levelRegion.position;
+
+        int levelWidth = levelRegion.dimensions.x;
+        int levelHeight = levelRegion.dimensions.y;
+
+        final char[][] mapData = new char[levelHeight][levelWidth];
+        world.visit(levelRegion, voxel -> {
+            Position3D pos = voxel.position.subtract(levelOrigin);
+            mapData[pos.y][pos.x] = voxel.getTileType().getSprite();
+        });
+
+        int sbSize = levelWidth * levelHeight * 2;
+        StringBuilder sb = new StringBuilder(sbSize);
+        for (int y = 0; y < levelHeight; y++) {
+            for (int x = 0; x < levelWidth; x++) {
+                sb.append(mapData[y][x]);
+                sb.append(' ');
+            }
+            sb.append('\n');
+        }
+
+        String levelStr = sb.toString();
+        LOG.info("levelRegion map data:\n" + levelStr);
     }
 
     public void renderGameMapThroughViewPort(TileGrid tileGrid,
@@ -59,6 +90,7 @@ public class MapTileRenderer implements TileRenderer {
                                              ViewPort viewPort,
                                              boolean drawViewportBorder) {
         GameMap3D world = gameState.getActiveGameMap();
+//        logCurrentLevelRegion(world);
 
         // ensure coordinate spaces of viewport fit on the TileGrid.
         checkCoordinatesFit(tileGrid, viewPort);
@@ -92,7 +124,10 @@ public class MapTileRenderer implements TileRenderer {
                     tileType = gameState.getUndefinedTileType();
                 }
 
+                char visibility = voxel.getVisibility();
                 TileDefinition tileDefinition = tileType.getMetadata();
+                tileDefinition = getTileDefinitionForVisibility(tileDefinition, visibility);
+
                 Tile tile = createZirconTileFrom(tileDefinition);
                 tileGrid.setTileAt(Positions.create(sx, sy), tile);
             }
@@ -113,7 +148,11 @@ public class MapTileRenderer implements TileRenderer {
                     int sx = viewPort.x + vx;
                     int sy = viewPort.y + vy;
 
+                    MapVoxel voxel = world.getVoxel(mapPos);
+                    char visibility = voxel.getVisibility();
                     TileDefinition tileDefinition = entity.getTileDefinition();
+                    tileDefinition = getTileDefinitionForVisibility(tileDefinition, visibility);
+
                     Tile tile = createZirconTileFrom(tileDefinition);
                     tileGrid.setTileAt(Positions.create(sx, sy), tile);
                 }
@@ -140,6 +179,52 @@ public class MapTileRenderer implements TileRenderer {
         if (drawViewportBorder) {
             drawSimpleBorder(tileGrid, viewPort, true);
         }
+    }
+
+    /**
+     * Get a TileDefinition for the given visibility value.
+     * @param definition The TileDefinition to use, or get a modified copy, based on the visibility.
+     * @param visibility The visibility value to get the TileDefinition for.
+     * @return A TileDefinition for the given visibility value.
+     */
+    private TileDefinition getTileDefinitionForVisibility(TileDefinition definition, char visibility) {
+        TileDefinition definitionForVisibility = null;
+
+        // VISIBLE visibility tiles are drawn per the GameMap3D's color scheme.
+        if (visibility == MapVoxel.VISIBLE)  {
+            definitionForVisibility = definition;
+        }
+
+        // KNOWN visibility tiles are drawn in GREY.
+        else if (visibility == MapVoxel.KNOWN) {
+            boolean tileIsWall = definition.getTileType() == TileType.WALL;
+            TileColor fgColor = definition.hasHighlight() ? GameColors.GREY_HIGHLIGHT : GameColors.GREY_2;
+            TileColor bgColor = tileIsWall ? GameColors.BLACK : GameColors.GREY_4;
+            definitionForVisibility = definition.copy();
+            definitionForVisibility.setForegroundColor(fgColor);
+            definitionForVisibility.setBackgroundColor(bgColor);
+        }
+
+        // UNKNOWN visibility tiles are drawn EMPTY in BLACK.
+        else if (visibility == MapVoxel.UNKNOWN) {
+            definitionForVisibility = definition.copy();
+            definitionForVisibility.setTileType(TileType.EMPTY);
+            definitionForVisibility.setSprite(TileType.EMPTY.getSprite());
+            definitionForVisibility.setForegroundColor(GameColors.BLACK);
+            definitionForVisibility.setBackgroundColor(GameColors.BLACK);
+        }
+
+        // MAPPED visibility tiles are drawn in GREEN.
+        else if (visibility == MapVoxel.MAPPED) {
+            boolean tileIsWall = definition.getTileType() == TileType.WALL;
+            TileColor fgColor = definition.hasHighlight() ? GameColors.GREEN_HIGHLIGHT : GameColors.GREEN_2;
+            TileColor bgColor = tileIsWall ? GameColors.BLACK : GameColors.GREEN_4;
+            definitionForVisibility = definition.copy();
+            definitionForVisibility.setForegroundColor(fgColor);
+            definitionForVisibility.setBackgroundColor(bgColor);
+        }
+
+        return definitionForVisibility;
     }
 
     private void renderTarotRLStatusLog(TileGrid tileGrid,
@@ -214,12 +299,8 @@ public class MapTileRenderer implements TileRenderer {
         int sy = logViewPort.y + 1;
 
         // clear the old status.
-        int maxWidth = logViewPort.width - 1;
-        String empty = TextUtils.getStringOfLength(' ', maxWidth);
+        int maxWidth = logViewPort.width - 2;
 
-        for (int i = 0; i < availableLogRows ; i++) {
-            writeText(tileGrid, empty, sx, sy + i);
-        }
         String status = gameState.getStatus();
         if (StringUtils.isNotBlank(status)) {
             List<String> wrappedStatus = TextUtils.getWordWrappedText(status, maxWidth);

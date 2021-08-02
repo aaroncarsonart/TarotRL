@@ -19,6 +19,7 @@ import java.util.function.Predicate;
 
 public class GameStateGenerator {
     private static final Logger LOG = new Logger(GameStateGenerator.class);
+    private static final int FIELD_OF_VIEW_RANGE = 10;
 
     private JsonDefinitionLoader loader;
     private GameWorldGenerator gameWorldGenerator;
@@ -79,6 +80,7 @@ public class GameStateGenerator {
 
         gameState.toggleAutoCollect();
         gameState.setUndefinedTileType(TileType.WALL);
+        gameState.setPlayerFovRange(FIELD_OF_VIEW_RANGE);
 
         String initialStatus = "Welcome to TarotRL!!!";
         gameState.setStatus(initialStatus);

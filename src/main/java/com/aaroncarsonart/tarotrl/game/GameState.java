@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -25,6 +26,8 @@ public class GameState implements Serializable {
 
     private Position2D playerPosition;
     private Position3D inspectedPosition;
+    private boolean playerMoved;
+    private int playerFovRange;
 
     private int turnCounter;
     private GameMap3D activeGameMap;
@@ -242,15 +245,34 @@ public class GameState implements Serializable {
     }
 
     public void addTarotCardToDeck(TarotCardItem tarotCardItem) {
-        TarotCard card = tarotCardItem.getTarotCard();
-        String name = card.getShorthandName();
+        TarotCard tarotCard = tarotCardItem.getTarotCard();
+        String name = tarotCard.getShorthandName();
 
         encounteredItems.put(name, tarotCardItem);
         collectedCards.put(name, tarotCardItem);
+        playersTarotDeck.add(tarotCardItem);
 
-        // TODO consider the ordering. Add to top or bottom of the deck?
-        // TODO which end of the list is the top, and which end is the bottom?
-        playersTarotDeck.add(0, tarotCardItem);
+        // sort the player's deck, and fetch the index for the new card
+        playersTarotDeck.sort(Comparator.naturalOrder());
+        int newCardIndex = -1;
+        for (int i = 0; i < playersTarotDeck.size(); i++) {
+            TarotCardItem otherCardItem = playersTarotDeck.get(i);
+            if (tarotCardItem == otherCardItem) {
+                newCardIndex = i;
+                break;
+            }
+        }
+
+        // check index is valid
+        try {
+            playersTarotDeck.get(newCardIndex);
+        } catch (IndexOutOfBoundsException e) {
+            throw new IllegalStateException("Tarot card: \"" + tarotCard.getDisplayName() + "\" must exist in player's deck.");
+        }
+
+        // store the fetched index
+        cardSelectionData.setLastCollectedCardIndex(newCardIndex);
+        cardSelectionData.setSelectedCardIndex(newCardIndex);
     }
 
     public TarotDeck getAllTarotCards() {
@@ -271,5 +293,21 @@ public class GameState implements Serializable {
 
     public CardSelectionData getCardSelectionData() {
         return cardSelectionData;
+    }
+
+    public boolean playerMoved() {
+        return playerMoved;
+    }
+
+    public void setPlayerMoved(boolean playerMoved) {
+        this.playerMoved = playerMoved;
+    }
+
+    public int getPlayerFovRange() {
+        return playerFovRange;
+    }
+
+    public void setPlayerFovRange(int playerFovRange) {
+        this.playerFovRange = playerFovRange;
     }
 }

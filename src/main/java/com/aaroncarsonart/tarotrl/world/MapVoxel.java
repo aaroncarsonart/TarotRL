@@ -15,15 +15,21 @@ import java.util.stream.Collectors;
  * WorldVoxels hold map terrain data.
  */
 public class MapVoxel {
+    public static final char UNKNOWN = '#';
+    public static final char KNOWN = '.';
+    public static final char VISIBLE = '!';
+    public static final char MAPPED = '\\';
 
     public final Position3D position;
     public final GameMap map;
     private TileType tileType;
+    char visibility;
 
     public MapVoxel(GameMap map, Position3D position, TileType tileType) {
         this.map = map;
         this.position = position;
         this.tileType = tileType;
+        this.visibility = MapVoxel.UNKNOWN;
     }
 
     public MapVoxel(GameMap world, Position3D position) {
@@ -83,5 +89,13 @@ public class MapVoxel {
             return entityDescription + " " + tileDescription;
         }
         return tileDescription;
+    }
+
+    public char getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(char visibility) {
+        this.visibility = visibility;
     }
 }

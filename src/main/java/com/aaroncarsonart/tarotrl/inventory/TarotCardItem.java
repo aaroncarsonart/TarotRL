@@ -2,6 +2,7 @@ package com.aaroncarsonart.tarotrl.inventory;
 
 import com.aaroncarsonart.tarotrl.deck.TarotCard;
 import com.aaroncarsonart.tarotrl.deck.TarotCardType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a physical instance of a TarotCard encountered within a map in the game.
@@ -52,5 +53,14 @@ public class TarotCardItem extends Item {
 
     public void setTarotCard(TarotCard tarotCard) {
         this.tarotCard = tarotCard;
+    }
+
+    @Override
+    public int compareTo(@NotNull Item item) {
+        if (item instanceof TarotCardItem) {
+            TarotCardItem that = (TarotCardItem) item;
+            return this.tarotCard.compareTo(that.tarotCard);
+        }
+        return this.compareTo(item);
     }
 }
