@@ -8,25 +8,25 @@
             "rank": 1,
             "name": "Pentacles",
             "sprite": "P",
-            "keywords": ["Earth", "Physical", "Value", "Money"]
+            "keywords": ["Earth", "Body", "Physical", "Value", "Money"]
         },
         {
             "rank": 2,
+            "name": "Swords",
+            "sprite": "S",
+            "keywords": ["Air", "Mind", "Thought", "Logic"]
+        },
+        {
+            "rank": 3,
             "name": "Wands",
             "sprite": "W",
             "keywords": ["Fire", "Spirit", "Will", "Action"]
         },
         {
-            "rank": 3,
+            "rank": 4,
             "name": "Cups",
             "sprite": "C",
-            "keywords": ["Water", "Heart", "Emotions", "Intuition"]
-        },
-        {
-            "rank": 4,
-            "name": "Swords",
-            "sprite": "S",
-            "keywords": ["Air", "Mind", "Thought", "Logic"]
+            "keywords": ["Water", "Emotions", "Heart", "Intuition"]
         }
     ],
     "cards": [
@@ -184,7 +184,6 @@
             "type": "Major Arcana",
             "keywords": []
         },
-
         {
             "order": 22,
             "rank": 1,
@@ -269,257 +268,256 @@
             "suit": "Pentacles",
             "keywords": ["King"]
         },
-
         {
             "order": 36,
             "rank": 1,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": ["Ace"]
         },
         {
             "order": 37,
             "rank": 2,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": []
         },
         {
             "order": 38,
             "rank": 3,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": []
         },
         {
             "order": 39,
             "rank": 4,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": []
         },
         {
             "order": 40,
             "rank": 5,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": []
         },
         {
             "order": 41,
             "rank": 6,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": []
         },
         {
             "order": 42,
             "rank": 7,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": []
         },
         {
             "order": 43,
             "rank": 8,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": []
         },
         {
             "order": 44,
             "rank": 9,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": []
         },
         {
             "order": 45,
             "rank": 10,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": []
         },
         {
             "order": 46,
             "rank": 11,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": ["Page"]
         },
         {
             "order": 47,
             "rank": 12,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": ["Knight"]
         },
         {
             "order": 48,
             "rank": 13,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": ["Queen"]
         },
         {
             "order": 49,
             "rank": 14,
-            "suit": "Wands",
+            "suit": "Swords",
             "keywords": ["King"]
         },
         {
             "order": 50,
             "rank": 1,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": ["Ace"]
         },
         {
             "order": 51,
             "rank": 2,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": []
         },
         {
             "order": 52,
             "rank": 3,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": []
         },
         {
             "order": 53,
             "rank": 4,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": []
         },
         {
             "order": 54,
             "rank": 5,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": []
         },
         {
             "order": 55,
             "rank": 6,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": []
         },
         {
             "order": 56,
             "rank": 7,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": []
         },
         {
             "order": 57,
             "rank": 8,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": []
         },
         {
             "order": 58,
             "rank": 9,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": []
         },
         {
             "order": 59,
             "rank": 10,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": []
         },
         {
             "order": 60,
             "rank": 11,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": ["Page"]
         },
         {
             "order": 61,
             "rank": 12,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": ["Knight"]
         },
         {
             "order": 62,
             "rank": 13,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": ["Queen"]
         },
         {
             "order": 63,
             "rank": 14,
-            "suit": "Cups",
+            "suit": "Wands",
             "keywords": ["King"]
         },
         {
             "order": 64,
             "rank": 1,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": ["Ace"]
         },
         {
             "order": 65,
             "rank": 2,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": []
         },
         {
             "order": 66,
             "rank": 3,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": []
         },
         {
             "order": 67,
             "rank": 4,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": []
         },
         {
             "order": 68,
             "rank": 5,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": []
         },
         {
             "order": 69,
             "rank": 6,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": []
         },
         {
             "order": 70,
             "rank": 7,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": []
         },
         {
             "order": 71,
             "rank": 8,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": []
         },
         {
             "order": 72,
             "rank": 9,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": []
         },
         {
             "order": 73,
             "rank": 10,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": []
         },
         {
             "order": 74,
             "rank": 11,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": ["Page"]
         },
         {
             "order": 75,
             "rank": 12,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": ["Knight"]
         },
         {
             "order": 76,
             "rank": 13,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": ["Queen"]
         },
         {
             "order": 77,
             "rank": 14,
-            "suit": "Swords",
+            "suit": "Cups",
             "keywords": ["King"]
         }
     ]
