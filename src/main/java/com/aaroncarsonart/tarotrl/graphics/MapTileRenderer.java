@@ -85,12 +85,40 @@ public class MapTileRenderer implements TileRenderer {
         LOG.info("levelRegion map data:\n" + levelStr);
     }
 
+    private void logCurrentLevelRegionVisibility(GameMap3D world) {
+        Region3D levelRegion = world.getLevelRegion(world.getCamera().z);
+        Position3D levelOrigin = levelRegion.position;
+
+        int levelWidth = levelRegion.dimensions.x;
+        int levelHeight = levelRegion.dimensions.y;
+
+        final char[][] mapData = new char[levelHeight][levelWidth];
+        world.visit(levelRegion, voxel -> {
+            Position3D pos = voxel.position.subtract(levelOrigin);
+            mapData[pos.y][pos.x] = voxel.getVisibility();
+        });
+
+        int sbSize = levelWidth * levelHeight * 2;
+        StringBuilder sb = new StringBuilder(sbSize);
+        for (int y = 0; y < levelHeight; y++) {
+            for (int x = 0; x < levelWidth; x++) {
+                sb.append(mapData[y][x]);
+                sb.append(' ');
+            }
+            sb.append('\n');
+        }
+
+        String levelStr = sb.toString();
+        LOG.info("levelRegion map data:\n" + levelStr);
+    }
+
     public void renderGameMapThroughViewPort(TileGrid tileGrid,
                                              GameState gameState,
                                              ViewPort viewPort,
                                              boolean drawViewportBorder) {
         GameMap3D world = gameState.getActiveGameMap();
 //        logCurrentLevelRegion(world);
+//        logCurrentLevelRegionVisibility(world);
 
         // ensure coordinate spaces of viewport fit on the TileGrid.
         checkCoordinatesFit(tileGrid, viewPort);

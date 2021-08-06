@@ -13,6 +13,8 @@ import com.aaroncarsonart.tarotrl.util.Logger;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -284,8 +286,12 @@ public class GameMap3D implements GameMap {
      */
     private List<Region3D> calculateLevelRegions() {
         List<Region3D> levelRegions = new ArrayList<>();
-        Map<Integer, List<MapVoxel>> voxelsGroupedByDepth = worldMap.values().stream()
-                .collect(Collectors.groupingBy(v -> v.position.z));
+        LinkedHashMap<Integer, List<MapVoxel>> voxelsGroupedByDepth = new LinkedHashMap<>();
+        worldMap.values().stream()
+                .collect(Collectors.groupingBy(v -> v.position.z))
+                .entrySet().stream()
+                .sorted(Collections.reverseOrder(Comparator.comparing(Map.Entry::getKey)))
+                .forEach(entry -> voxelsGroupedByDepth.put(entry.getKey(), entry.getValue()));
 
         for (Map.Entry<Integer, List<MapVoxel>> entry : voxelsGroupedByDepth.entrySet()) {
             List<MapVoxel> voxels = entry.getValue();
